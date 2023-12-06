@@ -2,6 +2,7 @@ package com.db.coffeestore9.user.domain;
 
 import com.db.coffeestore9.global.config.BaseTimeEntity;
 import com.db.coffeestore9.order.domain.Orders;
+import com.db.coffeestore9.security.common.Role;
 import com.db.coffeestore9.security.domain.Authority;
 import com.db.coffeestore9.user.common.Grade;
 import jakarta.persistence.CascadeType;
@@ -55,5 +56,14 @@ public class User extends BaseTimeEntity {
   @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.REMOVE, orphanRemoval = true)
   @Builder.Default
   private List<Orders> ordersList = new ArrayList<>();
+
+  public void addAuthority(Role role) {
+    if (!this.authorities.isEmpty() && (authorities.stream()
+        .anyMatch(authority -> authority.getRole().equals(role)))) {
+      throw new IllegalArgumentException("해당 유저는 이미 해당 권한을 가지고 있습니다.");
+    }
+    Authority authority = Authority.builder().role(role).user(this).build();
+    this.authorities.add(authority);
+  }
 
 }
