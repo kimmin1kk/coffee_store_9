@@ -1,4 +1,4 @@
-package com.db.coffeestore9.config;
+package com.db.coffeestore9.global.config;
 
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;
