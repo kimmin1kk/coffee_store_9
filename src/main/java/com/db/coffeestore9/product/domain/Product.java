@@ -43,9 +43,9 @@ public class Product extends BaseTimeEntity {
 
 
     public void updateProduct(ProductEditForm productEditForm) {
-        this.name = productEditForm.getName();
-        this.price = productEditForm.getPrice();
-        this.category = productEditForm.getCategory();
+        this.name = productEditForm.name();
+        this.price = productEditForm.price();
+        this.category = productEditForm.category();
     }
 
     public void addCount(int count) {
