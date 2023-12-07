@@ -1,4 +1,4 @@
-package com.db.coffeestore9.user.common;
+package com.db.coffeestore9.global.common;
 
 public enum Grade {
   BRONZE, SILVER, GOLD, VIP;

@@ -4,12 +4,14 @@ import com.db.coffeestore9.global.config.BaseTimeEntity;
 import com.db.coffeestore9.order.domain.Orders;
 import com.db.coffeestore9.security.common.Role;
 import com.db.coffeestore9.security.domain.Authority;
-import com.db.coffeestore9.user.common.Grade;
+import com.db.coffeestore9.global.common.Grade;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -56,6 +58,14 @@ public class User extends BaseTimeEntity {
   @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.REMOVE, orphanRemoval = true)
   @Builder.Default
   private List<Orders> ordersList = new ArrayList<>();
+
+  @OneToMany(mappedBy = "user")
+  private List<MonthlyUserData> monthlyUserData;
+
+  @OneToOne
+  @JoinColumn(name = "group_user_seq")
+  private GroupUser groupUser;
+
 
   public void addAuthority(Role role) {
     if (!this.authorities.isEmpty() && (authorities.stream()

@@ -1,5 +1,6 @@
 package com.db.coffeestore9.product.domain;
 
+import com.db.coffeestore9.event.sale.domain.SaleEventContent;
 import com.db.coffeestore9.global.config.BaseTimeEntity;
 import com.db.coffeestore9.product.common.Category;
 import com.db.coffeestore9.product.common.ProductEditForm;
@@ -7,7 +8,9 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.NotBlank;
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -40,6 +43,10 @@ public class Product extends BaseTimeEntity {
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Category category;
+
+    @OneToMany(mappedBy = "product")
+    @ToString.Exclude
+    private List<SaleEventContent> saleEventContentList;
 
 
     public void updateProduct(ProductEditForm productEditForm) {
