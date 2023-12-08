@@ -38,17 +38,30 @@ public class GroupCardService {
     }
   }
 
+  /**
+   * 그룹카드를 만드는 로직
+   *
+   * @param groupName
+   * @return
+   */
   private GroupCard createGroupCard(String groupName) {
     return groupCardRepository.save(GroupCard.builder().groupName(groupName).build());
   }
 
   private void createGroupAdmin(String username, GroupCard groupCard) {
     User user = userRepository.findByUsername(username);
+    GroupUser groupUser = GroupUser.builder().user(user).administrator(true).groupCard(groupCard)
+        .build();
 
-    user.getGroup(groupUserRepository.save(GroupUser.builder().user(user).administrator(true).groupCard(groupCard).build()));
+    user.getGroup(groupUserRepository.save(groupUser));
+    groupCard.addGroupUser(groupUser);
   }
 
   private void createGroupUser(List<String> usernames, GroupCard groupCard) {
+    usernames.stream()
+        .map(userRepository::findByUsername)
+        .map(s -> GroupUser.builder().user(s).groupCard(groupCard).build())
+        .forEach(groupCard::addGroupUser);
     usernames.stream()
         .map(userRepository::findByUsername)
         .forEach(s -> s.getGroup(groupUserRepository.save(GroupUser.builder().user(s).groupCard(groupCard).build())));

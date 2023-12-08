@@ -10,6 +10,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -58,6 +59,11 @@ public class GroupCard extends BaseTimeEntity {
 
   @OneToMany(mappedBy = "groupCard", cascade = CascadeType.REMOVE)
   @ToString.Exclude
-  private List<GroupUser> groupUsers;
+  @Builder.Default
+  private List<GroupUser> groupUsers = new ArrayList<>();
+
+  public void addGroupUser(GroupUser groupUser) {
+    this.groupUsers.add(groupUser);
+  }
 
 }
