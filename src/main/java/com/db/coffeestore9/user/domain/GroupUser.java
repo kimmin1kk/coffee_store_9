@@ -16,35 +16,50 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity
 @Getter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@ToString
 public class GroupUser extends BaseTimeEntity {
 
-  private Integer totalUsedAmount;
+  @Builder.Default
+  private Integer totalUsedAmount = 0;
 
-  private Integer totalChargedAmount;
+  @Builder.Default
+  private Integer totalChargedAmount = 0;
 
-  private Integer totalSalesAmount;
+  @Builder.Default
+  private Integer totalSalesAmount = 0;
 
-  private Integer pairShareAmount;
+  @Builder.Default
+  private Integer pairShareAmount = 0;
 
-  private boolean administrator;
+  @Builder.Default
+  private boolean administrator = false;
 
-  private Timestamp recentlyChargedDate;
+  @Builder.Default
+  private Timestamp recentlyChargedDate = null;
 
   @OneToOne(mappedBy = "groupUser")
+  @ToString.Exclude
   private User user;
 
   @OneToMany(mappedBy = "groupUser")
   @Builder.Default
+  @ToString.Exclude
   private List<RechargeUser> rechargeUsers = new ArrayList<>();
 
   @ManyToOne
   @JoinColumn(name = "group_card_seq")
+  @ToString.Exclude
   private GroupCard groupCard;
+
+  public void changeAdminState(boolean state) {
+    this.administrator = state;
+  }
 
 }

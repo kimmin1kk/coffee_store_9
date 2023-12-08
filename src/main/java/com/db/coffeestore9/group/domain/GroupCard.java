@@ -5,6 +5,7 @@ import com.db.coffeestore9.global.common.Grade;
 import com.db.coffeestore9.rank.domain.TotalRanking;
 import com.db.coffeestore9.user.domain.GroupUser;
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
@@ -15,30 +16,48 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity
 @Getter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@ToString
 public class GroupCard extends BaseTimeEntity {
 
+  @Column(nullable = false)
   private String groupName;
-  private Integer charge;
-  private Grade grade;
-  private Integer monthlyUsedCharge;
-  private Integer totalSalesCharge;
-  private Integer point;
-  private boolean active;
+  @Column(nullable = false)
+  @Builder.Default
+  private Integer charge = 0;
+  @Column(nullable = false)
+  @Builder.Default
+  private Grade grade = Grade.BRONZE;
+  @Column(nullable = false)
+  @Builder.Default
+  private Integer monthlyUsedCharge = 0;
+  @Column(nullable = false)
+  @Builder.Default
+  private Integer totalSalesCharge = 0;
+  @Column(nullable = false)
+  @Builder.Default
+  private Integer point = 0;
+  @Column(nullable = false)
+  @Builder.Default
+  private boolean active = true;
 
   @OneToOne(cascade = CascadeType.REMOVE)
   @JoinColumn(name = "total_ranking_seq")
+  @ToString.Exclude
   private TotalRanking totalRanking;
 
   @OneToMany(mappedBy = "groupCard", cascade = CascadeType.REMOVE)
+  @ToString.Exclude
   private List<PointUsage> pointUsages;
 
   @OneToMany(mappedBy = "groupCard", cascade = CascadeType.REMOVE)
+  @ToString.Exclude
   private List<GroupUser> groupUsers;
 
 }

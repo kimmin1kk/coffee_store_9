@@ -22,12 +22,14 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity
 @Getter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@ToString
 public class User extends BaseTimeEntity {
 
   @Column(nullable = false, unique = true)
@@ -37,15 +39,20 @@ public class User extends BaseTimeEntity {
   @Column(nullable = false)
   private String name;
   @Column(nullable = false)
-  private Grade grade;
+  @Builder.Default
+  private Grade grade = Grade.BRONZE;
   @Column(nullable = false)
-  private Integer mileage;
+  @Builder.Default
+  private Integer mileage = 0;
+  @Column
+  @Builder.Default
+  private Timestamp recentActiveDate = new Timestamp(System.currentTimeMillis());
   @Column(nullable = false)
-  private Timestamp recentActiveDate;
+  @Builder.Default
+  private Integer monthlyOrderCount = 0;
   @Column(nullable = false)
-  private Integer monthlyOrderCount;
-  @Column(nullable = false)
-  private Integer monthlyOrderCharge;
+  @Builder.Default
+  private Integer monthlyOrderCharge = 0;
 
   @Column(columnDefinition = "boolean default true")
   @Builder.Default
@@ -53,17 +60,23 @@ public class User extends BaseTimeEntity {
 
   @OneToMany(fetch = FetchType.EAGER, mappedBy = "user", cascade = CascadeType.REMOVE)
   @Builder.Default
+  @ToString.Exclude
   private Set<Authority> authorities = new HashSet<>();
 
   @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.REMOVE, orphanRemoval = true)
   @Builder.Default
+  @ToString.Exclude
+
   private List<Orders> ordersList = new ArrayList<>();
 
   @OneToMany(mappedBy = "user")
+
+  @ToString.Exclude
   private List<MonthlyUserData> monthlyUserData;
 
   @OneToOne
   @JoinColumn(name = "group_user_seq")
+  @ToString.Exclude
   private GroupUser groupUser;
 
 
@@ -74,6 +87,10 @@ public class User extends BaseTimeEntity {
     }
     Authority authority = Authority.builder().role(role).user(this).build();
     this.authorities.add(authority);
+  }
+
+  public void getGroup(GroupUser groupUser) {
+    this.groupUser = groupUser;
   }
 
 }
