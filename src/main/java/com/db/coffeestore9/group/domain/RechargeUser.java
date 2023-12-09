@@ -19,15 +19,38 @@ import lombok.NoArgsConstructor;
 public class RechargeUser extends BaseTimeEntity {
 
   private Integer rechargeAmount;
-  private boolean joined;
-  private boolean payed;
+  @Builder.Default
+  private boolean joined = false;
+  @Builder.Default
+  private boolean payed = false;
 
-  @ManyToOne()
+  @Builder.Default
+  private boolean penaltyPairAmount = true;
+
+  @ManyToOne
   @JoinColumn(name = "group_user_seq")
   private GroupUser groupUser;
 
   @ManyToOne
   @JoinColumn(name = "recharge_seq")
   private Recharge recharge;
+
+
+  public void changePayedState(boolean state) {
+    this.payed = state;
+  }
+
+  public void changeJoinedState(boolean state) {
+    this.joined = state;
+  }
+
+  public void changePenaltyState(boolean state) {
+    this.penaltyPairAmount = state;
+  }
+
+  public void addRechargeAmount(Integer amount) {
+    this.rechargeAmount += amount;
+  }
+
 
 }

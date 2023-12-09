@@ -69,6 +69,10 @@ public class GroupUser extends BaseTimeEntity {
     this.pairShareAmount = amount;
   }
 
+  public void addPairSharedAmount(Integer amount) {
+    this.pairShareAmount += amount;
+  }
+
   public void changeGroupActiveRequested(boolean state) {
     this.groupActiveRequested = state;
   }
