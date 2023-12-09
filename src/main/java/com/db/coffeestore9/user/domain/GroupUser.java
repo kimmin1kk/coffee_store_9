@@ -42,6 +42,9 @@ public class GroupUser extends BaseTimeEntity {
   private boolean administrator = false;
 
   @Builder.Default
+  private boolean groupActiveRequested = false;
+
+  @Builder.Default
   private Timestamp recentlyChargedDate = null;
 
   @OneToOne(mappedBy = "groupUser")
@@ -60,6 +63,14 @@ public class GroupUser extends BaseTimeEntity {
 
   public void changeAdminState(boolean state) {
     this.administrator = state;
+  }
+
+  public void changePairSharedAmount(Integer amount) {
+    this.pairShareAmount = amount;
+  }
+
+  public void changeGroupActiveRequested(boolean state) {
+    this.groupActiveRequested = state;
   }
 
 }

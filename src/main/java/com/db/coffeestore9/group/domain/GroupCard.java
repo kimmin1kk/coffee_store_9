@@ -66,4 +66,8 @@ public class GroupCard extends BaseTimeEntity {
     this.groupUsers.add(groupUser);
   }
 
+  public void changeActive(boolean state) {
+    this.active = state;
+  }
+
 }
