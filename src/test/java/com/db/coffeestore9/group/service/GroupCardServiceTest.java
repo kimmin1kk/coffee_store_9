@@ -25,7 +25,7 @@ class GroupCardServiceTest {
   private UserService userService;
 
   @Autowired
-  private GroupCardService groupCardService;
+  private CreateGroupCardService createGroupCardService;
 
   @Autowired
   private GroupCardRepository groupCardRepository;
@@ -50,7 +50,7 @@ class GroupCardServiceTest {
     CreateGroupCardForm createGroupCardForm = new CreateGroupCardForm("Test11111", "테스트그룹1", testList);
 
     //when
-    groupCardService.processGenerateGroupCard(createGroupCardForm);
+    createGroupCardService.processGenerateGroupCard(createGroupCardForm);
 
     //then
     assertNotNull(groupCardRepository.findByGroupName("테스트그룹1"));

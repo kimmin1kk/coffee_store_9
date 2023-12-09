@@ -1,7 +1,7 @@
 package com.db.coffeestore9.group.controller;
 
 import com.db.coffeestore9.group.common.CreateGroupCardForm;
-import com.db.coffeestore9.group.service.GroupCardService;
+import com.db.coffeestore9.group.service.CreateGroupCardService;
 import java.security.Principal;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/create/group")
-public class GroupCardController {
+public class CreateGroupCardController {
 
-  private final GroupCardService groupCardService;
+  private final CreateGroupCardService createGroupCardService;
 
 
   /**
@@ -37,7 +37,7 @@ public class GroupCardController {
    */
   @PostMapping
   public String createGroupCard(CreateGroupCardForm groupCardForm) {
-    groupCardService.processGenerateGroupCard(groupCardForm);
+    createGroupCardService.processGenerateGroupCard(groupCardForm);
 
     return "redirect:/";
   }

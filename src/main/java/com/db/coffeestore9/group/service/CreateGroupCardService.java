@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-public class GroupCardService {
+public class CreateGroupCardService {
 
   private final GroupCardRepository groupCardRepository;
   private final GroupUserRepository groupUserRepository;
