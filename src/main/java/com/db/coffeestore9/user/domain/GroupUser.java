@@ -61,10 +61,6 @@ public class GroupUser extends BaseTimeEntity {
   @ToString.Exclude
   private GroupCard groupCard;
 
-  public void changeAdminState(boolean state) {
-    this.administrator = state;
-  }
-
   public void changePairSharedAmount(Integer amount) {
     this.pairShareAmount = amount;
   }
