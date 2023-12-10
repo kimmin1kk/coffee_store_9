@@ -70,4 +70,12 @@ public class GroupCard extends BaseTimeEntity {
     this.active = state;
   }
 
+  public void changePoint(Integer point) {
+    if (point > 0) {
+      this.point += point;
+    }else {
+      this.point -= point;
+    }
+  }
+
 }
