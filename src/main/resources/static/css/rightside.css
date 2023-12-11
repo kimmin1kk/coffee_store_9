@@ -1,0 +1,11 @@
+.rightsideWrap1 {
+  position: absolute;
+  top: 130px;
+  right: 5%;
+}
+
+.rightsideWrap2 {
+  position: fixed;
+  bottom: 130px;
+  right: 5%;
+}

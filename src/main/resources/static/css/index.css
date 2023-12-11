@@ -1,0 +1,144 @@
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100vh;
+}
+
+.asideWrap {
+  position: fixed;
+  margin-left: 1%;
+  height: 35vh;
+  width: 10%;
+  padding-left: 20px;
+  top: 110px;
+}
+.img{
+position: absolute;
+width: 201px;
+}
+
+.asideTitle {
+  font-family: "Noto Sans KR";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 17px;
+  line-height: 24px;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  letter-spacing: 0.5px;
+  color: #d0aa8f;
+  background: linear-gradient(180deg, #f9f9f9 0%, rgba(249, 249, 249, 0) 30%);
+}
+
+.asideSub {
+  font-family: "Noto Sans KR";
+  font-style: normal;
+  font-weight: 300;
+  font-size: 13px;
+  line-height: 24px;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  letter-spacing: 0.5px;
+  color: #000000;
+}
+
+.sectionWrap {
+  margin-left: 10%;
+  position: relative;
+  margin-top: 150px;
+  width: 80%;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-column-gap: 20px;
+  grid-row-gap: 50px;
+}
+
+.categoryBox {
+  position: relative;
+  cursor: pointer;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 10px;
+  margin-bottom: 10px;
+  background-color: #f2f2f2;
+  padding: 20px;
+  filter: drop-shadow(0px 1px 4px rgba(0, 0, 0, 0.25));
+  border-radius: 12px;
+  width: 85%;
+  height: 270px;
+}
+
+.categoryName {
+  text-align: center;
+  font-weight: bold;
+  margin-top: 10px;
+  margin-bottom: 0;
+}
+
+.sectionTitle {
+  font-family: "Noto Sans KR";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 32px;
+  line-height: 24px;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  letter-spacing: 0.5px;
+  color: #000000;
+  position: relative;
+  top: 14.5%;
+  display: flex;
+  justify-content: center;
+  margin-right: 75%;
+}
+
+.footer {
+  /* position: fixed;
+  bottom: 0; */
+  position: relative;
+  background: #f8f5f2;
+  height: 10svh;
+  width: 100%;
+  margin-top: 20px;
+}
+
+.search {
+  position: absolute;
+  width: 300px;
+  top: 130px;
+  left: 38%;
+}
+
+.input {
+  width: 100%;
+  border: 1px solid #bbb;
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 14px;
+}
+
+.img {
+  position: absolute;
+  width: 17px;
+  top: 10px;
+  right: 0;
+  margin: 0;
+  display: block;
+}
+
+.search-button {
+  border: none;
+  background: none;
+  padding: 0;
+  cursor: pointer;
+  outline: none;
+}
+
+.border {
+  position: relative;
+  margin-top: 30px;
+}

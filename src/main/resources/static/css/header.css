@@ -1,0 +1,88 @@
+.headerWrap {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  position: fixed;
+  width: 100%;
+  height: 95px;
+  left: 0px;
+  top: 2px;
+  background: #ffffff;
+  border-bottom: 0.5px solid #ababab;
+  box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.25);
+  z-index: 100;
+}
+
+.title {
+  text-decoration: none;
+  color: inherit;
+}
+
+.title:hover {
+  color: inherit;
+}
+
+.headerTitle {
+  position: absolute;
+  width: 117px;
+  height: 66px;
+  left: 51px;
+  top: 10px;
+
+  font-family: "Noto Sans";
+  font-style: normal;
+  font-weight: 350;
+  font-size: 24px;
+  line-height: 24px;
+
+  display: flex;
+  align-items: center;
+  text-align: center;
+  letter-spacing: 0.5px;
+
+  color: #000000;
+}
+
+.imgTitle {
+  position: absolute;
+  top: 35px;
+  left: 27px;
+}
+
+.navTitle {
+  position: absolute;
+  display: flex;
+  margin-left: 10%;
+  margin-top: 30px;
+}
+
+.a {
+  text-decoration: none;
+  color: inherit;
+  margin-right: 20px;
+}
+
+.a:hover {
+  color: inherit;
+}
+
+.rightnavTitle1 {
+  position: absolute;
+  display: flex;
+  top: 35px;
+  left: 82.5%;
+}
+
+.rightnavTitle2 {
+  position: absolute;
+  display: flex;
+  top: 35px;
+  left: 85.5%;
+}
+
+.rightnavTitle3 {
+  position: absolute;
+  display: flex;
+  top: 35px;
+  left: 88.5%;
+}
