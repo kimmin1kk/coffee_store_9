@@ -78,4 +78,8 @@ public class GroupCard extends BaseTimeEntity {
     }
   }
 
+  public void getTotalRanking(TotalRanking totalRanking) {
+    this.totalRanking = totalRanking;
+  }
+
 }

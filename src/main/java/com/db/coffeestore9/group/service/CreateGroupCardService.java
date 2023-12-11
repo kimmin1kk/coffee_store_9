@@ -3,6 +3,8 @@ package com.db.coffeestore9.group.service;
 import com.db.coffeestore9.group.common.CreateGroupCardForm;
 import com.db.coffeestore9.group.domain.GroupCard;
 import com.db.coffeestore9.group.repository.GroupCardRepository;
+import com.db.coffeestore9.rank.domain.TotalRanking;
+import com.db.coffeestore9.rank.repository.TotalRankingRepository;
 import com.db.coffeestore9.user.domain.GroupUser;
 import com.db.coffeestore9.user.domain.User;
 import com.db.coffeestore9.user.repository.GroupUserRepository;
@@ -19,6 +21,7 @@ public class CreateGroupCardService {
   private final GroupCardRepository groupCardRepository;
   private final GroupUserRepository groupUserRepository;
   private final UserRepository userRepository;
+  private final TotalRankingRepository totalRankingRepository;
 
   /**
    * 그룹카드 생성하는 로직 (내부적으로 처리 하는 메서드들은 private 접근 제한 자로 선언해 둠 실제 생성할 떄는 이 로직만 호출 하면 됨)
@@ -32,6 +35,7 @@ public class CreateGroupCardService {
       GroupCard groupCard = createGroupCard(createGroupCardForm.groupName());
       createGroupAdmin(createGroupCardForm.adminUsername(), groupCard);
       createGroupUser(createGroupCardForm.usernames(), groupCard);
+      createTotalRanking(groupCard);
     } else {
       throw new IllegalArgumentException(
           "추가한 유저 중 이미 그룹이 존재하는 인원이 포함되어 있거나 그룹을 생성하기 위한 최소 인원수가 충족되지 않았습니다.");
@@ -64,7 +68,13 @@ public class CreateGroupCardService {
         .forEach(groupCard::addGroupUser);
     usernames.stream()
         .map(userRepository::findByUsername)
-        .forEach(s -> s.getGroup(groupUserRepository.save(GroupUser.builder().user(s).groupCard(groupCard).build())));
+        .forEach(s -> s.getGroup(
+            groupUserRepository.save(GroupUser.builder().user(s).groupCard(groupCard).build())));
+  }
+
+  private void createTotalRanking(GroupCard groupCard) {
+    groupCard.getTotalRanking(
+        totalRankingRepository.save(TotalRanking.builder().groupCard(groupCard).build()));
   }
 
   /**

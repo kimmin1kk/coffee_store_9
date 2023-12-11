@@ -55,6 +55,7 @@ public class PointService {
       case TEN_PERCENT -> 10000;
       case FORTY_PERCENT -> 5000;
       case SEVENTY_PERCENT -> 4000;
+      case NONE -> 0;
     };
   }
 

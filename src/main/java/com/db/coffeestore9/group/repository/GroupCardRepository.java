@@ -4,6 +4,7 @@ import com.db.coffeestore9.group.domain.GroupCard;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface GroupCardRepository extends JpaRepository<GroupCard, Long> {
+
   GroupCard findByGroupName(String groupName);
 
 }
