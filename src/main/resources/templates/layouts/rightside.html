@@ -1,0 +1,54 @@
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+  <head>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/rightside.css}" />
+    <style>
+      html,
+      body {
+        scroll-behavior: smooth;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="rightsideWrap1" id="scrollToBottom">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        height="24"
+        viewBox="0 -960 960 960"
+        width="24"
+      >
+        <path
+          d="M440-800v487L216-537l-56 57 320 320 320-320-56-57-224 224v-487h-80Z"
+        />
+      </svg>
+    </div>
+    <div class="rightsideWrap2" id="scrollToTop">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        height="24"
+        viewBox="0 -960 960 960"
+        width="24"
+      >
+        <path
+          d="M440-160v-487L216-423l-56-57 320-320 320 320-56 57-224-224v487h-80Z"
+        />
+      </svg>
+    </div>
+
+    <script>
+      document
+        .getElementById("scrollToBottom")
+        .addEventListener("click", function () {
+          window.scrollTo({
+            top: document.body.scrollHeight,
+            behavior: "smooth",
+          });
+        });
+
+      document
+        .getElementById("scrollToTop")
+        .addEventListener("click", function () {
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        });
+    </script>
+  </body>
+</html>
