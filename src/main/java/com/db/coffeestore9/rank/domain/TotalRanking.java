@@ -2,6 +2,7 @@ package com.db.coffeestore9.rank.domain;
 
 import com.db.coffeestore9.global.config.BaseEntity;
 import com.db.coffeestore9.group.domain.GroupCard;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
@@ -26,7 +27,11 @@ public class TotalRanking extends BaseEntity {
   @OneToOne(mappedBy = "totalRanking")
   private GroupCard groupCard;
 
-  @OneToMany(mappedBy = "totalRanking")
+  @OneToMany(mappedBy = "totalRanking", cascade = {CascadeType.PERSIST, CascadeType.DETACH})
   private List<RankInfo> rankingInfos;
+
+  public void addRankInfos(RankInfo rankInfo) {
+    this.rankingInfos.add(rankInfo);
+  }
 
 }

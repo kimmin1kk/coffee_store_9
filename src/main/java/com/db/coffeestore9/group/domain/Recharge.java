@@ -2,6 +2,7 @@ package com.db.coffeestore9.group.domain;
 
 import com.db.coffeestore9.global.config.BaseTimeEntity;
 import com.db.coffeestore9.global.common.State;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
@@ -34,7 +35,7 @@ public class Recharge extends BaseTimeEntity {
 
   private Integer pairAmount;
 
-  @OneToMany(mappedBy = "recharge")
+  @OneToMany(mappedBy = "recharge", cascade = {CascadeType.PERSIST,CascadeType.REMOVE})
   private List<RechargeUser> rechargeUsers;
 
   public void changeState(State state) {

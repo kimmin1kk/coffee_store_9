@@ -31,16 +31,17 @@ public class PointService {
 
     groupCard.changePoint(point);
 
-    groupCard.getPointUsages().add(pointUsageRepository.save(
+    groupCard.getPointUsages().add(
         PointUsage.builder().groupCard(groupCard)
-            .amountPoint(point).reasonPoint(message).expirationDate(new Timestamp(System.currentTimeMillis() + 96000)).build()));
+            .amountPoint(point).reasonPoint(message)
+            .expirationDate(new Timestamp(System.currentTimeMillis() + 96000)).build());
 
   }
 
   /**
    * 랭킹 별 포인트 얼마 받을지 정해서 리턴해 주는 로직
    *
-   * @param groupSeq 1,2,3등 보상이 월간사용금액에서 퍼센트로 지급해주는거라서 groupCard 정보 필요, 인자로 받아야 함
+   * @param groupSeq   1,2,3등 보상이 월간사용금액에서 퍼센트로 지급해주는거라서 groupCard 정보 필요, 인자로 받아야 함
    * @param rewardTier 그룹의 티어
    * @return 산정된 포인트 리턴 이걸 changeGroupPoint 메서드의 point 인자에 넣으면 됨
    */

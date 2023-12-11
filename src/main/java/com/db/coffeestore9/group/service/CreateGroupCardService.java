@@ -57,7 +57,7 @@ public class CreateGroupCardService {
     GroupUser groupUser = GroupUser.builder().user(user).administrator(true).groupCard(groupCard)
         .build();
 
-    user.getGroup(groupUserRepository.save(groupUser));
+    user.getGroup(groupUser);
     groupCard.addGroupUser(groupUser);
   }
 
@@ -68,13 +68,11 @@ public class CreateGroupCardService {
         .forEach(groupCard::addGroupUser);
     usernames.stream()
         .map(userRepository::findByUsername)
-        .forEach(s -> s.getGroup(
-            groupUserRepository.save(GroupUser.builder().user(s).groupCard(groupCard).build())));
+        .forEach(s -> s.getGroup(GroupUser.builder().user(s).groupCard(groupCard).build()));
   }
 
   private void createTotalRanking(GroupCard groupCard) {
-    groupCard.getTotalRanking(
-        totalRankingRepository.save(TotalRanking.builder().groupCard(groupCard).build()));
+    groupCard.getTotalRanking(TotalRanking.builder().groupCard(groupCard).build());
   }
 
   /**

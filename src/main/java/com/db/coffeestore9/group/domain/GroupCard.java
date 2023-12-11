@@ -48,16 +48,16 @@ public class GroupCard extends BaseTimeEntity {
   @Builder.Default
   private boolean active = true;
 
-  @OneToOne(cascade = CascadeType.REMOVE)
+  @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
   @JoinColumn(name = "total_ranking_seq")
   @ToString.Exclude
   private TotalRanking totalRanking;
 
-  @OneToMany(mappedBy = "groupCard", cascade = CascadeType.REMOVE)
+  @OneToMany(mappedBy = "groupCard", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
   @ToString.Exclude
   private List<PointUsage> pointUsages;
 
-  @OneToMany(mappedBy = "groupCard", cascade = CascadeType.REMOVE)
+  @OneToMany(mappedBy = "groupCard", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
   @ToString.Exclude
   @Builder.Default
   private List<GroupUser> groupUsers = new ArrayList<>();
@@ -73,7 +73,7 @@ public class GroupCard extends BaseTimeEntity {
   public void changePoint(Integer point) {
     if (point > 0) {
       this.point += point;
-    }else {
+    } else {
       this.point -= point;
     }
   }

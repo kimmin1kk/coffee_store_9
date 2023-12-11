@@ -60,7 +60,8 @@ public class User extends BaseTimeEntity {
   @Builder.Default
   private boolean enabled = true;
 
-  @OneToMany(fetch = FetchType.EAGER, mappedBy = "user", cascade = CascadeType.REMOVE)
+  @OneToMany(fetch = FetchType.EAGER, mappedBy = "user", cascade = {CascadeType.PERSIST,
+      CascadeType.REMOVE})
   @Builder.Default
   @ToString.Exclude
   private Set<Authority> authorities = new HashSet<>();
@@ -76,7 +77,7 @@ public class User extends BaseTimeEntity {
   @ToString.Exclude
   private List<MonthlyUserData> monthlyUserData;
 
-  @OneToOne
+  @OneToOne(cascade = CascadeType.PERSIST)
   @JoinColumn(name = "group_user_seq")
   @ToString.Exclude
   private GroupUser groupUser;

@@ -3,6 +3,7 @@ package com.db.coffeestore9.rank.domain;
 import com.db.coffeestore9.global.config.BaseTimeEntity;
 import com.db.coffeestore9.rank.common.Kind;
 import com.db.coffeestore9.global.common.State;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
@@ -30,7 +31,7 @@ public class Ranking extends BaseTimeEntity {
   @Column(nullable = false)
   private Kind kind;
 
-  @OneToMany(mappedBy = "ranking")
+  @OneToMany(mappedBy = "ranking", cascade = {CascadeType.PERSIST, CascadeType.DETACH})
   private List<RankInfo> rankingInfos;
 
   public void changeState(State state) {
@@ -39,6 +40,10 @@ public class Ranking extends BaseTimeEntity {
 
   public void changeKind(Kind kind) {
     this.kind = kind;
+  }
+
+  public void addRankInfo(RankInfo rankInfo) {
+    this.rankingInfos.add(rankInfo);
   }
 
 }

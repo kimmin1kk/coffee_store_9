@@ -3,6 +3,7 @@ package com.db.coffeestore9.user.domain;
 import com.db.coffeestore9.global.config.BaseTimeEntity;
 import com.db.coffeestore9.group.domain.GroupCard;
 import com.db.coffeestore9.group.domain.RechargeUser;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -47,11 +48,11 @@ public class GroupUser extends BaseTimeEntity {
   @Builder.Default
   private Timestamp recentlyChargedDate = null;
 
-  @OneToOne(mappedBy = "groupUser")
+  @OneToOne(mappedBy = "groupUser", cascade = CascadeType.DETACH)
   @ToString.Exclude
   private User user;
 
-  @OneToMany(mappedBy = "groupUser")
+  @OneToMany(mappedBy = "groupUser", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
   @Builder.Default
   @ToString.Exclude
   private List<RechargeUser> rechargeUsers = new ArrayList<>();
