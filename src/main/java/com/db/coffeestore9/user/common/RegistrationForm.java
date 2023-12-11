@@ -6,9 +6,10 @@ public record RegistrationForm(String username, String password, String name, St
 
     public User toUser() {
         return User.builder()
-                .username(this.username)
-                .password(this.password)
-                .name(this.name)
-                .build();
+            .username(this.username)
+            .password(this.password)
+            .name(this.name)
+            .nickname(this.nickname)
+            .build();
     }
 }
