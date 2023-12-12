@@ -27,7 +27,7 @@ public class CreateGroupCardController {
    * @return
    */
   @GetMapping
-  public String showCreateForm(Principal principal, Model model) {
+  public String showCreateForm(Model model, Principal principal) {
     return "group/createForm";
   }
 

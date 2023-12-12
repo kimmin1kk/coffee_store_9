@@ -23,14 +23,14 @@ public class RechargeController {
   private final GroupCardService groupCardService;
 
   @GetMapping("/request/form")
-  public String rechargeForm(Principal principal, Model model) {
+  public String rechargeForm(Model model, Principal principal) {
     model.addAttribute("groupUsers",
         groupCardService.getGroupUsers(groupCardService.getMyGroup(principal.getName())));
     return "/recharge/form";
   }
 
   @PostMapping("/request/form")
-  public String processRecharge(Principal principal, Model model, @ModelAttribute
+  public String processRecharge(Model model, Principal principal, @ModelAttribute
   RequestRechargeForm requestRechargeForm) {
     Long seq = rechargeService.requestRecharge(requestRechargeForm).getSeq();
 
@@ -42,7 +42,7 @@ public class RechargeController {
    * @return
    */
   @GetMapping("/request/pairAmount/{seq}")
-  public String pairAmountPenaltyCheckForm(Principal principal, Model model,
+  public String pairAmountPenaltyCheckForm(Model model, Principal principal,
       @PathVariable("seq") Long seq) {
     model.addAttribute("rechargeUsers", rechargeService.checkRechargeUsersPairAmount(
         rechargeService.getRecharge(seq).getRechargeUsers()));
@@ -51,7 +51,7 @@ public class RechargeController {
   }
 
   @PostMapping("/request/pairAmount/{seq}")
-  public String pairAmountPenaltyCheck(Principal principal, Model model,
+  public String pairAmountPenaltyCheck(Model model, Principal principal,
       @PathVariable("seq") Long seq, @ModelAttribute
   RequestPairAmountPenalty requestPairAmountPenalty) {
 
@@ -61,7 +61,7 @@ public class RechargeController {
   }
 
   @PostMapping("/request/pay/{seq}")
-  public String processingPayment(Principal principal, Model model, @PathVariable("seq") Long seq) {
+  public String processingPayment(Model model, Principal principal, @PathVariable("seq") Long seq) {
     rechargeService.processRecharge(principal.getName(), seq);
 
     return "redirect:/";

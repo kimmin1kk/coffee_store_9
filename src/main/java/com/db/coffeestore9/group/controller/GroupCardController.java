@@ -19,14 +19,23 @@ public class GroupCardController {
 
 
   /**
+   * 그룹카드 설명하는 페이지로 연결
+   * @return
+   */
+  @GetMapping
+  public String groupInfoPage(Model model, Principal principal) {
+    return "/group/groupinfo";
+  }
+
+  /**
    * 그룹이 활성화된 상태라면 마이그룹페이지로 이동 비활성화 상태라면 활성화 요청 페이지로 이동
    *
    * @param principal
    * @param model
    * @return
    */
-  @GetMapping
-  public String myGroupCardPage(Principal principal, Model model) {
+  @GetMapping("/myGroup")
+  public String myGroupCardPage(Model model, Principal principal) {
     GroupCard groupCard = groupCardService.getMyGroup(principal.getName());
     if (groupCardService.checkGroupCardActiveState(
         groupCard)) {
@@ -41,7 +50,7 @@ public class GroupCardController {
 
 
   @PostMapping("/request/active")
-  public String requestActive(Principal principal, Model model) {
+  public String requestActive(Model model, Principal principal) {
     GroupCard groupCard = groupCardService.getMyGroup(principal.getName());
 
     groupCardService.requestGroupActive(principal.getName());
