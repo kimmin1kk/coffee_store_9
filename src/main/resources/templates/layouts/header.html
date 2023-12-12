@@ -1,4 +1,4 @@
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
   <link rel="stylesheet" type="text/css" th:href="@{/css/header.css}" />
 
   <div class="headerWrap">
@@ -18,14 +18,15 @@
       <a class="title" th:href="@{/}">GROUP<br />CARD</a>
     </div>
     <div class="navTitle">
-      <a class="a" th:href="@{/}">MANAGE</a>
+      <a class="a" th:href="@{/}" sec:authorize="isAuthenticated()">MANAGE</a>
       <a class="a" th:href="@{/}">MENU</a>
-      <a class="a" th:href="@{/}">EVENT</a>
+      <a class="a" th:href="@{/}" >EVENT</a>
       <a class="a" th:href="@{/group}">CROUPCARD</a>
-      <a class="a" th:href="@{/}">MY GROUP PAGE</a>
-      <a class="a" th:href="@{/}">MY GROUP MANAGE</a>
+      <a class="a" th:href="@{/}" sec:authorize="isAuthenticated()">MY GROUP PAGE</a>
+      <a class="a" th:href="@{/}" sec:authorize="isAuthenticated()">MY GROUP MANAGE</a>
     </div>
-    <div class="rightnavTitle1">
+    <span class="userTitle" th:text="'안녕하세요 '+${username}+'님!'" sec:authorize="isAuthenticated()"></span>
+    <div class="rightnavTitle1" sec:authorize="isAnonymous()">
       <a th:href="@{/login}">
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -37,6 +38,11 @@
             d="M480-120v-80h280v-560H480v-80h280q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H480Zm-80-160-55-58 102-102H120v-80h327L345-622l55-58 200 200-200 200Z"
           />
         </svg>
+      </a>
+    </div>
+    <div class="rightnavTitle1" sec:authorize="isAuthenticated()" >
+      <a th:href="@{/logout}">
+        <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h280v80H200v560h280v80H200Zm440-160-55-58 102-102H360v-80h327L585-622l55-58 200 200-200 200Z"/></svg>
       </a>
     </div>
     <div class="rightnavTitle2">
