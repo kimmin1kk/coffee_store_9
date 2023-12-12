@@ -1,7 +1,6 @@
 package com.db.coffeestore9.group.service;
 
 import com.db.coffeestore9.group.domain.GroupCard;
-import com.db.coffeestore9.group.repository.GroupCardRepository;
 import com.db.coffeestore9.user.domain.GroupUser;
 import com.db.coffeestore9.user.repository.GroupUserRepository;
 import java.util.List;
@@ -13,28 +12,16 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class GroupCardService {
 
-  private final GroupCardRepository groupCardRepository;
   private final GroupUserRepository groupUserRepository;
 
   /**
-   * 그룹이 활성화 상태인지 확인하는 로직
+   * 그룹이 활성화 상태인지 + 3명 이상 들어와있는지 확인하는 로직
    *
    * @param groupCard
    * @return
    */
-  public boolean checkGroupCardActiveState(GroupCard groupCard) {
-    return groupCard.isActive();
-  }
-
-  /**
-   * 사용자 아이디를 통해 그룹을 찾는 로직
-   *
-   * @param username
-   * @return
-   */
-  public GroupCard getMyGroup(String username) {
-    return groupCardRepository.findByGroupName(
-        groupUserRepository.findByUserUsername(username).getGroupCard().getGroupName());
+  public boolean checkGroupCardActiveStateAndCreateActive(GroupCard groupCard) {
+    return groupCard.isActive() && groupCard.isCreateActive();
   }
 
   /**
@@ -44,14 +31,8 @@ public class GroupCardService {
    * @return 그룹원들
    */
   public List<GroupUser> getGroupUsers(GroupCard groupCard) {
-    return groupUserRepository.findGroupUsersByGroupCardSeq(groupCard.getSeq());
+    return groupUserRepository.findGroupUsersByGroupCardSeq(groupCard.getSeq()).stream().filter(GroupUser::isUserAccepted).toList();
   }
-
-  @Transactional
-  public void requestGroupActive(String username) {
-    groupUserRepository.findByUserUsername(username).changeGroupActiveRequested(true);
-  }
-
 
   /**
    * 활성화 요청이 과반수 이상 되었는지 확인하는 로직, 과반수가 넘었을 경우 그룹카드를 활성화 시키면서 그룹원들의 활성화요청상태를 false로 초기화 시킴
