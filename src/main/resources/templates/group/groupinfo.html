@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/groupcard.css}" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div th:include="/layouts/header"></div>
+    <div class="asideWrap">
+      <h4 class="asideTitle">카테고리</h4>
+      <p class="asideSub" onclick="scrollToSection('그룹 카드 란?')">
+        그룹 카드 란?
+      </p>
+      <p class="asideSub" onclick="scrollToSection('그룹 카드 혜택')">
+        그룹 카드 혜택
+      </p>
+      <p class="asideSub" onclick="scrollToSection('그룹 카드 만들기')">
+        그룹 카드 만들기
+      </p>
+    </div>
+    <div class="sectionWrap">
+      <h2 class="groupTitle" id="그룹 카드 란?">그룹 카드 란?</h2>
+      <div class="groupSection">
+        <div class="img">
+        </div>
+        <div class="sectionContent">
+          <h3 class="contentTitle"><strong>특별한 충전식 선불카드, 사용하면 할수록 다양한 혜택을 경험할 수 있습니다!</strong></h3>
+          <br>
+          <h4 class="contentTitle2">그룹 카드는 최소 3명부터 최대 20명까지 구성된 인원으로 생성 가능한 카드로<br><br> 사용자들 전원이 카드 하나로 구매가 가능하고 혜택을 받을 수 있습니다! <br><br>아래와 같은 혜택을 확인하고 지금 그룹 카드를 만들어 보세요!</h4>
+        </div>
+      </div>
+    </div>
+    <div class="sectionWrap">
+      <h2 class="groupTitle" id="그룹 카드 혜택">그룹 카드 혜택</h2>
+      <h3 class="contentTitle"><strong>브론즈 그룹</strong></h3>
+      <h4 class="contentTitle">첫 그룹 생성시 브론즈 그룹으로 지정되고 아래와 같은 혜택을 받을 수 있습니다.</h4>
+      <div class="sectionContent2">
+        <h4 class="contentTitle2">브론즈 그룹 카드는 한잔당 3%의 할인을 받으며 최대 8% 까지 할인을 받을 수 있습니다!<br><br><br>
+        또한 그룹 전체의 월간 사용 금액이 25만원이 초과하면 실버 그룹으로 승격하여<br><br><br>
+        더 많은 혜택을 누릴 수 있습니다!<br>
+      </h4>
+      </div>
+    </div>
+    <div class="sectionWrap">
+      <h3 class="contentTitle"><strong>실버 그룹</strong></h3>
+      <h4 class="contentTitle">첫 그룹 생성시 실버 그룹으로 지정되고 아래와 같은 혜택을 받을 수 있습니다.</h4>
+      <div class="sectionContent2">
+        <h4 class="contentTitle2">실버 그룹 카드는 한잔당 3%의 할인을 받으며 최대 8% 까지 할인을 받을 수 있습니다!<br><br><br>
+          또한 그룹 전체의 월간 사용 금액이 25만원이 초과하면 실버 그룹으로 승격하여<br><br><br>
+          더 많은 혜택을 누릴 수 있습니다!<br>
+        </h4>
+      </div>
+    </div>
+    <div class="sectionWrap">
+      <h3 class="contentTitle"><strong>골드 그룹</strong></h3>
+      <h4 class="contentTitle">첫 그룹 생성시 골드 그룹으로 지정되고 아래와 같은 혜택을 받을 수 있습니다.</h4>
+      <div class="sectionContent2">
+        <h4 class="contentTitle2">골드 그룹 카드는 한잔당 3%의 할인을 받으며 최대 8% 까지 할인을 받을 수 있습니다!<br><br><br>
+          또한 그룹 전체의 월간 사용 금액이 25만원이 초과하면 실버 그룹으로 승격하여<br><br><br>
+          더 많은 혜택을 누릴 수 있습니다!<br>
+        </h4>
+      </div>
+    </div>
+    <div class="sectionWrap">
+      <h3 class="contentTitle"><strong>VIP 그룹</strong></h3>
+      <h4 class="contentTitle">첫 그룹 생성시 VIP 그룹으로 지정되고 아래와 같은 혜택을 받을 수 있습니다.</h4>
+      <div class="sectionContent2">
+        <h4 class="contentTitle2">VIP 그룹 카드는 한잔당 3%의 할인을 받으며 최대 8% 까지 할인을 받을 수 있습니다!<br><br><br>
+          또한 그룹 전체의 월간 사용 금액이 25만원이 초과하면 실버 그룹으로 승격하여<br><br><br>
+          더 많은 혜택을 누릴 수 있습니다!<br>
+        </h4>
+      </div>
+    </div>
+    <div class="sectionWrap">
+      <h2 class="groupTitle" id="그룹 카드 만들기">그룹 카드 만들기</h2>
+      <h3 class="contentTitle">만드는 방법<strong></strong></h3>
+      <div class="sectionContent3">
+        <h4 class="makecardTitle">온라인 신청</h4>
+        <h4 class="makecrdsubTitle">그룹 카드는 온라인으로만 신청 가능합니다.</h4>
+        <h4 class="makecrdsubTitle2">- 개설자가 카드 관리자로 임명됩니다.<br><br>- 카드 관리자는 각출할 그룹원을 선택하고 그룹원에게 충전요청을 보낼 수 있습니다.<br><br>- 각 그룹원들은 충전요청을 받고 요청 받은 금액을 충전합니다.<br><br>- 기간내 충전이 이루어지지 않으면 금액은 각 사용자에게 철회됩니다.</h4>
+      </div>
+    </div>
+
+    <div th:include="/layouts/rightside"></div>
+    <footer class="footer"></footer>
+
+    <script>
+      function scrollToSection(sectionId) {
+        var sectionElement = document.getElementById(sectionId);
+
+        if (sectionElement) {
+          var topOffset =
+            sectionElement.getBoundingClientRect().top + window.scrollY;
+
+          window.scrollTo({
+            top: topOffset,
+            behavior: "smooth",
+          });
+        }
+      }
+    </script>
+  </body>
+</html>
