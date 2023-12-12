@@ -43,6 +43,12 @@ public class Orders extends BaseTimeEntity {
   private Integer totalPrice;
 
   @Builder.Default
+  private Integer salePercentage = 0;
+
+  @Builder.Default
+  private Integer savedPrice = 0;
+
+  @Builder.Default
   private boolean instant = false;
 
   @Builder.Default
@@ -55,8 +61,14 @@ public class Orders extends BaseTimeEntity {
 
   public void confirmOrder(OrderPageForm pageForm) {
     this.paymentMethod = pageForm.paymentMethod();
-    this.totalPrice = this.orderContentList.stream()
+    int price = this.orderContentList.stream()
         .mapToInt(oc -> oc.getProduct().getPrice() * oc.getCount()).sum();
+    this.savedPrice = (int) (price * ((double) salePercentage / 100));
+    this.totalPrice = price - this.savedPrice;
     this.ordered = true;
+  }
+
+  public void getSalePercentage(Integer salePercentage) {
+    this.salePercentage += salePercentage;
   }
 }

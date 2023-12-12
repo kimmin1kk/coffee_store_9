@@ -43,6 +43,9 @@ public class GroupUser extends BaseTimeEntity {
   private boolean administrator = false;
 
   @Builder.Default
+  private boolean userAccepted = false;
+
+  @Builder.Default
   private boolean groupActiveRequested = false;
 
   @Builder.Default
@@ -61,6 +64,10 @@ public class GroupUser extends BaseTimeEntity {
   @JoinColumn(name = "group_card_seq")
   @ToString.Exclude
   private GroupCard groupCard;
+
+  public void changeUserAccepted(boolean state) {
+    this.userAccepted = state;
+  }
 
   public void changePairSharedAmount(Integer amount) {
     this.pairShareAmount = amount;

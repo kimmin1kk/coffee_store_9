@@ -45,6 +45,10 @@ public class GroupCard extends BaseTimeEntity {
   @Builder.Default
   private Integer point = 0;
   @Column(nullable = false)
+
+  @Builder.Default
+  private boolean createActive = false;
+
   @Builder.Default
   private boolean active = true;
 
@@ -57,13 +61,17 @@ public class GroupCard extends BaseTimeEntity {
   @ToString.Exclude
   private List<PointUsage> pointUsages;
 
-  @OneToMany(mappedBy = "groupCard", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+  @OneToMany(mappedBy = "groupCard", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
   @ToString.Exclude
   @Builder.Default
   private List<GroupUser> groupUsers = new ArrayList<>();
 
   public void addGroupUser(GroupUser groupUser) {
     this.groupUsers.add(groupUser);
+  }
+
+  public void changeCreateActive(boolean state) {
+    this.createActive = state;
   }
 
   public void changeActive(boolean state) {
