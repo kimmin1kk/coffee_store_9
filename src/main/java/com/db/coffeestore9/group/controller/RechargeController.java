@@ -3,6 +3,7 @@ package com.db.coffeestore9.group.controller;
 import com.db.coffeestore9.group.common.RequestPairAmountPenalty;
 import com.db.coffeestore9.group.common.RequestRechargeForm;
 import com.db.coffeestore9.group.service.GroupCardService;
+import com.db.coffeestore9.group.service.GroupUserService;
 import com.db.coffeestore9.group.service.RechargeService;
 import java.security.Principal;
 import lombok.RequiredArgsConstructor;
@@ -21,11 +22,12 @@ public class RechargeController {
 
   private final RechargeService rechargeService;
   private final GroupCardService groupCardService;
+  private final GroupUserService groupUserService;
 
   @GetMapping("/request/form")
   public String rechargeForm(Model model, Principal principal) {
     model.addAttribute("groupUsers",
-        groupCardService.getGroupUsers(groupCardService.getMyGroup(principal.getName())));
+        groupCardService.getGroupUsers(groupUserService.getMyGroup(principal.getName())));
     return "/recharge/form";
   }
 
