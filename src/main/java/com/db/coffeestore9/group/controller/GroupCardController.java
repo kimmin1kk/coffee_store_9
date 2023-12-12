@@ -31,12 +31,12 @@ public class GroupCardController {
     if (groupCardService.checkGroupCardActiveState(
         groupCard)) {
       model.addAttribute("groupCard", groupCard);
-      return "/myGroup";
+      return "group/myGroup";
 
     }
-    //
+
     model.addAttribute("groupUsers", groupCardService.getGroupUsers(groupCard));
-    return "/disabledGroup";
+    return "group/disabledGroup";
   }
 
 

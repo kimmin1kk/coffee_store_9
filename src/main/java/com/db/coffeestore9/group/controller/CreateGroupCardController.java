@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -27,7 +28,7 @@ public class CreateGroupCardController {
    */
   @GetMapping
   public String showCreateForm(Principal principal, Model model) {
-    return "/group/createForm";
+    return "group/createForm";
   }
 
   /**
@@ -36,7 +37,7 @@ public class CreateGroupCardController {
    * @return
    */
   @PostMapping
-  public String createGroupCard(CreateGroupCardForm groupCardForm) {
+  public String createGroupCard(@ModelAttribute CreateGroupCardForm groupCardForm) {
     createGroupCardService.processGenerateGroupCard(groupCardForm);
 
     return "redirect:/";

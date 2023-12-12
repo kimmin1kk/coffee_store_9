@@ -42,8 +42,4 @@ public class Ranking extends BaseTimeEntity {
     this.kind = kind;
   }
 
-  public void addRankInfo(RankInfo rankInfo) {
-    this.rankingInfos.add(rankInfo);
-  }
-
 }

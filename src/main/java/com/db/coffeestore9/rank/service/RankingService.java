@@ -58,12 +58,12 @@ public class RankingService {
   public void startRankingSchedule(Long rankingSeq) {
     Ranking ranking = getRanking(rankingSeq);
     if (checkRankingStart(rankingSeq)) {
-      ranking.changeState(State.ON_PROGRESS);
 
       totalRankingRepository.findAll().stream().filter(s -> s.getGroupCard().isActive())
-          .forEach(s -> s.getRankingInfos()
-              .add(RankInfo.builder().totalRanking(s).ranking(ranking).build()
+          .forEach(s -> s.getRankingInfos().add(RankInfo.builder().totalRanking(s).ranking(ranking).build()
               ));
+
+      ranking.changeState(State.ON_PROGRESS);
     } else {
       throw new IllegalArgumentException("해당 랭킹 이벤트는 아직 시작할 시기가 되지 않았습니다. ?");
     }
