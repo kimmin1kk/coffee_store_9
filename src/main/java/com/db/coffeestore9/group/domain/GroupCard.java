@@ -7,6 +7,8 @@ import com.db.coffeestore9.user.domain.GroupUser;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
@@ -32,6 +34,7 @@ public class GroupCard extends BaseTimeEntity {
   @Column(nullable = false)
   @Builder.Default
   private Integer charge = 0;
+  @Enumerated(EnumType.STRING)
   @Column(nullable = false)
   @Builder.Default
   private Grade grade = Grade.BRONZE;

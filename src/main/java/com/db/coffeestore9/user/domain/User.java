@@ -8,6 +8,8 @@ import com.db.coffeestore9.global.common.Grade;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
@@ -42,6 +44,7 @@ public class User extends BaseTimeEntity {
   private String nickname;
   @Column(nullable = false)
   @Builder.Default
+  @Enumerated(EnumType.STRING)
   private Grade grade = Grade.BRONZE;
   @Column(nullable = false)
   @Builder.Default
