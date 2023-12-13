@@ -19,12 +19,46 @@
         그룹 카드 만들기
     </p>
 </div>
-<div>
-    <div class="sectionWrap">
-        <h2>그룹 카드 만들기</h2>
+<div class="sectionWrap">
+    <h3 class="contentTitle">그룹 카드 만들기</h3>
+    <div>
+        <form method="POST" th:action="@{/create/group}" id="groupCardForm">
+
+            <div>
+                <label for="adminUsername" th:text="'카드개설자: '+${username}"></label>
+                <input type="hidden" id="adminUsername" name="adminUsername" th:value="${username}">
+            </div>
+
+            <label for="groupName">그룹 이름</label>
+            <input type="text" id="groupName" name="groupName" placeholder="그룹명" required /><br />
+
+            <div>
+                <label>그룹원:</label>
+                <input type="text" name="usernames" placeholder="고객 아이디" required />
+                <button type="button" onclick="addGroupMember()">그룹원 추가</button>
+            </div>
+
+            <div class="button-container">
+                <button type="submit">카드 만들기</button>
+            </div>
+        </form>
     </div>
 </div>
+
 <div th:insert="/layouts/rightside"></div>
-<footer class="footer"></footer>
+<!--<footer class="footer"></footer>-->
+
+<script>
+    function addGroupMember() {
+        var inputContainer = document.getElementById('usernames-container');
+        var input = document.createElement('input');
+        input.type = 'text';
+        input.name = 'usernames';
+        input.placeholder = '고객 아이디';
+        input.required = true;
+        inputContainer.appendChild(input);
+    }
+</script>
+
 </body>
 </html>
