@@ -32,7 +32,7 @@ public class GroupUser extends BaseTimeEntity {
   @Builder.Default
   private Integer monthlyUsedAmount = 0;
 
-   @Builder.Default
+  @Builder.Default
   private Integer totalChargedAmount = 0;
 
   @Builder.Default
@@ -66,6 +66,10 @@ public class GroupUser extends BaseTimeEntity {
   @JoinColumn(name = "group_card_seq")
   @ToString.Exclude
   private GroupCard groupCard;
+
+  public void changeRecentChargedDate() {
+    this.recentlyChargedDate = new Timestamp(System.currentTimeMillis());
+  }
 
   public void changeUserAccepted(boolean state) {
     this.userAccepted = state;

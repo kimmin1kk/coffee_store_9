@@ -212,8 +212,12 @@ public class RechargeService {
 
     if (checkRechargeFinished(seq)) {
       recharge.changeState(State.FINISHED);
-      groupCardRepository.findByGroupName(groupUserRepository.findByUserUsername(username).getGroupCard()
-          .getGroupName()).addCharge(recharge.getRechargeAmount());
+      groupCardRepository.findByGroupName(
+          groupUserRepository.findByUserUsername(username).getGroupCard()
+              .getGroupName()).addCharge(recharge.getRechargeAmount());
+
+      recharge.getRechargeUsers().stream().filter(RechargeUser::isPayed)
+          .map(RechargeUser::getGroupUser).forEach(GroupUser::changeRecentChargedDate);
 
       resetPairSharedAmount(recharge.getRechargeUsers());
 
