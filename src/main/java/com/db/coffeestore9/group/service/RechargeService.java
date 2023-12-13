@@ -4,6 +4,7 @@ package com.db.coffeestore9.group.service;
 import com.db.coffeestore9.global.common.State;
 import com.db.coffeestore9.group.common.RequestPairAmountPenalty;
 import com.db.coffeestore9.group.common.RequestRechargeForm;
+import com.db.coffeestore9.group.domain.GroupCard;
 import com.db.coffeestore9.group.domain.Recharge;
 import com.db.coffeestore9.group.domain.RechargeUser;
 import com.db.coffeestore9.group.repository.GroupCardRepository;
@@ -24,6 +25,10 @@ public class RechargeService {
   private final RechargeUserRepository rechargeUserRepository;
   private final GroupUserRepository groupUserRepository;
   private final GroupCardRepository groupCardRepository;
+
+  public List<Recharge> getRechargeHistory(GroupCard groupCard) {
+    return groupCard.getRecharges().stream().filter(s -> s.getState() == State.FINISHED).toList();
+  }
 
   private List<RechargeUser> convertUsernamesAndSeqToRechargeUsers(List<String> usernames,
       Long seq) {
@@ -71,11 +76,15 @@ public class RechargeService {
             requestRechargeForm.groupSeq()
         ));
 
-    return rechargeRepository.save(Recharge.builder()
+    GroupCard groupCard = groupCardRepository.findById(requestRechargeForm.groupSeq())
+        .orElseThrow();
+    Recharge recharge = Recharge.builder()
         .rechargeAmount(requestRechargeForm.amount())
         .pairAmount(getPairAmount(requestRechargeForm.amount(), rechargeUsers))
         .rechargeUsers(rechargeUsers)
-        .build());
+        .build();
+    groupCard.getRecharges().add(recharge);
+    return recharge;
   }
 
   /**

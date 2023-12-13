@@ -4,6 +4,7 @@ import com.db.coffeestore9.group.domain.GroupCard;
 import com.db.coffeestore9.group.repository.GroupCardRepository;
 import com.db.coffeestore9.user.domain.GroupUser;
 import com.db.coffeestore9.user.repository.GroupUserRepository;
+import com.db.coffeestore9.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,6 +15,7 @@ public class GroupUserService {
 
   private final GroupCardRepository groupCardRepository;
   private final GroupUserRepository groupUserRepository;
+  private final UserRepository userRepository;
 
   /**
    * 사용자 아이디를 통해 그룹을 찾는 로직
@@ -50,7 +52,19 @@ public class GroupUserService {
    */
   @Transactional
   public void rejectGroupJoin(String username) {
-    groupUserRepository.delete(groupUserRepository.findByUserUsername(username));
+    GroupCard groupCard = groupCardRepository.findGroupCardByUserUsername(username);
+    GroupUser groupUser = groupUserRepository.findByUserUsername(username);
+    userRepository.findByUsername(username).rejectGroup();
+    groupUser.rejectGroup();
+    groupUserRepository.delete(groupUser);
+    checkGroupDelete(groupCard);
+  }
+
+  private void checkGroupDelete(GroupCard groupCard) {
+    if (groupCard.getGroupUsers().size() < 3) {
+      groupCard.deleteGroup();
+      groupCardRepository.delete(groupCard);
+    }
   }
 
   /** 그룹생성 요청 후, 승인한 유저가 3명 이상일 경우 createActive를 true로 바꿔주는 로..직

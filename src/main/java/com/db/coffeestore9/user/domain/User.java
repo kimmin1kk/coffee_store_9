@@ -77,11 +77,14 @@ public class User extends BaseTimeEntity {
   @ToString.Exclude
   private List<MonthlyUserData> monthlyUserData;
 
-  @OneToOne(cascade = CascadeType.PERSIST)
+  @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.DETACH}, orphanRemoval = true)
   @JoinColumn(name = "group_user_seq")
   @ToString.Exclude
   private GroupUser groupUser;
 
+  public void rejectGroup() {
+    this.groupUser = null;
+  }
 
   public void addAuthority(Role role) {
     if (!this.authorities.isEmpty() && (authorities.stream()

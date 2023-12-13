@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/recharge")
+@RequestMapping("/manageGroup/recharge")
 @RequiredArgsConstructor
 public class RechargeController {
 
@@ -24,26 +24,26 @@ public class RechargeController {
   private final GroupCardService groupCardService;
   private final GroupUserService groupUserService;
 
-  @GetMapping("/request/form")
+  @GetMapping("/form")
   public String rechargeForm(Model model, Principal principal) {
     model.addAttribute("groupUsers",
         groupCardService.getGroupUsers(groupUserService.getMyGroup(principal.getName())));
     return "/recharge/form";
   }
 
-  @PostMapping("/request/form")
+  @PostMapping("/request")
   public String processRecharge(Model model, Principal principal, @ModelAttribute
   RequestRechargeForm requestRechargeForm) {
     Long seq = rechargeService.requestRecharge(requestRechargeForm).getSeq();
 
-    return "redirect:/recharge/pairAmount/" + seq;
+    return "redirect:/manageGroup/recharge/pairAmount/" + seq;
   }
 
   /**
    * @param seq 생성된 Recharge의 seq
    * @return
    */
-  @GetMapping("/request/pairAmount/{seq}")
+  @GetMapping("pairAmount/{seq}")
   public String pairAmountPenaltyCheckForm(Model model, Principal principal,
       @PathVariable("seq") Long seq) {
     model.addAttribute("rechargeUsers", rechargeService.checkRechargeUsersPairAmount(
@@ -52,7 +52,7 @@ public class RechargeController {
     return "/recharge/pairForm";
   }
 
-  @PostMapping("/request/pairAmount/{seq}")
+  @PostMapping("/pairAmount/{seq}")
   public String pairAmountPenaltyCheck(Model model, Principal principal,
       @PathVariable("seq") Long seq, @ModelAttribute
   RequestPairAmountPenalty requestPairAmountPenalty) {
@@ -62,7 +62,7 @@ public class RechargeController {
     return "redirect:/";
   }
 
-  @PostMapping("/request/pay/{seq}")
+  @PostMapping("/pay/{seq}")
   public String processingPayment(Model model, Principal principal, @PathVariable("seq") Long seq) {
     rechargeService.processRecharge(principal.getName(), seq);
 

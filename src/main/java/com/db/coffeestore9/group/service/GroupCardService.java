@@ -22,6 +22,10 @@ public class GroupCardService {
   private final GroupCardRepository groupCardRepository;
   private final OrdersRepository ordersRepository;
 
+  public GroupCard getGroupCard(String username) {
+    return groupCardRepository.findGroupCardByUserUsername(username);
+  }
+
   /**
    * 다음 등급까지 남은 금액 보여주는 로직
    * @param groupCard

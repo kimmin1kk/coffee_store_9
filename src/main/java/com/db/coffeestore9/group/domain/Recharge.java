@@ -5,6 +5,8 @@ import com.db.coffeestore9.global.common.State;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import java.sql.Timestamp;
 import java.util.List;
@@ -35,8 +37,12 @@ public class Recharge extends BaseTimeEntity {
 
   private Integer pairAmount;
 
-  @OneToMany(mappedBy = "recharge", cascade = {CascadeType.PERSIST,CascadeType.REMOVE})
+  @OneToMany(mappedBy = "recharge", cascade = {CascadeType.PERSIST,CascadeType.REMOVE}, orphanRemoval = true)
   private List<RechargeUser> rechargeUsers;
+
+  @ManyToOne
+  @JoinColumn(name = "group_card_seq")
+  private GroupCard groupCard;
 
   public void changeState(State state) {
     this.state = state;
