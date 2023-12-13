@@ -70,6 +70,11 @@ public class GroupCard extends BaseTimeEntity {
   @Builder.Default
   private List<GroupUser> groupUsers = new ArrayList<>();
 
+  @OneToMany(mappedBy = "groupCard", cascade = {CascadeType.PERSIST,CascadeType.REMOVE}, orphanRemoval = true)
+  @ToString.Exclude
+  @Builder.Default
+  private List<Recharge> recharges = new ArrayList<>();
+
   public void addGroupUser(GroupUser groupUser) {
     this.groupUsers.add(groupUser);
   }
