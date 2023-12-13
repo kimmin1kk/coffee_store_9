@@ -22,7 +22,7 @@ public class ManageGroupController {
   public String getGroupInfo(Model model, Principal principal) {
     GroupCard groupCard = groupCardService.getGroupCard(principal.getName());
 
-    model.addAttribute("groupcard", groupCard);
+    model.addAttribute("groupCard", groupCard);
 
     model.addAttribute("groupUsers", groupCard.getGroupUsers());
 
