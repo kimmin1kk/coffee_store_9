@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div th:insert="/layouts/header"></div>
+<div class="asideWrap">
+    <h4 class="asideTitle">카테고리</h4>
+    <p class="asideSub" onclick="scrollToSection('My Group Reword')">
+        My Group Reword
+    </p>
+    <p class="asideSub" onclick="scrollToSection('그룹원 목록')">
+        그룹원 목록
+    </p>
+    <p class="asideSub" onclick="scrollToSection('충전 내역')">
+        충전 내역
+    </p>
+    <p class="asideSub" onclick="scrollToSection('그룹 포인트')">
+        그룹 포인트
+    </p>
+</div>
+
+<div>
+
+</div>
+<div th:insert="/layouts/rightside"></div>
+<footer class="footer"></footer>
+</body>
+</html>

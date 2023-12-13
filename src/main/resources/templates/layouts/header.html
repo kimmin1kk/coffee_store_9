@@ -22,7 +22,7 @@
       <a class="a" th:href="@{/}">MENU</a>
       <a class="a" th:href="@{/}" >EVENT</a>
       <a class="a" th:href="@{/group}">CROUPCARD</a>
-      <a class="a" th:href="@{/}" sec:authorize="isAuthenticated()">MY GROUP PAGE</a>
+      <a class="a" th:href="@{/myGroup}" sec:authorize="isAuthenticated()">MY GROUP PAGE</a>
       <a class="a" th:href="@{/}" sec:authorize="isAuthenticated()">MY GROUP MANAGE</a>
     </div>
     <span class="userTitle" th:text="'안녕하세요 '+${username}+'님!'" sec:authorize="isAuthenticated()"></span>
