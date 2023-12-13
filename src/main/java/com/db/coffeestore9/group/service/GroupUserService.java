@@ -57,6 +57,7 @@ public class GroupUserService {
    *
    * @param groupCard
    */
+  @Transactional
   public void checkValidation(GroupCard groupCard) {
     if (groupCard.getGroupUsers().stream().filter(GroupUser::isUserAccepted).count() >= 3) {
       groupCard.changeCreateActive(true);
