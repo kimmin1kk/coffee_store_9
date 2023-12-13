@@ -53,7 +53,7 @@ public class GroupUser extends BaseTimeEntity {
   @Builder.Default
   private Timestamp recentlyChargedDate = null;
 
-  @OneToOne(mappedBy = "groupUser", cascade = CascadeType.DETACH)
+  @OneToOne(mappedBy = "groupUser")
   @ToString.Exclude
   private User user;
 
@@ -69,6 +69,10 @@ public class GroupUser extends BaseTimeEntity {
 
   public void changeRecentChargedDate() {
     this.recentlyChargedDate = new Timestamp(System.currentTimeMillis());
+  }
+  public void rejectGroup() {
+
+    this.user = null;
   }
 
   public void changeUserAccepted(boolean state) {

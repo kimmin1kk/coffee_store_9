@@ -69,12 +69,11 @@ public class User extends BaseTimeEntity {
   @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.REMOVE, orphanRemoval = true)
   @Builder.Default
   @ToString.Exclude
-
   private List<Orders> ordersList = new ArrayList<>();
 
   @OneToMany(mappedBy = "user")
-
   @ToString.Exclude
+
   private List<MonthlyUserData> monthlyUserData;
 
   @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.DETACH}, orphanRemoval = true)
