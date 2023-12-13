@@ -79,10 +79,28 @@ public class GroupCard extends BaseTimeEntity {
   }
 
   public void changePoint(Integer point) {
-    if (point > 0) {
-      this.point += point;
+
+    if (this.point - point > 0) {
+
+      if (point > 0) {
+        this.point += point;
+      } else {
+        this.point -= point;
+      }
+    } else{
+      throw new IllegalArgumentException("그룹포인트가 부족합니다.");
+    }
+
+  }
+
+  public void addCharge(Integer charge) {
+    this.charge += charge;
+  }
+  public void useCharge(Integer charge) {
+    if (this.charge - charge > 0) {
+      this.charge -= charge;
     } else {
-      this.point -= point;
+      throw new IllegalArgumentException("그룹잔고가 부족합니다!");
     }
   }
 

@@ -60,6 +60,14 @@ public class GroupCardController {
   }
 
 
+  @GetMapping("/myGroup/history")
+  public String getHistory(Model model, Principal principal) {
+    model.addAttribute("histories",
+        groupCardService.findGroupChargeHistory(
+            groupUserService.getMyGroup(principal.getName()).getSeq()));
+    return "/group/purchaseHistory";
+  }
+
   @PostMapping("/request/active")
   public String requestActive(Model model, Principal principal) {
     GroupCard groupCard = groupUserService.getMyGroup(principal.getName());

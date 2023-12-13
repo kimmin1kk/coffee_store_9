@@ -6,6 +6,7 @@ import com.db.coffeestore9.group.common.RequestPairAmountPenalty;
 import com.db.coffeestore9.group.common.RequestRechargeForm;
 import com.db.coffeestore9.group.domain.Recharge;
 import com.db.coffeestore9.group.domain.RechargeUser;
+import com.db.coffeestore9.group.repository.GroupCardRepository;
 import com.db.coffeestore9.group.repository.RechargeRepository;
 import com.db.coffeestore9.group.repository.RechargeUserRepository;
 import com.db.coffeestore9.user.domain.GroupUser;
@@ -22,6 +23,7 @@ public class RechargeService {
   private final RechargeRepository rechargeRepository;
   private final RechargeUserRepository rechargeUserRepository;
   private final GroupUserRepository groupUserRepository;
+  private final GroupCardRepository groupCardRepository;
 
   private List<RechargeUser> convertUsernamesAndSeqToRechargeUsers(List<String> usernames,
       Long seq) {
@@ -197,7 +199,7 @@ public class RechargeService {
   //------------------------------------------------------------------------------------
 
   /**
-   * 충전하기 버튼 눌렀을 때 호출되는 로직 만약 모든 회원이
+   * 충전하기 버튼 눌렀을 때 호출되는 로직 만약 모든 회원이 충전했을 경우 그룹카드에 잔고가 올라가고 충전내역을 갖게된다.
    *
    * @param username Username
    * @param seq      Recharge Seq
@@ -210,6 +212,8 @@ public class RechargeService {
 
     if (checkRechargeFinished(seq)) {
       recharge.changeState(State.FINISHED);
+      groupCardRepository.findByGroupName(groupUserRepository.findByUserUsername(username).getGroupCard()
+          .getGroupName()).addCharge(recharge.getRechargeAmount());
 
       resetPairSharedAmount(recharge.getRechargeUsers());
 

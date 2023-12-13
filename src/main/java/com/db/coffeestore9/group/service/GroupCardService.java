@@ -1,8 +1,14 @@
 package com.db.coffeestore9.group.service;
 
 import com.db.coffeestore9.group.domain.GroupCard;
+import com.db.coffeestore9.group.repository.GroupCardRepository;
+import com.db.coffeestore9.order.common.PaymentMethod;
+import com.db.coffeestore9.order.domain.Orders;
+import com.db.coffeestore9.order.repository.OrdersRepository;
 import com.db.coffeestore9.user.domain.GroupUser;
+import com.db.coffeestore9.user.domain.User;
 import com.db.coffeestore9.user.repository.GroupUserRepository;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -13,6 +19,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class GroupCardService {
 
   private final GroupUserRepository groupUserRepository;
+  private final GroupCardRepository groupCardRepository;
+  private final OrdersRepository ordersRepository;
 
   /**
    * 그룹이 활성화 상태인지 + 3명 이상 들어와있는지 확인하는 로직
@@ -56,6 +64,22 @@ public class GroupCardService {
       }
 
     }
+  }
+
+  /**
+   * 그룹카드로 주문한 내역 찾는 로직
+   * @param groupSeq 그룹카드 seq
+   * @return List<Orders>
+   */
+  public List<Orders> findGroupChargeHistory(Long groupSeq) {
+    GroupCard groupCard = groupCardRepository.findById(groupSeq).orElseThrow();
+    List<Orders> groupOrders = new ArrayList<>();
+
+    groupCard.getGroupUsers().stream().map((GroupUser::getUser)).map(User::getUsername).forEach(
+        s -> groupOrders.addAll(
+            ordersRepository.findByPaymentMethodAndUserUsername(PaymentMethod.GROUP_CARD, s)));
+
+    return groupOrders;
   }
 
 }
