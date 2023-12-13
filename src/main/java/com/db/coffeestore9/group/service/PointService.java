@@ -3,44 +3,52 @@ package com.db.coffeestore9.group.service;
 import com.db.coffeestore9.group.domain.GroupCard;
 import com.db.coffeestore9.group.domain.PointUsage;
 import com.db.coffeestore9.group.repository.GroupCardRepository;
-import com.db.coffeestore9.group.repository.PointUsageRepository;
 import com.db.coffeestore9.rank.common.PointRewardTier;
+import com.db.coffeestore9.user.domain.GroupUser;
+import com.db.coffeestore9.user.domain.User;
+import com.db.coffeestore9.user.repository.GroupUserRepository;
 import java.sql.Timestamp;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
 public class PointService {
 
-  private final PointUsageRepository pointUsageRepository;
   private final GroupCardRepository groupCardRepository;
+  private final GroupUserRepository groupUserRepository;
 
   /**
-   * 포인트 지급,차감 로직
+   * 포인트 지급,차감 로직 Transactional propagation 설정 해둔 이유 -> OrdersService의 confirmOrder에서도
+   * Transactional을 선언해둬서..
    *
-   * @param groupSeq GroupCard seq
-   * @param point    +-Point
-   * @param message  Reason
+   * @param user
+   * @param point   +-Point
+   * @param message Reason
    */
-  @Transactional
-  public void changeGroupPoint(Long groupSeq, Integer point, String message) {
+  @Transactional(propagation = Propagation.REQUIRED)
+  public void changeGroupPoint(User user, Integer point, String message) {
+    GroupUser groupUser = groupUserRepository.findByUserUsername(user.getUsername());
+    GroupCard groupCard = groupCardRepository.findGroupCardByUserUsername(user.getUsername());
 
-    GroupCard groupCard = groupCardRepository.findById(groupSeq).orElseThrow();
-
-    groupCard.changePoint(point);
+    if (point > 0) {
+      groupCard.earnPoint(point);
+    } else {
+      groupCard.payWithGroupPoint(point);
+      groupUser.payWithGroupPoint(point);
+    }
 
     groupCard.getPointUsages().add(
         PointUsage.builder().groupCard(groupCard)
             .amountPoint(point).reasonPoint(message)
             .expirationDate(new Timestamp(System.currentTimeMillis() + 96000)).build());
-
   }
 
   /**
    * 랭킹 별 포인트 얼마 받을지 정해서 리턴해 주는 로직
-   *
+   * 리턴된 정보 changeGroupPoint()에 넣어주면 될 듯
    * @param groupSeq   1,2,3등 보상이 월간사용금액에서 퍼센트로 지급해주는거라서 groupCard 정보 필요, 인자로 받아야 함
    * @param rewardTier 그룹의 티어
    * @return 산정된 포인트 리턴 이걸 changeGroupPoint 메서드의 point 인자에 넣으면 됨

@@ -2,17 +2,17 @@ package com.db.coffeestore9.order.service;
 
 import com.db.coffeestore9.global.common.Grade;
 import com.db.coffeestore9.group.domain.GroupCard;
-import com.db.coffeestore9.group.domain.PointUsage;
 import com.db.coffeestore9.group.repository.GroupCardRepository;
+import com.db.coffeestore9.group.service.PointService;
 import com.db.coffeestore9.order.common.OrderPageForm;
 import com.db.coffeestore9.order.common.PaymentMethod;
 import com.db.coffeestore9.order.domain.OrderContent;
 import com.db.coffeestore9.order.domain.Orders;
 import com.db.coffeestore9.order.repository.OrdersRepository;
-import com.db.coffeestore9.product.repository.ProductRepository;
+import com.db.coffeestore9.user.domain.GroupUser;
 import com.db.coffeestore9.user.domain.User;
+import com.db.coffeestore9.user.repository.GroupUserRepository;
 import com.db.coffeestore9.user.repository.UserRepository;
-import java.sql.Timestamp;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,12 +24,14 @@ public class OrdersService {
 
   private final OrdersRepository ordersRepository;
   private final UserRepository userRepository;
-  private final ProductRepository productRepository;
   private final GroupCardRepository groupCardRepository;
+  private final GroupUserRepository groupUserRepository;
+
+  private final PointService pointService;
 
   /**
-   *
-   * checkCountValidation으로 먼저 주문이 가능한 상태인지 확인한 후 Orders 업데이트, 그 후 업데이트된 정보를 이용해 GroupPoint 결제 혹은 GroupCard 결제
+   * checkCountValidation으로 먼저 주문이 가능한 상태인지 확인한 후 Orders 업데이트, 그 후 업데이트된 정보를 이용해 GroupPoint 결제 혹은
+   * GroupCard 결제
    */
   @Transactional
   public void confirmOrder(OrderPageForm orderPageForm, Orders orders) {
@@ -43,13 +45,14 @@ public class OrdersService {
         groupAvailableCheck(orders.getUser().getUsername());
 
         if (orderPageForm.paymentMethod() == PaymentMethod.GROUP_POINT) {
-          usingGroupPoint(orders.getUser().getGroupUser().getGroupCard().getSeq() ,orders.getTotalPrice() * -1,"포인트 사용 (결제)");
+          pointService.changeGroupPoint(orders.getUser(),
+              orders.getTotalPrice() * -1, "포인트 사용 (결제)");
         }
 
         if (orderPageForm.paymentMethod() == PaymentMethod.GROUP_CARD) {
           orders.getSalePercentage(
               getSalePercentageByGrade(orders.getUser().getGroupUser().getGroupCard().getGrade()));
-          usingGroupCharge(orders.getTotalPrice(), orders.getUser());
+          payWithGroupCard(orders.getTotalPrice(), orders.getSavedPrice(), orders.getUser());
         }
 
       }
@@ -89,35 +92,16 @@ public class OrdersService {
 
   /**
    * 그룹카드로 결제할 때 그룹잔고 잔액 차감되는 로직.
-   * @param totalPrice 총 결제액
-   * @param user 사용한 유저
-   */
-  private void usingGroupCharge(Integer totalPrice, User user) {
-    GroupCard groupCard =  groupCardRepository.findByGroupName(
-        userRepository.findByUsername(user.getUsername()).getGroupUser().getGroupCard()
-            .getGroupName());
-
-    groupCard.useCharge(totalPrice);
-  }
-
-  /**
-   * 포인트 지급,차감 로직
    *
-   * @param groupSeq GroupCard seq
-   * @param point    +-Point
-   * @param message  Reason
+   * @param totalPrice 총 결제액
+   * @param user       사용한 유저
    */
-  private void usingGroupPoint(Long groupSeq, Integer point, String message) {
+  private void payWithGroupCard(Integer totalPrice, Integer savedCharge, User user) {
+    GroupUser groupUser = groupUserRepository.findByUserUsername(user.getUsername());
+    GroupCard groupCard = groupCardRepository.findGroupCardByUserUsername(user.getUsername());
 
-    GroupCard groupCard = groupCardRepository.findById(groupSeq).orElseThrow();
-
-    groupCard.changePoint(point);
-
-    groupCard.getPointUsages().add(
-        PointUsage.builder().groupCard(groupCard)
-            .amountPoint(point).reasonPoint(message)
-            .expirationDate(new Timestamp(System.currentTimeMillis() + 96000)).build());
-
+    groupCard.payWithGroupCard(totalPrice, savedCharge);
+    groupUser.payWithGroupCard(totalPrice,savedCharge);
   }
 
   /**

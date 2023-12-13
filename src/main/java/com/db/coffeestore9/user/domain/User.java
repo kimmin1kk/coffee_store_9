@@ -46,9 +46,6 @@ public class User extends BaseTimeEntity {
   @Builder.Default
   @Enumerated(EnumType.STRING)
   private Grade grade = Grade.BRONZE;
-  @Column(nullable = false)
-  @Builder.Default
-  private Integer mileage = 0;
   @Column
   @Builder.Default
   private Timestamp recentActiveDate = new Timestamp(System.currentTimeMillis());

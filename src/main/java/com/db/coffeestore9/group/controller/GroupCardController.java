@@ -19,6 +19,7 @@ public class GroupCardController {
   private final GroupCardService groupCardService;
   private final GroupUserService groupUserService;
   private static final String DEFAULT_REDIRECT = "redirect:/";
+  private static final String GROUP_USER_ATTRIBUTE = "groupUsers";
 
 
   /**
@@ -45,14 +46,15 @@ public class GroupCardController {
         groupCard)) {
       //그룹 활성화 상태 + 3명 이상 들어온 상태
       model.addAttribute("groupCard", groupCard);
+      model.addAttribute(GROUP_USER_ATTRIBUTE, groupCard.getGroupUsers());
       return "/group/myGroup";
     } else if (!groupCard.isActive()) {
       //그룹 비활성화 상태
-      model.addAttribute("groupUsers", groupCardService.getGroupUsers(groupCard));
+      model.addAttribute(GROUP_USER_ATTRIBUTE, groupCardService.getGroupUsers(groupCard));
       return "/group/disabledGroup";
     } else if (!groupCard.isCreateActive()) {
       //그룹 인원 3명 이상 들어 오지 않은 상태
-      model.addAttribute("groupUsers", groupCardService.getGroupUsers(groupCard));
+      model.addAttribute(GROUP_USER_ATTRIBUTE, groupCardService.getGroupUsers(groupCard));
       return "/group/waitForCreateGroup";
     } else {
       throw new IllegalArgumentException("잘못된 접근입니다.");
