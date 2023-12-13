@@ -3,8 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/groupcard.css}" />
 </head>
 <body>
-<h1>gdgd</h1>
+<div th:insert="/layouts/header"></div>
+<div class="sectionWrap">
+    <h2 class="groupTitle">그룹 카드 요청 확인</h2>
+    <div class="sectionContent2">
+        <form method="POST" th:action = "@{/group/accept/joinGroup}">
+            <button type="submit">요청 승인</button>
+        </form>
+        <form method="POST" th:action = "@{/group/reject/joinGroup}">
+            <button type="submit">요청 거부</button>
+        </form>
+    </div>
+</div>
+<footer class="footer"></footer>
 </body>
 </html>

@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/groupcard.css}" />
 </head>
 <body>
 <div th:insert="/layouts/header"></div>
@@ -21,11 +22,22 @@
         그룹 포인트
     </p>
 </div>
-
-<div>
-
-</div>
 <div th:insert="/layouts/rightside"></div>
 <footer class="footer"></footer>
+<script>
+    function scrollToSection(sectionId) {
+        var sectionElement = document.getElementById(sectionId);
+
+        if (sectionElement) {
+            var topOffset =
+                sectionElement.getBoundingClientRect().top + window.scrollY;
+
+            window.scrollTo({
+                top: topOffset,
+                behavior: "smooth",
+            });
+        }
+    }
+</script>
 </body>
 </html>
