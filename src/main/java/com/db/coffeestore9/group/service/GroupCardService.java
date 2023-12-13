@@ -23,6 +23,24 @@ public class GroupCardService {
   private final OrdersRepository ordersRepository;
 
   /**
+   * 다음 등급까지 남은 금액 보여주는 로직
+   * @param groupCard
+   * @return
+   */
+  public Integer getConditionForPromotion(GroupCard groupCard) {
+    return groupCard.getGrade().getGroupConditionsForPromotion() - groupCard.getMonthlyUsedCharge();
+  }
+
+  /**
+   * 등급 유지까지 남은 금액 보여주는 로직
+   * @param groupCard
+   * @return
+   */
+  public Integer getConditionForDemotion(GroupCard groupCard) {
+    return groupCard.getGrade().getGroupConditionsForDemotion() - groupCard.getMonthlyUsedCharge();
+  }
+
+  /**
    * 그룹이 활성화 상태인지 + 3명 이상 들어와있는지 확인하는 로직
    *
    * @param groupCard

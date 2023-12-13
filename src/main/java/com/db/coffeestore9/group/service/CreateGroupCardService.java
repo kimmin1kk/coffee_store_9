@@ -70,10 +70,6 @@ public class CreateGroupCardService {
   private void addGroupUser(List<String> usernames, GroupCard groupCard) {
     usernames.stream()
         .map(userRepository::findByUsername)
-        .map(s -> GroupUser.builder().user(s).groupCard(groupCard).build())
-        .forEach(groupCard::addGroupUser);
-    usernames.stream()
-        .map(userRepository::findByUsername)
         .forEach(s -> s.getGroup(GroupUser.builder().user(s).groupCard(groupCard).build()));
   }
 

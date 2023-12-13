@@ -45,6 +45,8 @@ public class GroupCardController {
     if (groupCardService.checkGroupCardActiveStateAndCreateActive(
         groupCard)) {
       //그룹 활성화 상태 + 3명 이상 들어온 상태
+      model.addAttribute("conditionPromotion", groupCardService.getConditionForPromotion(groupCard));
+      model.addAttribute("conditionDemotion", groupCardService.getConditionForDemotion(groupCard));
       model.addAttribute("groupCard", groupCard);
       model.addAttribute(GROUP_USER_ATTRIBUTE, groupCard.getGroupUsers());
       return "/group/myGroup";
