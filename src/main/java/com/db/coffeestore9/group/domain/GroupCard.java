@@ -61,7 +61,8 @@ public class GroupCard extends BaseTimeEntity {
   @ToString.Exclude
   private List<PointUsage> pointUsages;
 
-  @OneToMany(mappedBy = "groupCard", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
+  @OneToMany(mappedBy = "groupCard", cascade = {CascadeType.PERSIST,
+      CascadeType.REMOVE}, orphanRemoval = true)
   @ToString.Exclude
   @Builder.Default
   private List<GroupUser> groupUsers = new ArrayList<>();
@@ -78,29 +79,30 @@ public class GroupCard extends BaseTimeEntity {
     this.active = state;
   }
 
-  public void changePoint(Integer point) {
-
-    if (this.point - point > 0) {
-
-      if (point > 0) {
-        this.point += point;
-      } else {
-        this.point -= point;
-      }
-    } else{
-      throw new IllegalArgumentException("그룹포인트가 부족합니다.");
-    }
-
+  public void earnPoint(Integer point) {
+    this.point += point;
   }
 
   public void addCharge(Integer charge) {
     this.charge += charge;
   }
-  public void useCharge(Integer charge) {
+
+  public void payWithGroupCard(Integer charge, Integer savedCharge) {
     if (this.charge - charge > 0) {
       this.charge -= charge;
+      this.monthlyUsedCharge += charge;
+      this.totalSalesCharge += savedCharge;
     } else {
       throw new IllegalArgumentException("그룹잔고가 부족합니다!");
+    }
+  }
+
+  public void payWithGroupPoint(Integer point) {
+    if (this.point - point > 0) {
+      this.point -= point;
+      this.totalSalesCharge += point;
+    }else {
+      throw new IllegalArgumentException("포인트가 부족합니다!");
     }
   }
 

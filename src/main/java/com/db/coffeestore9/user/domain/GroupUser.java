@@ -29,8 +29,10 @@ public class GroupUser extends BaseTimeEntity {
 
   @Builder.Default
   private Integer totalUsedAmount = 0;
-
   @Builder.Default
+  private Integer monthlyUsedAmount = 0;
+
+   @Builder.Default
   private Integer totalChargedAmount = 0;
 
   @Builder.Default
@@ -79,6 +81,17 @@ public class GroupUser extends BaseTimeEntity {
 
   public void changeGroupActiveRequested(boolean state) {
     this.groupActiveRequested = state;
+  }
+
+  public void payWithGroupCard(Integer amount, Integer savedAmount) {
+    this.monthlyUsedAmount += amount;
+    this.totalUsedAmount += amount;
+    this.totalSalesAmount += savedAmount;
+    this.pairShareAmount -= amount;
+  }
+
+  public void payWithGroupPoint(Integer savedAmount) {
+    this.totalSalesAmount += savedAmount;
   }
 
 }
