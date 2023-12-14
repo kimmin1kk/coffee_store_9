@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/index.css}" />
+</head>
+<body>
+<div th:insert="/layouts/header"></div>
+<div class="asideWrap">
+    <h4 class="asideTitle">카테고리</h4>
+    <p class="asideSub" onclick="scrollToSection('커피')">커피</p>
+    <p class="asideSub" onclick="scrollToSection('차')">차</p>
+    <p class="asideSub" onclick="scrollToSection('디저트')">디저트</p>
+</div>
+
+<div th:insert="/layouts/rightside"></div>
+<footer class="footer"></footer>
+</body>
+</html>
