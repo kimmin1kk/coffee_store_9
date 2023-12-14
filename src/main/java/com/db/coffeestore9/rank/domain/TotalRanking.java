@@ -24,10 +24,10 @@ public class TotalRanking extends BaseEntity {
   private Integer averageRanking;
   private Integer totalEarnedPoint;
 
-  @OneToOne(mappedBy = "totalRanking")
+  @OneToOne(mappedBy = "totalRanking", cascade = {CascadeType.PERSIST,CascadeType.REMOVE})
   private GroupCard groupCard;
 
-  @OneToMany(mappedBy = "totalRanking", cascade = {CascadeType.PERSIST, CascadeType.DETACH})
+  @OneToMany(mappedBy = "totalRanking", cascade = {CascadeType.PERSIST, CascadeType.DETACH}, orphanRemoval = true)
   private List<RankInfo> rankingInfos;
 
   public void addRankInfos(RankInfo rankInfo) {

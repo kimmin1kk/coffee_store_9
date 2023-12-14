@@ -5,4 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface TotalRankingRepository extends JpaRepository<TotalRanking, Long> {
 
+  TotalRanking findTotalRankingByGroupCardSeq(Long seq);
+
 }

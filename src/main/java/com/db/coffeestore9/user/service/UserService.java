@@ -12,17 +12,38 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class UserService {
 
-    private final UserRepository userRepository;
-    @Transactional
-    public void processRegistration(RegistrationForm form) {
-        User user = form.toUser();
-        user.addAuthority(Role.ROLE_USER);
-        userRepository.save(user);
-    }
+  private final UserRepository userRepository;
 
-    public User findByUsername(String username) {
-        return userRepository.findByUsername(username);
-    }
+  @Transactional
+  public void processRegistration(RegistrationForm form) {
+    User user = form.toUser();
+    user.addAuthority(Role.ROLE_USER);
+    userRepository.save(user);
+  }
+
+  /**
+   * 다음 등급까지 남은 금액 보여주는 로직
+   *
+   * @param User
+   * @return
+   */
+  public Integer getConditionForPromotion(User user) {
+    return user.getGrade().getUserConditionsForPromotion() - user.getMonthlyOrderCharge();
+  }
+
+  /**
+   * 등급 유지까지 남은 금액 보여주는 로직
+   *
+   * @param User
+   * @return
+   */
+  public Integer getConditionForDemotion(User user) {
+    return user.getGrade().getUserConditionsForDemotion() - user.getMonthlyOrderCharge();
+  }
+
+  public User findByUsername(String username) {
+    return userRepository.findByUsername(username);
+  }
 
 
 }
