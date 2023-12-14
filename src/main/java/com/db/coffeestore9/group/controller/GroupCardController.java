@@ -18,6 +18,7 @@ public class GroupCardController {
 
   private final GroupCardService groupCardService;
   private final GroupUserService groupUserService;
+
   private static final String DEFAULT_REDIRECT = "redirect:/";
   private static final String GROUP_USER_ATTRIBUTE = "groupUsers";
 

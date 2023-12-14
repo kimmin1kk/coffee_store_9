@@ -70,8 +70,12 @@ public class RechargeService {
    * @param users
    * @return
    */
-  private List<RechargeUser> getJoinedUsers(List<RechargeUser> users) {
+  public List<RechargeUser> getJoinedUsers(List<RechargeUser> users) {
     return users.stream().filter(RechargeUser::isJoined).toList();
+  }
+
+  public Recharge getOnProgressRecharge(List<Recharge> recharges) {
+    return recharges.stream().filter(s -> s.getState() == State.ON_PROGRESS).findFirst().orElseThrow();
   }
 
   /**
