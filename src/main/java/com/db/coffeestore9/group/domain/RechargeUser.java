@@ -35,6 +35,9 @@ public class RechargeUser extends BaseTimeEntity {
   @JoinColumn(name = "recharge_seq")
   private Recharge recharge;
 
+  public void requestRecharge(Recharge recharge) {
+    this.recharge = recharge;
+  }
 
   public void changePayedState(boolean state) {
     this.payed = state;

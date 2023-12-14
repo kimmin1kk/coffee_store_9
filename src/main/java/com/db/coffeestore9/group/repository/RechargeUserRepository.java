@@ -5,6 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface RechargeUserRepository extends JpaRepository<RechargeUser, Long> {
 
-  RechargeUser findByGroupUserUserUsernameAndRechargeSeq(String username,Long seq);
+  RechargeUser findByGroupUserUserUsernameAndGroupUserGroupCardSeq(String username,Long seq);
 
 }
