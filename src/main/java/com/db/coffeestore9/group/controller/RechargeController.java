@@ -36,7 +36,13 @@ public class RechargeController {
   RequestRechargeForm requestRechargeForm) {
     Long seq = rechargeService.requestRecharge(requestRechargeForm).getSeq();
 
-    return "redirect:/manageGroup/recharge/pairAmount/" + seq;
+    if (rechargeService.checkUsersPairAmount(rechargeService.getRecharge(seq))) {
+      //양심금 오바된 사람 있을 때
+      return "redirect:/manageGroup/recharge/pairAmount/" + seq;
+    }
+    //양심금 오바된 사람 없을 때
+    return "redirect:/group/myGroup";
+
   }
 
   /**
@@ -59,7 +65,7 @@ public class RechargeController {
 
     rechargeService.requestPenalty(seq, requestPairAmountPenalty);
 
-    return "redirect:/";
+    return "redirect:/group/myGroup";
   }
 
   @PostMapping("/pay/{seq}")

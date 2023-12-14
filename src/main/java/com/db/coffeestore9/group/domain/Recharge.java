@@ -5,6 +5,8 @@ import com.db.coffeestore9.global.common.State;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
@@ -30,6 +32,7 @@ public class Recharge extends BaseTimeEntity {
   private Timestamp expirationDate = new Timestamp(System.currentTimeMillis());
 
   @Builder.Default
+  @Enumerated(EnumType.STRING)
   private State state = State.ON_PROGRESS;
 
   @Column(nullable = false)

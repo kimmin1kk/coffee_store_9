@@ -25,7 +25,7 @@ public class RechargeUser extends BaseTimeEntity {
   private boolean payed = false;
 
   @Builder.Default
-  private boolean penaltyPairAmount = true;
+  private boolean penaltyPairAmount = false;
 
   @ManyToOne
   @JoinColumn(name = "group_user_seq")

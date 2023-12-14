@@ -104,6 +104,17 @@ public class RechargeService {
     return rechargeRepository.findById(seq).orElseThrow();
   }
 
+  /**
+   * 양심금 오바된 사람이 있는지 확인하는 로직
+   *
+   * @return 오바된 사람이 있으면 True
+   */
+  public boolean checkUsersPairAmount(Recharge recharge) {
+    List<RechargeUser> rechargeUsers = recharge.getRechargeUsers().stream().filter(RechargeUser::isJoined).toList();
+
+    return rechargeUsers.stream().anyMatch(s -> s.getGroupUser().getPairShareAmount() < 0);
+  }
+
 //----------------------------------------------------------------------------------------------------
 
   /**
