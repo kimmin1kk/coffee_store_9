@@ -18,20 +18,33 @@
     <h2 class="groupTitle">그룹원 정보</h2>
     <div class="sectionContent2">
         <h4 class="contentTitle2">
-            <tr th:each="groupuser : ${groupUsers}">
-                <td th:text="${groupuser.getUser().getUsername()}">
-                </td>
-            </tr>
+            <table>
+                <thead>
+                <tr>
+                    <th>이름</th>
+                    <th>직위</th>
+                    <th>양심금</th>
+                    <th>월간 사용 금액</th>
+                    <th>최근 충전 현황</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="groupuser : ${groupUsers}">
+                    <td th:text="${groupuser.getUser().getUsername()}">
+                    <td th:if="${groupuser.isAdministrator()}">관리자</td>
+                    <td th:unless="${groupuser.isAdministrator()}">그룹원</td>
+                    <td th:text="${groupuser.getPairShareAmount()}"></td>
+                    <td th:text="${groupuser.getMonthlyUsedAmount()}"></td>
+                    <td th:text="${groupuser.getRecentlyChargedDate()}"></td>
+                </tr>
+                </tbody>
+            </table>
         </h4>
     </div>
 </div>
 <div class="sectionWrap">
-    <h2 class="groupTitle">그룹원 정보</h2>
+    <h2 class="groupTitle">그룹 현황</h2>
     <div class="sectionContent2">
-        <h4 class="contentTitle2">브론즈 그룹 카드는 한잔당 3%의 할인을 받으며 최대 8% 까지 할인을 받을 수 있습니다!<br><br><br>
-            또한 그룹 전체의 월간 사용 금액이 25만원이 초과하면 실버 그룹으로 승격하여<br><br><br>
-            더 많은 혜택을 누릴 수 있습니다!<br>
-        </h4>
     </div>
 </div>
 <div th:insert="/layouts/rightside"></div>

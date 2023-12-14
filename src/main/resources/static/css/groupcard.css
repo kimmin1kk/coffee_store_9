@@ -123,7 +123,17 @@ body {
   flex-direction: column;
   background: #F8F5F2;
   width: 1220px;
-  height: 600px;
+  height: 360px;
+  box-shadow: 0px 4px 8px 3px rgba(0, 0, 0, 0.1);
+  border-radius: 12px 12px 12px 12px;
+}
+
+.sectionContent4{
+  display: flex;
+  flex-direction: row;
+  background: #F8F5F2;
+  width: 1220px;
+  height: 340px;
   box-shadow: 0px 4px 8px 3px rgba(0, 0, 0, 0.1);
   border-radius: 12px 12px 12px 12px;
 }
@@ -164,8 +174,8 @@ body {
 .makecardTitle{
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  justify-content: flex-start;
+  align-items: center;
+  justify-content: center;
   margin-left: 20px;
   padding-top: 20px;
   font-family: 'Droid Sans';
@@ -177,29 +187,69 @@ body {
 }
 
 .makecrdsubTitle{
+  display: flex;
   margin-left: 20px;
   font-family: 'Droid Sans';
   font-style: normal;
   font-weight: 400;
   font-size: 13.5625px;
   line-height: 14px;
-  align-items: flex-start;
-  justify-content: flex-start;
+  align-items: center;
+  justify-content: center;
   flex-direction: column;
   color: #006633;
 }
 
 .makecrdsubTitle2{
+  display: flex;
   margin-left: 20px;
   font-family: 'Droid Sans';
   font-style: normal;
   font-weight: 400;
   font-size: 13.5625px;
   line-height: 20px;
-  align-items: flex-start;
-  justify-content: flex-start;
+  align-items: center;
+  justify-content: center;
   flex-direction: column;
   color: #666666;
+  text-decoration: none;
 }
 
+.makecrdsubTitle3{
+  display: flex;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 13.5625px;
+  line-height: 20px;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  color: #666666;
+  text-decoration: none;
+  width: 10%;
+  background-color: #b38758;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease-in-out;
+  color: white;
+  margin-bottom: 300px;
+}
+.makecrdsubTitle3:hover {
+  background-color: #a3764d;
+}
 
+.wrap{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 2%;
+}
+
+.nav{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 130px;
+}
