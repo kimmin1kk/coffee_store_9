@@ -26,10 +26,21 @@ public class RechargeService {
   private final GroupUserRepository groupUserRepository;
   private final GroupCardRepository groupCardRepository;
 
+  /**
+   * 진행중인 충전요청과 이미 끝난 충전요청을 List 형태로 반환하는 로직
+   * @param groupCard
+   * @return
+   */
   public List<Recharge> getRechargeHistory(GroupCard groupCard) {
-    return groupCard.getRecharges().stream().filter(s -> s.getState() == State.FINISHED).toList();
+    return groupCard.getRecharges().stream().filter(s -> s.getState() == State.FINISHED || s.getState() == State.ON_PROGRESS).toList();
   }
 
+  /**
+   * Usernames과 Recharge의 seq를 받아 유저별 충전 내역을 받아오는 로직
+   * @param usernames
+   * @param seq
+   * @return
+   */
   private List<RechargeUser> convertUsernamesAndSeqToRechargeUsers(List<String> usernames,
       Long seq) {
     return usernames.stream()
@@ -37,22 +48,48 @@ public class RechargeService {
         .toList();
   }
 
+  /**
+   * Username과 Recharge의 seq를 받아 유저별 충전 내역을 받아오는 로직
+   * @param username
+   * @param seq
+   * @return
+   */
   private RechargeUser convertUsernameAndSeqToRechargeUser(String username, Long seq) {
     return rechargeUserRepository.findByGroupUserUserUsernameAndRechargeSeq(username, seq);
   }
 
+  /**
+   * 충전에 참여하는 유저를 List 형태로 받아오는 로직
+   * @param users
+   * @return
+   */
   private List<RechargeUser> getJoinedUsers(List<RechargeUser> users) {
     return users.stream().filter(RechargeUser::isJoined).toList();
   }
 
+  /**
+   * 이미 돈 낸 유저를 List 형태로 받아오는 로직
+   * @param users
+   * @return
+   */
   private List<RechargeUser> getPayedUsers(List<RechargeUser> users) {
     return users.stream().filter(RechargeUser::isPayed).toList();
   }
 
+  /**
+   * 양심금을 지불해야하는 유저를 List 형태로 받아오는 로직
+   * @param users
+   * @return
+   */
   private List<RechargeUser> getPenaltyUsers(List<RechargeUser> users) {
     return users.stream().filter(RechargeUser::isPenaltyPairAmount).toList();
   }
 
+  /**
+   * Recharge Seq를 통해 Recharge를 가져오는 로직
+   * @param seq
+   * @return
+   */
   public Recharge getRecharge(Long seq) {
     return rechargeRepository.findById(seq).orElseThrow();
   }
