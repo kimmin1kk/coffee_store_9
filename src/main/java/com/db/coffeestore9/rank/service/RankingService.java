@@ -2,6 +2,8 @@ package com.db.coffeestore9.rank.service;
 
 import com.db.coffeestore9.global.common.State;
 import com.db.coffeestore9.group.domain.GroupCard;
+import com.db.coffeestore9.group.service.PointService;
+import com.db.coffeestore9.rank.common.CreateRankingForm;
 import com.db.coffeestore9.rank.common.Kind;
 import com.db.coffeestore9.rank.common.PointRewardTier;
 import com.db.coffeestore9.rank.domain.RankInfo;
@@ -26,23 +28,49 @@ public class RankingService {
   private final RankingRepository rankingRepository;
   private final RankInfoRepository rankInfoRepository;
   private final TotalRankingRepository totalRankingRepository;
+  private final PointService pointService;
 
+  /**
+   * 랭킹 엔티티 찾는 로직
+   *
+   * @param rankingSeq
+   * @return
+   */
   public Ranking getRanking(Long rankingSeq) {
     return rankingRepository.findById(rankingSeq).orElseThrow();
   }
 
   /**
+   * 종료된 랭킹 등 지금까지의 모든 랭킹들을 보는 로직
+   *
+   * @return
+   */
+  public List<Ranking> getAllRankings() {
+    return rankingRepository.findAll();
+  }
+
+
+  /**
+   * 현재 진행중인 랭킹이벤트를 보는 로직
+   *
+   * @return
+   */
+  public Ranking getActiveRanking() {
+    return rankingRepository.findAll().stream().filter(s -> s.getState() == State.ON_PROGRESS)
+        .findFirst().orElseThrow();
+  }
+
+  /**
    * 랭킹 스케쥴 등록하는 로직, 그 외에도 측정월에 따라 상태를 바꿔주는 로직, 랭킹 집계를 하는 로직 등등이 더 필요한 상태
    *
-   * @param yymm
-   * @param eventKind
-   * @param eventName
+   * @param createRankingForm
    */
   @Transactional
-  public void createRankingSchedule(Integer yymm, Kind eventKind, String eventName) {
-    Ranking ranking = Ranking.builder().projectedMonth(convertIntegerToTimestamp(yymm))
-        .eventName(eventName)
-        .kind(eventKind).build();
+  public void createRankingSchedule(CreateRankingForm createRankingForm) {
+    Ranking ranking = Ranking.builder().projectedMonth(convertIntegerToTimestamp(
+            createRankingForm.yymm()))
+        .eventName(createRankingForm.eventName())
+        .kind(createRankingForm.eventKind()).build();
 
     rankingRepository.save(ranking);
 
@@ -51,16 +79,19 @@ public class RankingService {
   /**
    * 랭킹 이벤트를 시작하는 로직, 내부적으로 checkRankingStart 메서드를 호출해 시작할 시기가 되었는지 확인하고 그 상태에 따라 랭킹의 상태를 바꿔주고
    * GroupCard -> TotalRanking 생성 -> RankInfo 생성 및 서로 연결 연결.. 하면 끝
+   * <p>
+   * -> 시연을 위해 yymm (년월) 인자값 추가로 받아서 시작예정년월과 일치하면 랭킹 이벤트 시작
    *
    * @param rankingSeq Ranking seq
    */
   @Transactional
-  public void startRankingSchedule(Long rankingSeq) {
+  public void startRankingSchedule(Long rankingSeq, Integer yymm) {
     Ranking ranking = getRanking(rankingSeq);
-    if (checkRankingStart(rankingSeq)) {
+    if (checkRankingStart(rankingSeq, yymm)) {
 
       totalRankingRepository.findAll().stream().filter(s -> s.getGroupCard().isActive())
-          .forEach(s -> s.getRankingInfos().add(RankInfo.builder().totalRanking(s).ranking(ranking).build()
+          .forEach(s -> s.getRankingInfos()
+              .add(RankInfo.builder().totalRanking(s).ranking(ranking).build()
               ));
 
       ranking.changeState(State.ON_PROGRESS);
@@ -71,14 +102,16 @@ public class RankingService {
 
 
   /**
-   * 랭킹 seq, 이벤트를 시작 해야 하는지 현재 시간이랑 비교해서 판단 하는 로직
+   * 랭킹 seq, 이벤트를 시작 해야 하는지 현재 시간이랑 비교해서 판단 하는 로직 -> 시연을 위해서 인자로 yymm(년월)넣어서 Timestamp 타입으로 변환한 후
+   * 같으면 true
    *
    * @param rankingSeq Ranking seq
+   * @param yymm       시작하려는 년월
    * @return true or false
    */
-  private boolean checkRankingStart(Long rankingSeq) {
+  private boolean checkRankingStart(Long rankingSeq, Integer yymm) {
     Ranking ranking = getRanking(rankingSeq);
-    return ranking.getProjectedMonth().before(new Timestamp(System.currentTimeMillis()));
+    return ranking.getProjectedMonth().equals(convertIntegerToTimestamp(yymm));
   }
 
   /**
@@ -99,14 +132,15 @@ public class RankingService {
 
   }
 
+
   /**
-   * 랭킹 구하는 로직, 활성화된 GroupCard -> monthlyUsedCharge로 내림차순 정렬하고 그 리스트 순서별로 RankInfo ->
-   * currentRanking(순위) 맥이기
+   * ScheduledTasks에서 호출되는 메서드. 그룹 랭킹 갱신해주는 로직, 활성화된 GroupCard -> monthlyUsedCharge로 내림차순 정렬하고 그 리스트
+   * 순서별로 RankInfo -> currentRanking(순위) 맥이기 위에 주석친 메서드와 거의 동일하나 이 메서드는 Schedule 걸어두고 쓸 예정
    */
   @Transactional
-  public void getGroupsRanking(Long rankingSeq) {
-    Ranking ranking = getRanking(rankingSeq);
-    List<RankInfo> rankInfos = rankInfoRepository.findRankInfosByRankingSeq(rankingSeq);
+  public void renewGroupsRanking() {
+    Ranking ranking = getActiveRanking();
+    List<RankInfo> rankInfos = rankInfoRepository.findRankInfosByRankingSeq(ranking.getSeq());
 
     List<GroupCard> sortedGroupCard = ranking.getRankingInfos().stream()
         .map(RankInfo::getTotalRanking)
@@ -121,7 +155,6 @@ public class RankingService {
 
     getGroupRewardTier(rankInfos.size(), rankInfos);
     getScheduledPoint(rankInfos);
-
 
   }
 
@@ -181,9 +214,36 @@ public class RankingService {
         rankInfo.changeScheduledPoint("4000");
       }
     }
-
-
   }
+
+  /**
+   * 랭킹 이벤트 종료 로직 Ranking -> State 변경 GroupCard -> PointUsages.add / RankInfos.add / point ++
+   * TotalRank -> total_earned_point ++ / 최고 등수 (갱신하면 업데이트) / 평균등수(지금까지 등수 다 더해서 1/n)
+   *
+   * @param rankingSeq
+   */
+  @Transactional
+  public void processRankingEnds(Long rankingSeq) {
+    Ranking ranking = rankingRepository.findById(rankingSeq).orElseThrow();
+    ranking.changeState(State.FINISHED);
+
+    ranking.getRankingInfos().forEach(s -> {
+      s.getTotalRanking().addRankInfos(s);
+      //포인트 지급하는 부분,,
+      pointService.changeGroupPoint(
+          s.getTotalRanking().getGroupCard().getGroupUsers().get(0).getUser(),
+          pointService.awardPointByRanking(s.getTotalRanking().getGroupCard().getSeq(),
+              s.getPointRewardTier()), "등수 보상");
+      // TotalRank -> 누적 포인트, 평균 등수, 최고 등수
+      s.getTotalRanking().addTotalEarnedPoint(
+          pointService.awardPointByRanking(s.getTotalRanking().getGroupCard().getSeq(),
+              s.getPointRewardTier()));
+      s.getTotalRanking().reNewAverageRanking();
+      s.getTotalRanking().reNewHighestRanking();
+      //
+    });
+  }
+
 
   /**
    * Integer yymm 넣으면 Timestamp 형식으로 바꿔주는 로직

@@ -6,6 +6,8 @@ import com.db.coffeestore9.global.common.State;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.OneToMany;
 import java.sql.Timestamp;
 import java.util.List;
@@ -27,7 +29,9 @@ public class Ranking extends BaseTimeEntity {
   @Column(nullable = false)
   private String eventName;
   @Builder.Default
+  @Enumerated(EnumType.STRING)
   private State state = State.NOT_YET;
+  @Enumerated(EnumType.STRING)
   @Column(nullable = false)
   private Kind kind;
 
