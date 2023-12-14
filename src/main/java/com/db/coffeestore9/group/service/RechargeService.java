@@ -144,10 +144,13 @@ public class RechargeService {
    */
   private List<RechargeUser> createRechargeUsers(Long groupSeq) {
     List<GroupUser> groupUsers = groupUserRepository.findGroupUsersByGroupCardSeq(groupSeq);
-    groupUsers.forEach(s -> s.getRechargeUsers().add(RechargeUser.builder().groupUser(s).build()));
-    return groupUsers.stream().map(s -> RechargeUser.builder().groupUser(s).build())
-        .toList();
+    return groupUsers.stream().map(s -> {
+      RechargeUser rechargeUser = RechargeUser.builder().groupUser(s).build();
+      s.getRechargeUsers().add(rechargeUser);
+      return rechargeUser;
+    }).toList();
   }
+
 
   /**
    * 공정분배금액 구하는 로직, 이건 그룹원의 공정분배금액이랑 관련없이 충전할 때 더해줄 공정분배금액
