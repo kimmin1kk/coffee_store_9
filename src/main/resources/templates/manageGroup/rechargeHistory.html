@@ -3,8 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/groupcard.css}" />
 </head>
 <body>
-
+<div th:insert="/layouts/header"></div>
+<div class="nav">
+    <nav>
+        <a class="a" th:href="@{/manageGroup/groupInfo}">그룹 정보</a>
+        <a class="a" th:href="@{/manageGroup/rechargeForm}">충전</a>
+        <a class="a" th:href="@{/manageGroup/rechargeHistory}">충전 내역</a>
+    </nav>
+</div>
+<div>
+    충전 내역 페이지
+</div>
+<div th:insert="/layouts/rightside"></div>
+<footer class="footer"></footer>
 </body>
 </html>

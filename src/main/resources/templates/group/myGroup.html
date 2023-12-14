@@ -23,6 +23,30 @@
     </p>
 </div>
 <div th:insert="/layouts/rightside"></div>
+<div class="sectionWrap">
+    <h2 class="groupTitle" id="My Group Reword">마이 그룹 페이지</h2>
+    <div class="sectionContent2">
+
+    </div>
+</div>
+<div class="sectionWrap">
+    <h2 class="groupTitle" id="그룹원 목록">그룹원 목록</h2>
+    <div class="sectionContent2">
+
+    </div>
+</div>
+<div class="sectionWrap">
+    <h2 class="groupTitle" id="충전 내역">충전 내역</h2>
+    <div class="sectionContent2">
+
+    </div>
+</div>
+<div class="sectionWrap">
+    <h2 class="groupTitle" id="그룹 포인트">그룹 포인트</h2>
+    <div class="sectionContent2">
+
+    </div>
+</div>
 <footer class="footer"></footer>
 <script>
     function scrollToSection(sectionId) {
@@ -30,7 +54,7 @@
 
         if (sectionElement) {
             var topOffset =
-                sectionElement.getBoundingClientRect().top + window.scrollY;
+                sectionElement.getBoundingClientRect().top + window.scrollY-130;
 
             window.scrollTo({
                 top: topOffset,
