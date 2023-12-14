@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/groupcard.css}" />
+</head>
+<body>
+<div th:insert="/layouts/header"></div>
+<div class="nav">
+    <nav>
+        <a class="a" th:href="@{/manageGroup/groupInfo}">그룹 정보</a>
+        <a class="a" th:href="@{/manageGroup/recharge/form}">충전</a>
+        <a class="a" th:href="@{/manageGroup/rechargeHistory}">충전 내역</a>
+    </nav>
+</div>
+<div class="sectionWrap">
+    <h2 class="groupTitle">충전 하기</h2>
+    <div class="sectionContent2">
+        <div>
+            <table>
+                <thead>
+                <tr>
+                    <th>선택</th>
+                    <th>이름</th>
+                    <th>직위</th>
+                    <th>양심금</th>
+                    <th>월간 사용 금액</th>
+                    <th>최근 충전 현황</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="groupuser : ${groupUsers}">
+                    <td>
+                        <input type="checkbox" th:id="'checkbox_' + ${groupuser.getUser().getUsername()}" th:value="${groupuser.getUser().getUsername()}" onclick="updateUsernames()"/>
+                        <label th:for="'checkbox_' + ${groupuser.getUser().getUsername()}" th:text="${groupuser.getUser().getUsername()}"></label>
+                    </td>
+                    <td th:if="${groupuser.isAdministrator()}">관리자</td>
+                    <td th:unless="${groupuser.isAdministrator()}">그룹원</td>
+                    <td th:text="${groupuser.getPairShareAmount()}"></td>
+                    <td th:text="${groupuser.getMonthlyUsedAmount()}"></td>
+                    <td th:text="${groupuser.getRecentlyChargedDate()}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div>
+            <form method="POST" th:action="@{/manageGroup/recharge/request}" id="requestRechargeForm">
+
+                <label for="amount">충전 금액:</label>
+                <input type="number" id="amount" name="amount" placeholder="충전 금액" required /><br />
+
+                <input type="hidden" id="usernames" name="usernames" required />
+
+                <input type="hidden" id="groupSeq" name="groupSeq" th:value="${groupUsers.get(0).getGroupCard().getSeq()}" required />
+                <div class="button-container">
+                    <button type="submit">충전 요청 보내기</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div th:insert="/layouts/rightside"></div>
+<footer class="footer"></footer>
+
+<script th:inline="javascript">
+    function updateUsernames() {
+        var checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');
+        var usernames = [];
+        checkboxes.forEach(function (checkbox) {
+            usernames.push(checkbox.value);
+        });
+        document.getElementById('usernames').value = usernames.join(',');
+    }
+</script>
+
+</body>
+</html>

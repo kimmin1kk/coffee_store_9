@@ -10,12 +10,16 @@
 <div class="nav">
     <nav>
         <a class="a" th:href="@{/manageGroup/groupInfo}">그룹 정보</a>
-        <a class="a" th:href="@{/manageGroup/rechargeForm}">충전</a>
+        <a class="a" th:href="@{/manageGroup/recharge/form}">충전</a>
         <a class="a" th:href="@{/manageGroup/rechargeHistory}">충전 내역</a>
     </nav>
 </div>
-<div>
-    충전 내역 페이지
+<div class="sectionWrap">
+    <h2 class="groupTitle">충전 내역</h2>
+    <div class="sectionContent2">
+        <h4 class="contentTitle2">
+        </h4>
+    </div>
 </div>
 <div th:insert="/layouts/rightside"></div>
 <footer class="footer"></footer>
