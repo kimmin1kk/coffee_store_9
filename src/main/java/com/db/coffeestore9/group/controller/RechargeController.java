@@ -35,7 +35,6 @@ public class RechargeController {
   }
 
   /**
-   *
    * @return
    */
   @GetMapping("/form")
@@ -45,10 +44,12 @@ public class RechargeController {
     if (rechargeService.getRechargeHistory(groupCard).stream()
         .anyMatch(s -> s.getState() == State.ON_PROGRESS)) {
       // 현재 진행중인 충전
-      model.addAttribute("onProgressRecharge",
+      model.addAttribute("joinedUsers",
           rechargeService.getOnProgressRecharge(rechargeService.getRechargeHistory(groupCard))
               .getRechargeUsers().stream().filter(
                   RechargeUser::isJoined).toList());
+      model.addAttribute("onProgressRecharge", rechargeService.getOnProgressRecharge(
+          rechargeService.getRechargeHistory(groupCard)));
     }
 
     return "recharge/basicForm";
