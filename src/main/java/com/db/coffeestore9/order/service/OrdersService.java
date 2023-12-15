@@ -51,7 +51,8 @@ public class OrdersService {
 
         if (orderPageForm.paymentMethod() == PaymentMethod.GROUP_CARD) {
           orders.getSalePercentage(
-              getSalePercentageByGrade(orders.getUser().getGroupUser().getGroupCard().getGrade()));
+              getSalePercentageByGrade(orders.getUser().getGroupUser().getGroupCard().getGrade(),orders.getOrderContentList().stream().mapToInt(
+                  OrderContent::getCount).sum()));
           payWithGroupCard(orders.getTotalPrice(), orders.getSavedPrice(), orders.getUser());
         }
 
@@ -63,19 +64,41 @@ public class OrdersService {
   }
 
   /**
-   * 할인율 주는 로직, 잔당 세일 추가로 먹이려면 시킬 때 카운트 or 종류 2개 이상인거? 이런걸 좀 구하는 로직이 필요할 듯
-   *
-   * @param grade
-   * @return
+   * 할인율 주는 로직,
+   * @param grade Group Grade
+   * @param productsCount / OrderContentList().stream().mapToInt(OrderContent::getCount).sum
+   * @return SalePercentage
    */
-  private Integer getSalePercentageByGrade(Grade grade) {
+  private Integer getSalePercentageByGrade(Grade grade, Integer productsCount) {
+    int minimumPercent;
+    int maximumPercent;
 
-    return switch (grade) {
-      case BRONZE -> 3;
-      case SILVER -> 5;
-      case GOLD -> 7;
-      case VIP -> 10;
-    };
+    if (grade == Grade.BRONZE) {
+      minimumPercent = 3;
+      maximumPercent = 8;
+      return Math.min(minimumPercent * productsCount, maximumPercent);
+    }
+
+    if (grade == Grade.SILVER) {
+      minimumPercent = 5;
+      maximumPercent = 12;
+      return Math.min(minimumPercent * productsCount, maximumPercent);
+
+    }
+
+    if (grade == Grade.GOLD) {
+      minimumPercent = 7;
+      maximumPercent = 16;
+      return Math.min(minimumPercent * productsCount, maximumPercent);
+    }
+
+    if (grade == Grade.VIP) {
+      minimumPercent = 10;
+      maximumPercent = 20;
+      return Math.min(minimumPercent * productsCount, maximumPercent);
+    }
+
+    return 0;
   }
 
   /**
