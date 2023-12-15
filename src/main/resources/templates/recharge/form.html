@@ -39,7 +39,7 @@
                     <td th:unless="${groupuser.isAdministrator()}">그룹원</td>
                     <td th:text="${groupuser.getPairShareAmount()}"></td>
                     <td th:text="${groupuser.getMonthlyUsedAmount()}"></td>
-                    <td th:text="${groupuser.getRecentlyChargedDate()}"></td>
+                    <td th:text="${#dates.format(groupuser.getRecentlyChargedDate(),'yyyy-MM-dd')}"></td>
                 </tr>
                 </tbody>
             </table>

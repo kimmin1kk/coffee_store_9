@@ -39,9 +39,25 @@
 <div class="sectionWrap">
     <h2 class="groupTitle" id="충전 내역">충전 내역</h2>
     <div class="sectionContent2">
-
+        <table>
+            <thead>
+            <tr>
+                <th>이름</th>
+                <th>직위</th>
+                <th>충전금액</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="recharge : ${recharges}">
+                <td th:each="rechargeuser :${recharge.getRechargeUsers()}">
+                    <p th:text="${rechargeuser.getGroupUser().getUser().getUsername()}"></p>
+                </td>
+            </tr>
+            </tbody>
+        </table>
     </div>
 </div>
+
 <div class="sectionWrap">
     <h2 class="groupTitle" id="그룹 포인트">그룹 포인트</h2>
     <div class="sectionContent2">
