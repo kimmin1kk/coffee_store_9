@@ -14,6 +14,7 @@ import com.db.coffeestore9.rank.repository.RankingRepository;
 import com.db.coffeestore9.rank.repository.TotalRankingRepository;
 import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Comparator;
 import java.util.List;
@@ -105,10 +106,10 @@ public class RankingService {
    * @param rankingSeq Ranking seq
    */
   @Transactional
-  public void startRankingSchedule(Long rankingSeq, Integer yymm) {
+  public void startRankingSchedule(Long rankingSeq, Timestamp yymm) {
     if (getActiveRanking() == null) { //현재 진행중인 랭킹이 없어야함
       Ranking ranking = getRanking(rankingSeq);
-      if (checkRankingStart(rankingSeq, yymm)) { //rankingSeq와 yymm으로 시작할 기간이 된 랭킹인지 확인함
+      if (checkRankingStart(rankingSeq, convertTimestampToInteger(yymm))) { //rankingSeq와 yymm으로 시작할 기간이 된 랭킹인지 확인함
 
         totalRankingRepository.findAll().stream().filter(s -> s.getGroupCard().isActive())
             .forEach(s -> s.getRankingInfos()
@@ -281,6 +282,19 @@ public class RankingService {
     LocalDate date = LocalDate.of(year, month, 2);
 
     return Timestamp.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant());
+  }
+
+  /**
+   * Timestamp를 받아서 년월 Integer로 바꿔주는 로직
+   *
+   * @param timestamp Timestamp ex) 2023-11-02
+   * @return Integer ex) 2311로 바꿔서 반환
+   */
+  private Integer convertTimestampToInteger(Timestamp timestamp) {
+    LocalDateTime dateTime = timestamp.toLocalDateTime();
+    int year = dateTime.getYear() - 2000;
+    int month = dateTime.getMonthValue();
+    return year * 100 + month;
   }
 
 

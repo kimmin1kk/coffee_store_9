@@ -6,6 +6,7 @@ import com.db.coffeestore9.rank.service.RankInfoService;
 import com.db.coffeestore9.rank.service.RankingService;
 import com.db.coffeestore9.rank.service.TotalRankingService;
 import java.security.Principal;
+import java.sql.Timestamp;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -89,7 +90,7 @@ public class RankingController {
    */
   @PostMapping("/start/{seq}")
   public String startRanking(Model model, Principal principal, @PathVariable("seq") Long rankingSeq,
-      Integer yymm) {
+      Timestamp yymm) {
     rankingService.startRankingSchedule(rankingSeq, yymm);
     return "redirect:/ranking/info";
   }
