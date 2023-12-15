@@ -2,6 +2,7 @@ package com.db.coffeestore9.rank.controller;
 
 import com.db.coffeestore9.group.service.GroupCardService;
 import com.db.coffeestore9.rank.common.CreateRankingForm;
+import com.db.coffeestore9.rank.service.RankInfoService;
 import com.db.coffeestore9.rank.service.RankingService;
 import com.db.coffeestore9.rank.service.TotalRankingService;
 import java.security.Principal;
@@ -22,6 +23,7 @@ public class RankingController {
   private final RankingService rankingService;
   private final TotalRankingService totalRankingService;
   private final GroupCardService groupCardService;
+  private final RankInfoService rankInfoService;
 
   /**
    * 현재 등록되어 있는 랭킹 이벤트들을 전부 볼 수 있는 페이지로 연결해주는 컨트롤러
@@ -33,6 +35,7 @@ public class RankingController {
 
     //현재 진행중인 랭킹
     model.addAttribute("onProgressRanking", rankingService.getActiveRanking());
+    model.addAttribute("top3", rankInfoService.getRankingTop3(rankingService.getActiveRanking()));
 
     // 종료된 랭킹들
     model.addAttribute("rankings", rankingService.getFinishedRankings());

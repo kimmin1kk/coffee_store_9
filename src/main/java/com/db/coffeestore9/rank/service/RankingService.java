@@ -67,8 +67,9 @@ public class RankingService {
    */
   public Ranking getActiveRanking() {
     return rankingRepository.findAll().stream().filter(s -> s.getState() == State.ON_PROGRESS)
-        .findFirst().orElseThrow();
+        .findFirst().orElse(null);
   }
+
 
   /**
    * 랭킹 스케쥴 등록하는 로직, 그 외에도 측정월에 따라 상태를 바꿔주는 로직, 랭킹 집계를 하는 로직 등등이 더 필요한 상태
