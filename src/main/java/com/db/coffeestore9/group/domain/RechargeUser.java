@@ -55,5 +55,4 @@ public class RechargeUser extends BaseTimeEntity {
     this.rechargeAmount = amount;
   }
 
-
 }

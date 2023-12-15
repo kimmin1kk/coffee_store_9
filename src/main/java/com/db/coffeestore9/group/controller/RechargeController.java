@@ -109,4 +109,11 @@ public class RechargeController {
 
     return "redirect:/group/myGroup";
   }
+
+  @PostMapping("/cancel/{seq}")
+  public String cancelRecharge(Model model, Principal principal, @PathVariable("seq") Long seq) {
+    rechargeService.cancelRecharge(seq);
+
+    return "redirect:/group/myGroup";
+  }
 }

@@ -388,5 +388,18 @@ public class RechargeService {
 
   }
 
+  @Transactional
+  public void cancelRecharge(Long seq) {
+    Recharge recharge = rechargeRepository.findById(seq).orElseThrow();
+
+    if (recharge.getRechargeUsers().stream().noneMatch(RechargeUser::isPayed)) {
+      //아직 결제한 사람이 없을 때 -> 삭제 가능할 때
+      recharge.getRechargeUsers().forEach(s -> s.requestRecharge(null));
+      rechargeRepository.delete(recharge);
+    }else {
+      throw new IllegalArgumentException("이미 충전한 회원이 존재합니다!");
+    }
+  }
+
 
 }
