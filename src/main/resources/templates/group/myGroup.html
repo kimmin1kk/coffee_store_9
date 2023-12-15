@@ -31,6 +31,7 @@
 </div>
 <div class="sectionWrap">
     <h2 class="groupTitle" id="그룹원 목록">그룹원 목록</h2>
+    <button><a th:href="@{/manageGroup/recharge/pay/{seq}}" >충전</a> </button>
     <div class="sectionContent2">
 
     </div>
@@ -50,10 +51,10 @@
 <footer class="footer"></footer>
 <script>
     function scrollToSection(sectionId) {
-        var sectionElement = document.getElementById(sectionId);
+        const sectionElement = document.getElementById(sectionId);
 
         if (sectionElement) {
-            var topOffset =
+            const topOffset =
                 sectionElement.getBoundingClientRect().top + window.scrollY-130;
 
             window.scrollTo({
