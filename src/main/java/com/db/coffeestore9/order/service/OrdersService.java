@@ -53,6 +53,7 @@ public class OrdersService {
           orders.getSalePercentage(
               getSalePercentageByGrade(orders.getUser().getGroupUser().getGroupCard().getGrade(),orders.getOrderContentList().stream().mapToInt(
                   OrderContent::getCount).sum()));
+          orders.calculateSavedPrice();
           payWithGroupCard(orders.getTotalPrice(), orders.getSavedPrice(), orders.getUser());
         }
 

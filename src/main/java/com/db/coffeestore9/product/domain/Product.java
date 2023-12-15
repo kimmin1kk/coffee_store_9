@@ -9,7 +9,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.OneToMany;
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -29,17 +29,17 @@ public class Product extends BaseTimeEntity {
     @Column(unique = true, nullable = false)
     private String name;
 
-    @NotBlank
+    @NotNull
     @Column(nullable = false)
     private Integer price;
 
 
-    @NotBlank
+    @NotNull
     @Column(nullable = false)
     private Integer count;
 
 
-    @NotBlank
+
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Category category;
@@ -55,9 +55,6 @@ public class Product extends BaseTimeEntity {
         this.category = productEditForm.category();
     }
 
-    public void addCount(int count) {
-        this.count += count;
-    }
 
     public void minusCount(int count) {
         this.count -= count;
