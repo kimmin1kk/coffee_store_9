@@ -58,6 +58,13 @@ public class RankingController {
     return "/ranking/createForm";
   }
 
+  @GetMapping("/manageRanking")
+  public String manageRankList(Model model, Principal principal) {
+    model.addAttribute("rankings", rankingService.getAllRankings());
+
+    return "/ranking/manageRanking";
+  }
+
   /**
    * @param createRankingForm (yymm, eventKind(Kind), eventName)
    * @return
