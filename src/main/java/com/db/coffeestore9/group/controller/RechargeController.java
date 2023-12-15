@@ -50,6 +50,12 @@ public class RechargeController {
                   RechargeUser::isJoined).toList());
       model.addAttribute("onProgressRecharge", rechargeService.getOnProgressRecharge(
           rechargeService.getRechargeHistory(groupCard)));
+
+      model.addAttribute("chargingAmount",
+          rechargeService.getOnProgressRecharge(rechargeService.getRechargeHistory(groupCard))
+              .getRechargeUsers().stream().filter(
+                  RechargeUser::isJoined).filter(RechargeUser::isPayed)
+              .mapToInt(RechargeUser::getRechargeAmount).sum());
     }
 
     return "recharge/basicForm";
