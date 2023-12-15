@@ -33,7 +33,7 @@ public class ScheduledTasks {
       log.info("그룹 랭킹 정보가 갱신되었습니다.");
       rankingService.renewGroupsRanking();
     }else {
-      log.info("갱신할 그룹 정보가 존재하지 않습니다.");
+      log.info("갱신할 그룹 랭킹 정보가 존재하지 않습니다.");
     }
   }
 

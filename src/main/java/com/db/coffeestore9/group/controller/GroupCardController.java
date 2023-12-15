@@ -1,8 +1,10 @@
 package com.db.coffeestore9.group.controller;
 
+import com.db.coffeestore9.global.common.State;
 import com.db.coffeestore9.group.domain.GroupCard;
 import com.db.coffeestore9.group.service.GroupCardService;
 import com.db.coffeestore9.group.service.GroupUserService;
+import com.db.coffeestore9.group.service.RechargeService;
 import java.security.Principal;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -18,6 +20,7 @@ public class GroupCardController {
 
   private final GroupCardService groupCardService;
   private final GroupUserService groupUserService;
+  private final RechargeService rechargeService;
 
   private static final String DEFAULT_REDIRECT = "redirect:/";
   private static final String GROUP_USER_ATTRIBUTE = "groupUsers";
@@ -60,6 +63,16 @@ public class GroupCardController {
       model.addAttribute("conditionDemotion", groupCardService.getConditionForDemotion(groupCard));
       model.addAttribute("groupCard", groupCard);
       model.addAttribute(GROUP_USER_ATTRIBUTE, groupCardService.getAcceptedGroupUsers(groupCard));
+
+      // 충전 내역이 있는가 + 끝난 충전이 하나라도 있는가
+      if (rechargeService.getRechargeHistory(groupCard).stream().findAny().isPresent()
+          && rechargeService.getRechargeHistory(groupCard).stream()
+          .anyMatch(s -> s.getState() == State.FINISHED)) {
+
+        // 끝난 충전들 (충전 내역)
+        model.addAttribute("recharges", rechargeService.getRechargeHistory(groupCard).stream()
+            .filter(s -> s.getState() == State.FINISHED));
+      }
       return "/group/myGroup";
     } else {
       throw new IllegalArgumentException("잘못된 접근입니다.");

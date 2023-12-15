@@ -34,13 +34,22 @@ public class RechargeController {
     return "/recharge/form";
   }
 
+  /**
+   *
+   * @return
+   */
   @GetMapping("/form")
   public String rechargeBasicForm(Model model, Principal principal) {
-    GroupCard groupCard =  groupCardService.getGroupCard(principal.getName());
-    model.addAttribute("recharges", rechargeService.getRechargeHistory(groupCard).stream().filter(s -> s.getState() == State.FINISHED));
-    model.addAttribute("onProgressRecharge",
-        rechargeService.getOnProgressRecharge(rechargeService.getRechargeHistory(groupCard)).getRechargeUsers().stream().filter(
-            RechargeUser::isJoined).toList());
+    GroupCard groupCard = groupCardService.getGroupCard(principal.getName());
+    //진행중인 충전이 있는가(하나라도 있는가랑 동일하나 한 번에 하나만 가능해야하니까..)
+    if (rechargeService.getRechargeHistory(groupCard).stream()
+        .anyMatch(s -> s.getState() == State.ON_PROGRESS)) {
+      // 현재 진행중인 충전
+      model.addAttribute("onProgressRecharge",
+          rechargeService.getOnProgressRecharge(rechargeService.getRechargeHistory(groupCard))
+              .getRechargeUsers().stream().filter(
+                  RechargeUser::isJoined).toList());
+    }
 
     return "recharge/basicForm";
   }
