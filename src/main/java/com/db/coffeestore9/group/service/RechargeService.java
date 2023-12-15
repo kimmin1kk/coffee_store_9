@@ -37,6 +37,11 @@ public class RechargeService {
         .filter(s -> s.getState() == State.FINISHED || s.getState() == State.ON_PROGRESS).toList();
   }
 
+  public Recharge getOnProgressRecharge(List<Recharge> recharges) {
+    return recharges.stream().filter(s -> s.getState() == State.ON_PROGRESS).findFirst()
+        .orElseThrow();
+  }
+
   /**
    * Usernames과 Recharge의 seq를 받아 유저별 충전 항목 (RechargeUser) 을 받아오는 로직
    *
@@ -87,16 +92,13 @@ public class RechargeService {
    * 충전에 참여하는 유저를 List 형태로 받아오는 로직
    *
    * @param users
-   * @return
+   * @return JoinedRechargeUsers
    */
   public List<RechargeUser> getJoinedUsers(List<RechargeUser> users) {
     return users.stream().filter(RechargeUser::isJoined).toList();
   }
 
-  public Recharge getOnProgressRecharge(List<Recharge> recharges) {
-    return recharges.stream().filter(s -> s.getState() == State.ON_PROGRESS).findFirst()
-        .orElseThrow();
-  }
+
 
   /**
    * 이미 돈 낸 유저를 List 형태로 받아오는 로직
@@ -170,6 +172,7 @@ public class RechargeService {
         .build();
     groupCard.getRecharges().add(recharge);
     rechargeUsers.forEach(s -> s.requestRecharge(recharge));
+    getRechargeAmount(recharge.getRechargeUsers(), recharge.getRechargeAmount());
     return recharge;
   }
 
