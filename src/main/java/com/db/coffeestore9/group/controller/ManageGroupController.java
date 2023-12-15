@@ -30,13 +30,5 @@ public class ManageGroupController {
     return "/manageGroup/groupInfo";
   }
 
-  @GetMapping("/rechargeHistory")
-  public String getRechargeHistories(Model model, Principal principal) {
-    GroupCard groupCard = groupCardService.getGroupCard(principal.getName());
 
-    model.addAttribute("recharges", rechargeService.getRechargeHistory(groupCard));
-
-
-    return "/manageGroup/rechargeHistory";
-  }
 }
