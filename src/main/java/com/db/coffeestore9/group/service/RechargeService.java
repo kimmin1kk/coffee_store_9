@@ -63,12 +63,12 @@ public class RechargeService {
       Long seq) {
     return usernames.stream()
         .map(
-        //한번 충전한 뒤로 두번째 충전할 때 결과가 2개라 오류뜸
+            //한번 충전한 뒤로 두번째 충전할 때 결과가 2개라 오류뜸
             //유저네임과 그룹카드seq만으로는 rechargeUser 2개가 반환되기 때문에 오류가 뜬건데..
-            s -> rechargeUserRepository.findTopByGroupUserUserUsernameAndGroupUserGroupCardSeqOrderByCreatedDateDesc(s, seq))
+            s -> rechargeUserRepository.findTopByGroupUserUserUsernameAndGroupUserGroupCardSeqOrderByCreatedDateDesc(
+                s, seq))
         .toList();
   }
-
 
 
   /**
@@ -151,8 +151,9 @@ public class RechargeService {
    */
   @Transactional
   public Recharge requestRecharge(RequestRechargeForm requestRechargeForm) {
-    // 그룹원 전체 -> createRechargeUsers()
-    List<RechargeUser> rechargeUsers = createRechargeUsers(requestRechargeForm.groupSeq());
+    // 들어온 그룹원 전체 -> createRechargeUsers()
+    List<RechargeUser> rechargeUsers = createRechargeUsers(requestRechargeForm.groupSeq()).stream()
+        .toList();
     // 충전 요청에 선택된 그룹원 -> joinRecharge()
     joinRecharge(
         convertUsernamesAndGroupSeqToRechargeUsers(requestRechargeForm.usernames(),
@@ -176,7 +177,7 @@ public class RechargeService {
    * 그룹원 별 충전 항목 만드는 로직, 그룹원 전체를 넣는 이유는 양심금을 계산하기 위해서
    *
    * @param groupSeq 그룹원 전체를 넣기 위해 그룹카드의 주식별자가 필요함
-   * @return List<RechargeUser>
+   * @return List<RechargeUser>  가입하지 않은 유저 필터링된 상태
    */
   private List<RechargeUser> createRechargeUsers(Long groupSeq) {
     List<GroupUser> groupUsers = groupUserRepository.findGroupUsersByGroupCardSeq(groupSeq);
@@ -308,7 +309,7 @@ public class RechargeService {
     Recharge recharge = getRecharge(seq);
     rechargeUser.changePayedState(true);
     // 주의
-    getRechargeAmount(recharge.getRechargeUsers(),recharge.getRechargeAmount());
+    getRechargeAmount(recharge.getRechargeUsers(), recharge.getRechargeAmount());
 
     if (checkRechargeFinished(seq)) {
       recharge.rechargeFinishedDate();
@@ -318,11 +319,16 @@ public class RechargeService {
               .getGroupName()).addCharge(recharge.getRechargeAmount());
 
       recharge.getRechargeUsers().stream().filter(RechargeUser::isPayed)
-          .map(RechargeUser::getGroupUser).forEach(GroupUser::changeRecentChargedDate);
+          .map(RechargeUser::getGroupUser).forEach(s -> {
+            s.changeRecentChargedDate();
+            s.addTotalRechargedAmount(rechargeUser.getRechargeAmount());
+          });
 
+      // 패널티 받은 유저들 양심금 초기화
       resetPairSharedAmount(recharge.getRechargeUsers());
 
-      addPairSharedAmount(recharge.getRechargeUsers(), recharge.getPairAmount());
+      // 양심금 더해줌
+      addPairSharedAmount(recharge);
 
     }
 
@@ -345,16 +351,16 @@ public class RechargeService {
 
   /**
    * 공정금액 더하는 로직
+   *
    * @param rechargeUsers
    * @param pairAmount
    */
-  private void addPairSharedAmount(List<RechargeUser> rechargeUsers, Integer pairAmount) {
-    List<GroupUser> payedUsers = getPayedUsers(rechargeUsers).stream()
-        .map(RechargeUser::getGroupUser).toList();
+  private void addPairSharedAmount(Recharge recharge) {
 
-    for (GroupUser s : payedUsers) {
-      s.addPairSharedAmount(pairAmount);
-    }
+    //양심금 지급
+    recharge.getRechargeUsers().stream().map(RechargeUser::getGroupUser)
+        .forEach(s -> s.addPairSharedAmount(recharge.getPairAmount()));
+
   }
 
 

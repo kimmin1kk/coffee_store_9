@@ -33,7 +33,7 @@ public class GroupUser extends BaseTimeEntity {
   private Integer monthlyUsedAmount = 0;
 
   @Builder.Default
-  private Integer totalChargedAmount = 0;
+  private Integer totalRechargedAmount = 0;
 
   @Builder.Default
   private Integer totalSalesAmount = 0;
@@ -81,6 +81,10 @@ public class GroupUser extends BaseTimeEntity {
 
   public void changePairSharedAmount(Integer amount) {
     this.pairShareAmount = amount;
+  }
+
+  public void addTotalRechargedAmount(Integer totalRechargedAmount) {
+    this.totalRechargedAmount += totalRechargedAmount;
   }
 
   public void addPairSharedAmount(Integer amount) {
