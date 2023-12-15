@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/rank.css}" />
+</head>
+<body>
+<div th:insert="/layouts/header"></div>
+
+<div class="sectionWrap">
+    <h4 class="contentTitle"><strong>그룹 카드 랭킹 스케줄러</strong></h4>
+    <div class="sectionContent2">
+        <div class="scheduler">
+            <div class="month-selector">
+                <button onclick="prevMonth()">이전 달</button>
+                <span id="currentMonth"></span>
+                <button onclick="nextMonth()">다음 달</button>
+            </div>
+            <table id="calendar"></table>
+            <div id="selectedDate"></div>
+            <div>
+                <form method="post" th:action = "@{/ranking/create}" id="createRankingForm">
+                    <select>
+                        <option value="MAX_PAY_RANK">BEST GROUPCARD EVENT</option>
+                        <option value="BEST_ITEM_RANK">BEST ITEM CUSTOMER</option>
+                        <option value="WORST_ITEM_RANK">WORST ITEM CUSTOMER</option>
+                    </select>
+                    <label for="eventName">이벤트명: </label>
+                    <input type="text" id="eventName">
+                    <button type="submit">등록하기</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:insert="/layouts/rightside"></div>
+<footer class="footer"></footer>
+<script>
+    var currentYear = new Date().getFullYear();
+    var currentMonth = new Date().getMonth();
+    var selectedYear = currentYear;
+    var selectedMonth = currentMonth + 1;
+
+    function createCalendar(year, month) {
+        var daysInMonth = new Date(year, month + 1, 0).getDate();
+        var firstDayOfMonth = new Date(year, month, 1).getDay();
+
+        var table = '<tr><th>Sun</th><th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th></tr>';
+        var dayCounter = 1;
+
+        for (var i = 0; i < 6; i++) {
+            table += '<tr>';
+            for (var j = 0; j < 7; j++) {
+                if (i === 0 && j < firstDayOfMonth) {
+                    table += '<td></td>';
+                } else if (dayCounter > daysInMonth) {
+                    table += '<td></td>';
+                } else {
+                    table += '<td onclick="selectDate(' + year + ', ' + (month + 1) + ', ' + dayCounter + ')">' + dayCounter + '</td>';
+                    dayCounter++;
+                }
+            }
+            table += '</tr>';
+        }
+
+        return table;
+    }
+
+    function updateCalendar() {
+        document.getElementById('calendar').innerHTML = createCalendar(currentYear, currentMonth);
+        document.getElementById('currentMonth').innerText = (currentMonth + 1) + '월';
+        document.getElementById('selectedDate').innerText = selectedYear + '년 ' + selectedMonth + '월';
+    }
+
+    function prevMonth() {
+        currentMonth = (currentMonth === 0) ? 11 : currentMonth - 1;
+        updateCalendar();
+    }
+
+    function nextMonth() {
+        currentMonth = (currentMonth === 11) ? 0 : currentMonth + 1;
+        updateCalendar();
+    }
+
+    function selectDate(year, month, day) {
+        selectedYear = year;
+        selectedMonth = month;
+        updateCalendar();
+    }
+
+    updateCalendar();
+</script>
+
+</body>
+</html>

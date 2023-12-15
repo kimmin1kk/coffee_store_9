@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/rank.css}" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+<div th:insert="/layouts/header"></div>
+<div class="asideWrap">
+    <h4 class="asideTitle">카테고리</h4>
+    <p class="asideSub" onclick="scrollToSection('진행 중인 그룹 랭킹')">
+        진행 중인 그룹 랭킹
+    </p>
+    <p class="asideSub" onclick="scrollToSection('종료된 그룹 랭킹')">
+        종료된 그룹 랭킹
+    </p>
+    <p class="asideSub" onclick="scrollToSection('나의 그룹 랭킹')">
+        나의 그룹 랭킹
+    </p>
+</div>
+
+<div class="sectionWrap">
+    <h2 class="groupTitle" id="진행 중인 그룹 랭킹">이벤트</h2>
+    <h4 class="contentTitle">진행 중인 그룹 랭킹</h4>
+    <div class="rankTitle">
+    </div>
+    <div class="sectionContent2">
+        <h4 class="contentTitle2"><br>
+            <canvas class="graph" id="myChart" width="500" height="400px" style="position: relative"></canvas>
+        </h4>
+        <br><br>
+        <hr style="height: 1px !important; display: block !important; width: 100% !important;"/>
+        <div>
+
+        </div>
+    </div>
+    <hr>
+
+</div>
+<div class="sectionWrap">
+    <h4 class="contentTitle" id="종료된 그룹 랭킹">종료된 그룹 랭킹</h4>
+    <div class="sectionContent2">
+        <h4 class="contentTitle2"><br>
+        </h4>
+    </div>
+</div>
+<div class="sectionWrap">
+    <h4 class="contentTitle" id="나의 그룹 랭킹">나의 그룹 랭킹</h4>
+    <div class="sectionContent2">
+        <h4 class="contentTitle2"><br>
+        </h4>
+    </div>
+</div>
+
+<div th:insert="/layouts/rightside"></div>
+<footer class="footer"></footer>
+
+<script>
+    function scrollToSection(sectionId) {
+        var sectionElement = document.getElementById(sectionId);
+
+        if (sectionElement) {
+            var topOffset =
+                sectionElement.getBoundingClientRect().top + window.scrollY-130;
+
+            window.scrollTo({
+                top: topOffset,
+                behavior: "smooth",
+            });
+        }
+    }
+
+
+    var data = {
+        labels: ['2등', '1등', '3등'], // 2등과 3등에 빈 문자열을 넣어 세로 라벨을 없앰
+        datasets: [{
+            data: [6, 15, 4], // 각 순위에 해당하는 데이터
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.7)', // 1등 색상
+                'rgba(54, 162, 235, 0.7)', // 2등 색상
+                'rgba(255, 206, 86, 0.7)' // 3등 색상
+            ],
+            borderColor: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)'
+            ],
+            borderWidth: 1
+        }]
+    };
+
+    // 그래프 설정
+    var options = {
+        scales: {
+            y: {
+                beginAtZero: true,
+                ticks: {
+                    display: false // y축의 숫자 감춤
+                },
+                grid: {
+                    display: false // y축의 그리드 라인 숨김
+                }
+            },
+            x: {
+                grid: {
+                    display: false // x축의 그리드 라인 숨김
+                }
+            }
+        },
+        plugins: {
+            legend: {
+                display: false // 범례 숨김
+            }
+        },
+        layout: {
+            padding: {
+                left: 0, // 그래프의 왼쪽에 여백을 주어 2등 그래프가 왼쪽으로 이동하도록 함
+                right: 0,
+                top: 0,
+                bottom: 0
+            }
+        }
+    };
+
+
+    // 캔버스 요소 가져오기
+    var ctx = document.getElementById('myChart').getContext('2d');
+
+    // 그래프 생성
+    var myChart = new Chart(ctx, {
+        type: 'bar', // 바 그래프 사용
+        data: data,
+        options: options
+    });
+</script>
+
+</body>
+</html>
