@@ -1,5 +1,6 @@
 package com.db.coffeestore9.group.controller;
 
+import com.db.coffeestore9.global.common.State;
 import com.db.coffeestore9.group.common.RequestPairAmountPenalty;
 import com.db.coffeestore9.group.common.RequestRechargeForm;
 import com.db.coffeestore9.group.domain.GroupCard;
@@ -29,14 +30,14 @@ public class RechargeController {
   @GetMapping("/request/form")
   public String rechargeForm(Model model, Principal principal) {
     model.addAttribute("groupUsers",
-        groupCardService.getGroupUsers(groupUserService.getMyGroup(principal.getName())));
+        groupCardService.getAcceptedGroupUsers(groupUserService.getMyGroup(principal.getName())));
     return "/recharge/form";
   }
 
   @GetMapping("/form")
   public String rechargeBasicForm(Model model, Principal principal) {
     GroupCard groupCard =  groupCardService.getGroupCard(principal.getName());
-    model.addAttribute("recharges", rechargeService.getRechargeHistory(groupCard));
+    model.addAttribute("recharges", rechargeService.getRechargeHistory(groupCard).stream().filter(s -> s.getState() == State.FINISHED));
     model.addAttribute("onProgressRecharge",
         rechargeService.getOnProgressRecharge(rechargeService.getRechargeHistory(groupCard)).getRechargeUsers().stream().filter(
             RechargeUser::isJoined).toList());

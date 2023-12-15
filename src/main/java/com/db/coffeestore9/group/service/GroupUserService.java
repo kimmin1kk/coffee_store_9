@@ -26,7 +26,11 @@ public class GroupUserService {
    */
   public GroupCard getMyGroup(String username) {
     return groupCardRepository.findByGroupName(
-        groupUserRepository.findByUserUsername(username).getGroupCard().getGroupName());
+        getMyGroupUser(username).getGroupCard().getGroupName());
+  }
+
+  public GroupUser getMyGroupUser(String username) {
+    return groupUserRepository.findByUserUsername(username);
   }
 
   /**
@@ -36,7 +40,7 @@ public class GroupUserService {
    */
   @Transactional
   public void requestGroupActive(String username) {
-    groupUserRepository.findByUserUsername(username).changeGroupActiveRequested(true);
+    getMyGroupUser(username).changeGroupActiveRequested(true);
   }
 
   /**
@@ -46,7 +50,7 @@ public class GroupUserService {
    */
   @Transactional
   public void acceptGroupJoin(String username) {
-    groupUserRepository.findByUserUsername(username).changeUserAccepted(true);
+    getMyGroupUser(username).changeUserAccepted(true);
   }
 
   /**
@@ -57,7 +61,7 @@ public class GroupUserService {
   @Transactional
   public void rejectGroupJoin(String username) {
     GroupCard groupCard = groupCardRepository.findGroupCardByUserUsername(username);
-    GroupUser groupUser = groupUserRepository.findByUserUsername(username);
+    GroupUser groupUser = getMyGroupUser(username);
     User user = userRepository.findByUsername(username);
     userRepository.findByUsername(username).rejectGroup();
     user.rejectGroup();

@@ -43,22 +43,24 @@ public class GroupCardController {
   @GetMapping("/myGroup")
   public String myGroupCardPage(Model model, Principal principal) {
     GroupCard groupCard = groupUserService.getMyGroup(principal.getName());
-    if (groupCardService.checkGroupCardActiveStateAndCreateActive(
-        groupCard)) {
-      //그룹 활성화 상태 + 3명 이상 들어온 상태
-      model.addAttribute("conditionPromotion", groupCardService.getConditionForPromotion(groupCard));
-      model.addAttribute("conditionDemotion", groupCardService.getConditionForDemotion(groupCard));
-      model.addAttribute("groupCard", groupCard);
+    if (!groupCard.isCreateActive() || !groupUserService.getMyGroupUser(principal.getName())
+        .isUserAccepted()) {
+      //그룹 인원 3명 이상 들어 오지 않은 상태 or 유저가 수락하지 않은 상태
       model.addAttribute(GROUP_USER_ATTRIBUTE, groupCard.getGroupUsers());
-      return "/group/myGroup";
+      return "/group/waitForCreateGroup";
     } else if (!groupCard.isActive()) {
       //그룹 비활성화 상태
-      model.addAttribute(GROUP_USER_ATTRIBUTE, groupCardService.getGroupUsers(groupCard));
+      model.addAttribute(GROUP_USER_ATTRIBUTE, groupCard.getGroupUsers());
       return "/group/disabledGroup";
-    } else if (!groupCard.isCreateActive()) {
-      //그룹 인원 3명 이상 들어 오지 않은 상태
-      model.addAttribute(GROUP_USER_ATTRIBUTE, groupCardService.getGroupUsers(groupCard));
-      return "/group/waitForCreateGroup";
+    } else if (groupCardService.checkGroupCardActiveStateAndCreateActive(
+        groupCard)) {
+      //그룹 활성화 상태 + 3명 이상 들어온 상태
+      model.addAttribute("conditionPromotion",
+          groupCardService.getConditionForPromotion(groupCard));
+      model.addAttribute("conditionDemotion", groupCardService.getConditionForDemotion(groupCard));
+      model.addAttribute("groupCard", groupCard);
+      model.addAttribute(GROUP_USER_ATTRIBUTE, groupCardService.getAcceptedGroupUsers(groupCard));
+      return "/group/myGroup";
     } else {
       throw new IllegalArgumentException("잘못된 접근입니다.");
     }

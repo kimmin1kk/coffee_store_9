@@ -58,9 +58,9 @@ public class GroupCardService {
    * 그룹원 찾는 로직
    *
    * @param groupCard 그룹원을 찾으려는 그룹
-   * @return 그룹원들
+   * @return 그룹원들(요청 수락한)
    */
-  public List<GroupUser> getGroupUsers(GroupCard groupCard) {
+  public List<GroupUser> getAcceptedGroupUsers(GroupCard groupCard) {
     return groupUserRepository.findGroupUsersByGroupCardSeq(groupCard.getSeq()).stream().filter(GroupUser::isUserAccepted).toList();
   }
 
