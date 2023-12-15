@@ -1,0 +1,41 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+.sectionWrap {
+    max-width: 600px;
+    width: 100%;
+    padding: 20px;
+}
+
+.card {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.card-body {
+    padding: 20px;
+}
+
+.h1 {
+    color: #b38758;
+    text-align: center;
+}
+
+.footer {
+    position: fixed;
+    bottom: 0;
+    /*position: relative;*/
+    background: #f8f5f2;
+    height: 10svh;
+    width: 100%;
+    margin-top: 20px;
+}
+

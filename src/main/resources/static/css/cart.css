@@ -1,0 +1,115 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    margin-top: 130px;
+}
+
+.container {
+    width: 500px ;
+    max-width: 800px;
+    margin: 20px auto;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+}
+
+.sibal{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.p{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+h1 {
+    color: #b38758;
+    text-align: center;
+}
+
+.h3{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+th, td {
+    border: 1px solid #d4c7ac;
+    padding: 10px;
+    text-align: left;
+}
+
+th {
+    background-color: #b38758;
+    color: #fff;
+}
+
+.editCountForm {
+    display: flex;
+    align-items: center;
+}
+
+.countInput {
+    width: 50px;
+    padding: 5px;
+    margin-right: 10px;
+    box-sizing: border-box;
+    border: 1px solid #d4c7ac;
+    border-radius: 4px;
+}
+
+button {
+    background-color: #b38758;
+    color: #fff;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #a3764d;
+}
+
+.checkout-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50%;
+    text-align: center;
+    background-color: #b38758;
+    color: #fff;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    text-decoration: none;
+    margin-top: 20px;
+}
+
+.checkout-button:hover {
+    background-color: #a3764d;
+}
+
+.footer {
+    /*position: fixed;*/
+    /*bottom: 0;*/
+    position: relative;
+    background: #f8f5f2;
+    height: 10svh;
+    width: 100%;
+    margin-top: 20px;
+}

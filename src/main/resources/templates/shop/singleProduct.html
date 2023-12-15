@@ -1,20 +1,71 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-    <link rel="stylesheet" type="text/css" th:href="@{/css/index.css}" />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/detailmenu.css}" />
+    <title>Document</title>
 </head>
 <body>
+
 <div th:insert="/layouts/header"></div>
-<div class="asideWrap">
-    <h4 class="asideTitle">카테고리</h4>
-    <p class="asideSub" onclick="scrollToSection('커피')">커피</p>
-    <p class="asideSub" onclick="scrollToSection('차')">차</p>
-    <p class="asideSub" onclick="scrollToSection('디저트')">디저트</p>
+
+<div class="sectionWrap">
+    <div class="card">
+        <div class="card-body">
+            <h1 class="h1" th:text="${product.getName()}"></h1>
+            <p th:text="'가격 : ' + ${product.getPrice()} + '원'"></p>
+
+            <div sec:authorize="isAuthenticated()">
+                <div>
+                    <ul>
+                        <li>
+                            수량
+                            <input type="hidden" name="count" id="product-count" value="1">
+                        </li>
+                        <li><span id="btn-minus">-</span></li>
+                        <li><span id="var-value">1</span></li>
+                        <li><span id="btn-plus">+</span></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <form id="cart-form" th:action="@{/add-to-cart/{seq}(seq=${product.getSeq()})}"
+                          method="post">
+                        <input type="hidden" name="count" th:value="${count}">
+                        <button id="add-to-cart" type="submit"
+                                name="submit" th:value="${product.getSeq()}">장바구니 담기
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <div sec:authorize="isAnonymous()">
+                <h4>결제를 원하신다면 먼저 로그인해주세요.</h4>
+            </div>
+
+        </div>
+    </div>
 </div>
 
-<div th:insert="/layouts/rightside"></div>
 <footer class="footer"></footer>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const countInput = document.getElementById('product-count');
+        const varValueSpan = document.getElementById('var-value');
+        const btnMinus = document.getElementById('btn-minus');
+        const btnPlus = document.getElementById('btn-plus');
+
+        btnMinus.addEventListener('click', () => updateQuantity(-1));
+        btnPlus.addEventListener('click', () => updateQuantity(1));
+
+        function updateQuantity(change) {
+            let count = parseInt(countInput.value) + change;
+            count = count > 0 ? count : 1;
+
+            countInput.value = count;
+            varValueSpan.innerText = count;
+        }
+    });
+</script>
+
 </body>
 </html>
