@@ -1,11 +1,14 @@
 package com.db.coffeestore9.order.controller;
 
 import com.db.coffeestore9.order.common.OrderPageForm;
+import com.db.coffeestore9.order.common.PaymentMethod;
 import com.db.coffeestore9.order.service.OrderContentService;
 import com.db.coffeestore9.order.service.OrdersService;
 import java.security.Principal;
+import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,40 +41,12 @@ public class OrderController {
     return "shop/orderPage";
   }
 
-  /**
-   * 바로구매를 클릭했을 때 호출되는 컨트롤러
-   *
-   * @param model
-   * @param principal
-   * @return
-   */
-  @GetMapping("/add-to-cart-instant/{seq}")
-  public String orderPageForInstant(Model model, Principal principal,
-      @PathVariable("seq") Long seq,
-      @RequestParam(value = "count", required = false) Integer count) {
-    orderContentService.getOrdersForInstant(principal.getName());
-    if (count == null) {
-      count = 1;
-    }
-    orderContentService.addProductToCartForInstant(seq, principal.getName(), count);
-
-    model.addAttribute(ORDER_ATTRIBUTE, orderContentService.findOrdersForInstant(principal.getName()));
-    return "shop/orderPage";
-  }
-
   @PostMapping("/order-page")
   public String orderPage(Model model, Principal principal,
       @ModelAttribute OrderPageForm orderPageForm) {
-    log.info(
-        "OrderController -> orderPage : OK , orderPageForm is " + orderPageForm.toString());
 
-    if (orderPageForm.orderInstant()) {
-      ordersService.confirmOrder(orderPageForm,
-          orderContentService.findOrdersForInstant(principal.getName()));
-    } else {
-      ordersService.confirmOrder(orderPageForm,
-          orderContentService.findOrders(principal.getName()));
-    }
+    ordersService.confirmOrder(orderPageForm,
+        orderContentService.findOrders(principal.getName()));
 
     return "redirect:/";
   }
@@ -88,5 +63,4 @@ public class OrderController {
     log.info(ordersService.getAllOrderList() + "sss");
     return "shop/orderList";
   }
-
 }

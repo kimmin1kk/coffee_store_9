@@ -37,20 +37,6 @@ public class OrderContentService {
         .orElse(null);
   }
 
-
-  /**
-   * 바로 구매용 Orders 리스트를 가져와서 isOrdered == false && isInstant == true인 Orders의 Seq로 찾는 로직
-   *
-   * @param username
-   * @return 장바구니
-   */
-  public Orders findOrdersForInstant(String username) {
-    return ordersRepository.findOrdersListByUserUsername(username).stream()
-        .filter(orders -> !orders.isOrdered() && orders.isInstant())
-        .findFirst()
-        .orElse(null);
-  }
-
   /**
    * 장바구니 구매용 조건이 맞으면 장바구니 생성 기존에 주문내역이 있는 유저 = 마지막 장바구니 isOrdered == True && isInstant == false 일
    * 경우 새로 생성 처음 주문하는 유저 = OrdersList.isEmpty -> 새로 생성
@@ -75,38 +61,6 @@ public class OrderContentService {
   }
 
   /**
-   * 바로 구매용 조건에 맞게 장바구니 생성 기존에 주문내역이 있는 유저 = 마지막 장바구니 isOrdered == True && isInstant == true 일 경우 새로
-   * 생성 처음 주문하는 유저 = OrdersList.isEmpty -> 새로 생성
-   */
-  public void getOrdersForInstant(String username) {
-    boolean check = true;
-    var user = userRepository.findByUsername(username);
-
-    if (!user.getOrdersList().isEmpty()) { //장바구니가 이미 있엇으면 이걸로 ㅇㅇ
-      Long seq = null;
-      for (Orders orders : user.getOrdersList().stream().filter(Orders::isInstant).toList()) {
-        check = orders.isOrdered(); //주문이 됐으면 TRUE
-        seq = orders.getSeq();
-      }
-      if (!check) {
-        deleteOrders(seq);
-      }
-
-      createOrdersForInstant(username);
-    }
-    if (user.getOrdersList().isEmpty()) { //첫 장바구니 생성
-      createOrdersForInstant(username);
-    }
-  }
-
-  private void deleteOrders(Long seq) {
-    Orders cart = ordersRepository.findBySeq(seq);
-    if (cart.isInstant()) {
-      ordersRepository.deleteById(seq);
-    }
-  }
-
-  /**
    * 장바구니 구매용 장바구니 생성
    *
    * @param username
@@ -118,21 +72,6 @@ public class OrderContentService {
     log.info("OrderSerivce -> create Cart : OK  Cart = " + orders);
   }
 
-  /**
-   * 바로 구매용 장바구니 생성
-   *
-   * @param username
-   */
-  public void createOrdersForInstant(String username) {
-    var user = userRepository.findByUsername(username);
-    var orders = new Orders(user).toBuilder()
-        .orderContentList(new ArrayList<>())
-        .ordered(false)
-        .instant(true)
-        .build();
-    ordersRepository.save(orders);
-    log.info("OrderSerivce -> create Cart : OK  Cart = " + orders);
-  }
 
 
   /**
@@ -171,25 +110,4 @@ public class OrderContentService {
                 () -> orderContentRepository.save(new OrderContent(orders, product, count))));
   }
 
-  /**
-   * 바로 구매용
-   *
-   * @param seq   상품 PK
-   * @param count 구매하려는 상품 수
-   */
-  public void addProductToCartForInstant(long seq, String username, int count) {
-
-    var orders = findOrdersForInstant(username);
-
-    productRepository.findById(seq).ifPresentOrElse(
-        product -> {
-          OrderContent newOrderContent = new OrderContent(orders, product, count);
-          orders.getOrderContentList().add(newOrderContent);
-          orderContentRepository.save(newOrderContent);
-        },
-        () -> {
-          //null 일 때 여기서 처리
-        }
-    );
-  }
 }

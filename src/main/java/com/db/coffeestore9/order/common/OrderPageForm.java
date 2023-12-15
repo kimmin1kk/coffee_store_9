@@ -1,5 +1,5 @@
 package com.db.coffeestore9.order.common;
 
-public record OrderPageForm(boolean orderInstant, PaymentMethod paymentMethod, Integer totalPrice) {
+public record OrderPageForm(PaymentMethod paymentMethod, Integer totalPrice) {
 
 }
