@@ -11,6 +11,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import java.sql.Timestamp;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -29,7 +31,7 @@ public class Recharge extends BaseTimeEntity {
   private Timestamp finishedDate = null;
 
   @Builder.Default
-  private Timestamp expirationDate = new Timestamp(System.currentTimeMillis());
+  private Timestamp expirationDate = Timestamp.from(Instant.now().plus(7, ChronoUnit.DAYS));
 
   @Builder.Default
   @Enumerated(EnumType.STRING)
