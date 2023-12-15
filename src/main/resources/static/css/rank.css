@@ -1,0 +1,217 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    width: 100%;
+}
+
+.asideWrap {
+    position: fixed;
+    margin-left: 1%;
+    height: 35vh;
+    width: 10%;
+    padding-left: 20px;
+    top: 110px;
+}
+
+.asideTitle {
+    font-family: "Noto Sans KR";
+    font-style: normal;
+    font-weight: 400;
+    font-size: 17px;
+    line-height: 24px;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    letter-spacing: 0.5px;
+    color: #d0aa8f;
+    background: linear-gradient(180deg, #f9f9f9 0%, rgba(249, 249, 249, 0) 30%);
+}
+
+.asideSub {
+    font-family: "Noto Sans KR";
+    font-style: normal;
+    font-weight: 300;
+    font-size: 13px;
+    line-height: 24px;
+    display: flex;
+    align-items: flex-start;
+    letter-spacing: 0.5px;
+    color: #000000;
+}
+
+.sectionWrap {
+    margin-left: 10%;
+    position: relative;
+    margin-top: 110px;
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+}
+
+.groupTitle {
+    font-family: "Noto Sans KR";
+    font-style: normal;
+    font-weight: 400;
+    font-size: 32px;
+    line-height: 24px;
+    align-items: center;
+    letter-spacing: 0.5px;
+    color: #000000;
+    position: relative;
+}
+
+.sectionContent2 {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: #F8F5F2;
+    width: 1220px;
+    height: auto;
+    padding-bottom: 30px;
+    padding-top: 30px;
+    box-shadow: 0px 4px 8px 3px rgba(0, 0, 0, 0.1);
+    border-radius: 12px 12px 12px 12px;
+}
+
+.gyusche {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: #F8F5F2;
+    width: 1220px;
+    height: 500px;
+    box-shadow: 0px 4px 8px 3px rgba(0, 0, 0, 0.1);
+    border-radius: 12px 12px 12px 12px;
+}
+
+@media (min-width: 1901px) {
+    .sectionContent {
+        width: 1300px;
+    }
+}
+
+@media (min-width: 1901px) {
+    .sectionContent2 {
+        width: 1530px;
+    }
+}
+
+.contentTitle {
+    font-family: 'Noto Sans KR';
+    font-style: normal;
+    font-weight: 300;
+    font-size: 20px;
+    line-height: 24px;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    letter-spacing: 0.5px;
+    color: #000000;
+}
+
+.footer {
+    /*position: fixed;*/
+    /*bottom: 0;*/
+    position: relative;
+    background: #f8f5f2;
+    height: 10svh;
+    width: 100%;
+    margin-top: 20px;
+}
+
+.ralnkTitle{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 1220px;
+    height: 100px;
+    background: #F8F5F2;
+    box-shadow: 0px 4px 8px 3px rgba(0, 0, 0, 0.1);
+    border-radius: 12px 12px 12px 12px;
+    margin-bottom: 30px;
+}
+
+@media (min-width: 1901px) {
+    .ralnkTitle {
+        width: 1300px;
+    }
+}
+
+@media (min-width: 1901px) {
+    .ralnkTitle {
+        width: 1530px;
+    }
+}
+
+.graph{
+   padding-bottom: 30px;
+}
+
+.scheduler {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.month-selector {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.month-selector button {
+    background-color: #b38758;
+    color: #fff;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.month-selector button:hover {
+    background-color: #a3764d;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 10px;
+    border: 1px solid #d4c7ac;
+    text-align: center;
+}
+
+th {
+    background-color: #b38758;
+    color: #fff;
+}
+#selectedDate {
+    margin-top: 10px;
+    font-size: 18px;
+}
+
+td {
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+td:hover {
+    background-color: #f5f5f5;
+}
+.footer{
+    position: fixed;
+    bottom: 0;
+}
