@@ -51,8 +51,8 @@ public class RechargeUser extends BaseTimeEntity {
     this.penaltyPairAmount = state;
   }
 
-  public void addRechargeAmount(Integer amount) {
-    this.rechargeAmount += amount;
+  public void getRechargeAmount(Integer amount) {
+    this.rechargeAmount = amount;
   }
 
 

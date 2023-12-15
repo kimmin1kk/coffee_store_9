@@ -51,4 +51,8 @@ public class Recharge extends BaseTimeEntity {
     this.state = state;
   }
 
+  public void rechargeFinishedDate() {
+    this.finishedDate = new Timestamp(System.currentTimeMillis());
+  }
+
 }

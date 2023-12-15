@@ -41,16 +41,34 @@ public class RechargeService {
    * Usernames과 Recharge의 seq를 받아 유저별 충전 항목 (RechargeUser) 을 받아오는 로직
    *
    * @param usernames usernames
-   * @param seq       GroupCard seq
+   * @param seq       Recharge Seq
    * @return
    */
-  private List<RechargeUser> convertUsernamesAndSeqToRechargeUsers(List<String> usernames,
+  private List<RechargeUser> convertUsernamesAndRechargeSeqToRechargeUsers(List<String> usernames,
       Long seq) {
     return usernames.stream()
         .map(
-            s -> rechargeUserRepository.findByGroupUserUserUsernameAndGroupUserGroupCardSeq(s, seq))
+            s -> rechargeUserRepository.findByGroupUserUserUsernameAndRechargeSeq(s, seq))
         .toList();
   }
+
+  /**
+   * Usernames과 Recharge의 seq를 받아 유저별 충전 항목 (RechargeUser) 을 받아오는 로직
+   *
+   * @param usernames usernames
+   * @param seq       GroupCard seq
+   * @return
+   */
+  private List<RechargeUser> convertUsernamesAndGroupSeqToRechargeUsers(List<String> usernames,
+      Long seq) {
+    return usernames.stream()
+        .map(
+        //한번 충전한 뒤로 두번째 충전할 때 결과가 2개라 오류뜸
+            s -> rechargeUserRepository.findRechargeUsersByGroupUserUserUsernameAndGroupUserGroupCardSeq(s, seq))
+        .toList();
+  }
+
+
 
   /**
    * Username과 Recharge의 seq를 받아 유저별 충전 내역을 받아오는 로직
@@ -60,7 +78,7 @@ public class RechargeService {
    * @return
    */
   private RechargeUser convertUsernameAndSeqToRechargeUser(String username, Long seq) {
-    return rechargeUserRepository.findByGroupUserUserUsernameAndGroupUserGroupCardSeq(username,
+    return rechargeUserRepository.findByGroupUserUserUsernameAndRechargeSeq(username,
         seq);
   }
 
@@ -75,7 +93,8 @@ public class RechargeService {
   }
 
   public Recharge getOnProgressRecharge(List<Recharge> recharges) {
-    return recharges.stream().filter(s -> s.getState() == State.ON_PROGRESS).findFirst().orElseThrow();
+    return recharges.stream().filter(s -> s.getState() == State.ON_PROGRESS).findFirst()
+        .orElseThrow();
   }
 
   /**
@@ -114,7 +133,8 @@ public class RechargeService {
    * @return 오바된 사람이 있으면 True
    */
   public boolean checkUsersPairAmount(Recharge recharge) {
-    List<RechargeUser> rechargeUsers = recharge.getRechargeUsers().stream().filter(RechargeUser::isJoined).toList();
+    List<RechargeUser> rechargeUsers = recharge.getRechargeUsers().stream()
+        .filter(RechargeUser::isJoined).toList();
 
     return rechargeUsers.stream().anyMatch(s -> s.getGroupUser().getPairShareAmount() < 0);
   }
@@ -134,7 +154,7 @@ public class RechargeService {
     // 충전 요청에 선택된 그룹원 -> joinRecharge()
     List<RechargeUser> rechargeUsers = createRechargeUsers(requestRechargeForm.groupSeq());
     joinRecharge(
-        convertUsernamesAndSeqToRechargeUsers(requestRechargeForm.usernames(),
+        convertUsernamesAndGroupSeqToRechargeUsers(requestRechargeForm.usernames(),
             requestRechargeForm.groupSeq()
         ));
 
@@ -159,7 +179,7 @@ public class RechargeService {
    */
   private List<RechargeUser> createRechargeUsers(Long groupSeq) {
     List<GroupUser> groupUsers = groupUserRepository.findGroupUsersByGroupCardSeq(groupSeq);
-    return groupUsers.stream().map(s -> {
+    return groupUsers.stream().filter(GroupUser::isUserAccepted).map(s -> {
       RechargeUser rechargeUser = RechargeUser.builder().groupUser(s).build();
       s.getRechargeUsers().add(rechargeUser);
       return rechargeUser;
@@ -229,7 +249,7 @@ public class RechargeService {
   public void requestPenalty(Long seq, RequestPairAmountPenalty requestPairAmountPenalty) {
     Recharge recharge = getRecharge(seq);
 
-    List<RechargeUser> rechargeUsers = convertUsernamesAndSeqToRechargeUsers(
+    List<RechargeUser> rechargeUsers = convertUsernamesAndRechargeSeqToRechargeUsers(
         requestPairAmountPenalty.usernames(), seq);
 
     joinPenalty(rechargeUsers);
@@ -264,10 +284,10 @@ public class RechargeService {
     for (RechargeUser rechargeUser : joinedUsers) {
 
       if (rechargeUser.isPenaltyPairAmount()) {
-        rechargeUser.addRechargeAmount(
+        rechargeUser.getRechargeAmount(
             sharedAmount + Math.abs(rechargeUser.getGroupUser().getPairShareAmount()));
       } else {
-        rechargeUser.addRechargeAmount(sharedAmount);
+        rechargeUser.getRechargeAmount(sharedAmount);
       }
 
     }
@@ -286,8 +306,11 @@ public class RechargeService {
     RechargeUser rechargeUser = convertUsernameAndSeqToRechargeUser(username, seq);
     Recharge recharge = getRecharge(seq);
     rechargeUser.changePayedState(true);
+    // 주의
+    getRechargeAmount(recharge.getRechargeUsers(),recharge.getRechargeAmount());
 
     if (checkRechargeFinished(seq)) {
+      recharge.rechargeFinishedDate();
       recharge.changeState(State.FINISHED);
       groupCardRepository.findByGroupName(
           groupUserRepository.findByUserUsername(username).getGroupCard()
@@ -319,6 +342,11 @@ public class RechargeService {
 
   }
 
+  /**
+   * 공정금액 더하는 로직
+   * @param rechargeUsers
+   * @param pairAmount
+   */
   private void addPairSharedAmount(List<RechargeUser> rechargeUsers, Integer pairAmount) {
     List<GroupUser> payedUsers = getPayedUsers(rechargeUsers).stream()
         .map(RechargeUser::getGroupUser).toList();
