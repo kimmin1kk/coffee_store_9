@@ -378,5 +378,15 @@ public class RechargeService {
         .allMatch(RechargeUser::isPayed);
   }
 
+  /**
+   * 유저가 결제했는지 확인하는 로직
+   *
+   * @return
+   */
+  public boolean checkUserPayed(String username, Long rechargeSeq) {
+    return convertUsernameAndSeqToRechargeUser(username, rechargeSeq).isPayed();
+
+  }
+
 
 }

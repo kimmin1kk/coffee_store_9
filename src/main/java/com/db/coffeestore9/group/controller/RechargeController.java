@@ -43,7 +43,7 @@ public class RechargeController {
     //진행중인 충전이 있는가(하나라도 있는가랑 동일하나 한 번에 하나만 가능해야하니까..)
     if (rechargeService.getRechargeHistory(groupCard).stream()
         .anyMatch(s -> s.getState() == State.ON_PROGRESS)) {
-      // 현재 진행중인 충전
+      // 현재 진행중인 충전 -> 주문 참가한 유저, 현재 진행중인 주문, 로그인한 유저가 결제를 했는지 여부
       model.addAttribute("joinedUsers",
           rechargeService.getOnProgressRecharge(rechargeService.getRechargeHistory(groupCard))
               .getRechargeUsers().stream().filter(
@@ -51,11 +51,16 @@ public class RechargeController {
       model.addAttribute("onProgressRecharge", rechargeService.getOnProgressRecharge(
           rechargeService.getRechargeHistory(groupCard)));
 
+      model.addAttribute("checkPayed",
+          rechargeService.checkUserPayed(principal.getName(), rechargeService.getOnProgressRecharge(
+              rechargeService.getRechargeHistory(groupCard)).getSeq()));
+      //현재 충전된 금액
       model.addAttribute("chargingAmount",
           rechargeService.getOnProgressRecharge(rechargeService.getRechargeHistory(groupCard))
               .getRechargeUsers().stream().filter(
                   RechargeUser::isJoined).filter(RechargeUser::isPayed)
               .mapToInt(RechargeUser::getRechargeAmount).sum());
+      //유저가 결제 했는지 여부(true false)
     }
 
     return "recharge/basicForm";
