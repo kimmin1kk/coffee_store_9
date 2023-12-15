@@ -4,14 +4,13 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <link rel="stylesheet" type="text/css" th:href="@{/css/groupcard.css}"/>
-    <link rel="stylesheet" href="../../static/css/groupcard.css">
 </head>
 <body>
 <div th:insert="/layouts/header"></div>
 <div th:insert="/layouts/rightside"></div>
 <div class="sectionWrap">
     <h2 class="groupTitle">충전</h2>
-    <div class="sectionContent2">
+    <div class="sectionContents">
         <div class="date1">
         <p th:text="${#dates.format(joinedUsers.get(0).getRecharge().getCreatedDate(),'yyyy-MM-dd')}"></p>
             &nbsp;
@@ -45,22 +44,51 @@
                 <td th:if="${joineduser.isPayed()}" th:text="${joineduser.getRechargeAmount()}"></td>
                 <td th:unless="${joineduser.isPayed()}">0</td>
             </tr>
+            <tr>
+                <th>나의 결제 금액</th>
+                <th>총 결제 금액</th>
+            </tr>
+            <tr th:if="${joinedUsers.size() > 0}">
+                <td th:text="${joinedUsers.get(0).getRecharge().getRechargeAmount()}"></td>
+                <td th:text="${joinedUsers.get(0).getRecharge().getRechargeAmount()}"></td>
+            </tr>
             </tbody>
         </table>
     </div>
 </div>
-<div class="amount">
-    <label>나의 결제금액: </label>
-    <p th:text="${joinedUsers.get(0).getRecharge().getPairAmount()}"></p>
-    <label>결제금액: </label>
-    <p th:text="${joinedUsers.get(0).getRecharge().getRechargeAmount()}"></p>
-    <form method="post" th:action="@{/manageGroup/recharge/pay/{seq}(seq =${onProgressRecharge.getSeq()})}">
+<div th:if="${checkPayed}">
+    <script>
+        alert('이미 결제 하셨습니다.');
+    </script>
+</div>
+<div class="amount" th:unless="${checkPayed}">
+    <form method="post" th:action="@{/manageGroup/recharge/pay/{seq}(seq=${onProgressRecharge.getSeq()})}">
         <button type="submit">결제 요청</button>
     </form>
 </div>
 
-
 <footer class="footer"></footer>
+<script>
 
+    document.addEventListener("DOMContentLoaded", function () {
+        var firstRechargeAmount = document.querySelector('.recharge-amount');
+        var firstTotalRechargeAmount = document.querySelector('.total-recharge-amount');
+
+        if (firstRechargeAmount && firstTotalRechargeAmount) {
+
+            var rechargeAmount = firstRechargeAmount.innerText;
+            var totalRechargeAmount = firstTotalRechargeAmount.innerText;
+
+
+            document.querySelectorAll('.recharge-amount').forEach(function (element) {
+                element.innerText = rechargeAmount;
+            });
+
+            document.querySelectorAll('.total-recharge-amount').forEach(function (element) {
+                element.innerText = totalRechargeAmount;
+            });
+        }
+    });
+</script>
 </body>
 </html>

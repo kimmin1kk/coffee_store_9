@@ -15,10 +15,43 @@
     </nav>
 </div>
 <div class="sectionWrap">
-    <h2 class="groupTitle">충전 내역</h2>
-    <div class="sectionContent2">
-        <h4 class="contentTitle2">
-        </h4>
+    <h2 class="groupTitle">충전</h2>
+    <div class="sectionContents">
+        <div class="date1">
+            <p th:text="${#dates.format(recharges.get(0).getCreatedDate(),'yyyy-MM-dd')}"></p>
+            &nbsp;
+            <p>일자 - 충전 상태 -</p>
+            &nbsp;
+            <p th:text="${recharges.get(0).getState()}"></p>
+        </div>
+        <div class="date2">
+            <p>현재 그룹 충전 금액: </p>
+            &nbsp;
+            <p th:text="${recharges.get(0).getRechargeAmount()}"></p>
+        </div>
+        <div class="date3">
+            <p>충전 만료 기간: </p>
+            &nbsp;
+            <p th:text="${#dates.format(recharges.get(0).getExpirationDate(),'yyyy-MM-dd')}"></p>
+        </div>
+        <table>
+            <thead>
+            <tr>
+                <th>이름</th>
+                <th>직위</th>
+                <th>충전금액</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="recharge : ${recharges}">
+                <td th:text="${recharge.getRechargeUsers()}"></td>
+<!--                <td th:if="${recharge.get}">관리자</td>-->
+<!--                <td th:unless="${recharge.getGroupUser().isAdministrator()}">그룹원</td>-->
+<!--                <td th:if="${recharge.isPayed()}" th:text="${recharger.getRechargeAmount()}"></td>-->
+<!--                <td th:unless="${recharge.isPayed()}">0</td>-->
+            </tr>
+            </tbody>
+        </table>
     </div>
 </div>
 <div th:insert="/layouts/rightside"></div>
