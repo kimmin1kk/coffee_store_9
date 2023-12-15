@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/rank.css}"/>
+</head>
+<body>
+<div th:insert="/layouts/header"></div>
+<div class="nav">
+    <nav>
+        <a class="a" th:href="@{/ranking/form}">그룹 카드 랭킹 스케줄러</a>
+        <a class="a" th:href="@{/ranking/manageRanking}">그룹 카드 랭킹 관리</a>
+    </nav>
+</div>
+
+<div class="sectionWrap">
+    <h4 class="contentTitle"><strong>그룹 카드 랭킹 관리</strong></h4>
+    <div class="sectionContent2">
+        <div>
+            <h4>진행 중인 그룹 랭킹 이벤트</h4>
+            <table>
+                <thead>
+                <tr>
+                    <th>랭킹 이름</th>
+                    <th>랭킹 종류</th>
+                    <th>랭킹 시작 월</th>
+                    <th>종료 버튼</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:if="${onProgressRanking != null}">
+                        <td th:text="${onProgressRanking.getEventName()}">
+                        <td th:text="${onProgressRanking.getState()}">
+                        <td th:text="${onProgressRanking.getProjectedMonth()}">
+                    <td>
+                        <form method="post" th:action = "@{/ranking/end/{seq}(seq=${onProgressRanking.getSeq()})}">
+                            <button type="submit">종료 하기</button>
+                        </form>
+                </td>
+                </tr>
+                <p th:unless="${onProgressRanking != null}">
+                    현재 진행중인 이벤트가 없습니다.
+                </p>
+                </tbody>
+            </table>
+        </div>
+        <div>
+            <h4>진행 예정 그룹 랭킹 이벤트</h4>
+            <table>
+                <tr>
+                    <th>랭킹 이름</th>
+                    <th>랭킹 종류</th>
+                    <th>랭킹 시작 예정 월</th>
+                    <th>시작 버튼</th>
+                </tr>
+                <tr th:each="notYetRank : ${notYetRankings}">
+                    <td th:text="${notYetRank.getEventName()}"></td>
+                    <td th:text="${notYetRank.getState()}"></td>
+                    <td th:text="${notYetRank.getProjectedMonth()}"></td>
+                    <td>
+                        <form method="post" th:action = "@{/ranking/start/{seq}(seq=${notYetRank.getSeq()})}">
+                            <input type="hidden" name="yymm" th:value="${notYetRank.getProjectedMonth()}">
+                            <button type="submit">시작 하기</button>
+                        </form>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div>
+            <h4>종료된 그룹 랭킹 이벤트</h4>
+            <table>
+                <tr>
+                    <th>랭킹 이름</th>
+                    <th>랭킹 종류</th>
+                    <th>랭킹 시작 월</th>
+                    <th>랭킹 종료 월</th>
+                </tr>
+                <tr th:each="finishedRank : ${finishedRankings}">
+                    <td th:text="${finishedRank.getEventName()}"></td>
+                    <td th:text="${finishedRank.getState()}"></td>
+                    <td th:text="${finishedRank.getProjectedMonth()}"></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div th:insert="/layouts/rightside"></div>
+<footer class="footer"></footer>
+</body>
+</html>
