@@ -49,6 +49,16 @@ public class RankingService {
     return rankingRepository.findAll();
   }
 
+  /**
+   * 종료된 랭킹만 보는 로직
+   * @return
+   */
+  public List<Ranking> getFinishedRankings() {
+
+    return rankingRepository.findAll().stream().filter(s -> s.getState() == State.FINISHED)
+        .toList();
+  }
+
 
   /**
    * 현재 진행중인 랭킹이벤트를 보는 로직
