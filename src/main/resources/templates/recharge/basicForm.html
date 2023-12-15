@@ -16,15 +16,8 @@
     </div>
 </div>
 <div>
-    <form method="post" th:action="@{/manageGroup/recharge/request/pay/{seq}}" id="processingPayment">
-        <label>결제방식</label>
-        <select>
-            <option value="groupcard">그룹카드</option>
-            <option value="creditcard">신용카드</option>
-            <option value="grouppoint">그룹포인트</option>
-        </select>
+    <form method="post" th:action="@{/manageGroup/recharge/request/pay/{seq}(seq =${onProgressRecharge.getSeq()})}">
         <label>충전금액</label>
-        <input type="number">
         <button type="submit">결제 요청</button>
     </form>
 </div>
