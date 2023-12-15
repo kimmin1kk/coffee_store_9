@@ -102,6 +102,6 @@ public class RechargeController {
   public String processingPayment(Model model, Principal principal, @PathVariable("seq") Long seq) {
     rechargeService.processRecharge(principal.getName(), seq);
 
-    return "redirect:/";
+    return "redirect:/group/myGroup";
   }
 }
