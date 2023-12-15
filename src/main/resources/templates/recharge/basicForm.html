@@ -66,6 +66,11 @@
         <button type="submit">결제 요청</button>
     </form>
 </div>
+<div th:if="${chargingAmount} == 0">
+    <form th:action="@{/manageGroup/recharge/cancel/{seq}(seq=${onProgressRecharge.getSeq()})}" th:method="post">
+        <button type="submit">요청 취소</button>
+    </form>
+</div>-
 
 <footer class="footer"></footer>
 <script>
