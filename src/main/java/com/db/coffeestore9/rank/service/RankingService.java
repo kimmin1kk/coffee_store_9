@@ -59,10 +59,19 @@ public class RankingService {
         .toList();
   }
 
+  /**
+   * 시작되지 않은 랭킹만 보는 로직
+   * @return
+   */
+  public List<Ranking> getNotYetRankings() {
+
+    return rankingRepository.findAll().stream().filter(s -> s.getState() == State.NOT_YET).toList();
+  }
+
 
   /**
-   * 현재 진행중인 랭킹이벤트를 보는 로직
-   *
+   * 현재 진행중인 랭킹 이벤트를 보는 로직
+   * 한번에 하나밖에 진행 못하니까 List로 받지않음 그냥 있거나 없거나
    * @return
    */
   public Ranking getActiveRanking() {
@@ -97,17 +106,21 @@ public class RankingService {
    */
   @Transactional
   public void startRankingSchedule(Long rankingSeq, Integer yymm) {
-    Ranking ranking = getRanking(rankingSeq);
-    if (checkRankingStart(rankingSeq, yymm)) {
+    if (getActiveRanking() == null) { //현재 진행중인 랭킹이 없어야함
+      Ranking ranking = getRanking(rankingSeq);
+      if (checkRankingStart(rankingSeq, yymm)) { //rankingSeq와 yymm으로 시작할 기간이 된 랭킹인지 확인함
 
-      totalRankingRepository.findAll().stream().filter(s -> s.getGroupCard().isActive())
-          .forEach(s -> s.getRankingInfos()
-              .add(RankInfo.builder().totalRanking(s).ranking(ranking).build()
-              ));
+        totalRankingRepository.findAll().stream().filter(s -> s.getGroupCard().isActive())
+            .forEach(s -> s.getRankingInfos()
+                .add(RankInfo.builder().totalRanking(s).ranking(ranking).build()
+                ));
 
-      ranking.changeState(State.ON_PROGRESS);
+        ranking.changeState(State.ON_PROGRESS);
+      } else {
+        throw new IllegalArgumentException("해당 랭킹 이벤트는 아직 시작할 시기가 되지 않았습니다. ?");
+      }
     } else {
-      throw new IllegalArgumentException("해당 랭킹 이벤트는 아직 시작할 시기가 되지 않았습니다. ?");
+      throw new IllegalArgumentException("현재 진행중인 랭킹 이벤트가 존재합니다.");
     }
   }
 

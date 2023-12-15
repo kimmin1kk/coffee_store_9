@@ -60,7 +60,10 @@ public class RankingController {
 
   @GetMapping("/manageRanking")
   public String manageRankList(Model model, Principal principal) {
-    model.addAttribute("rankings", rankingService.getAllRankings());
+
+    model.addAttribute("notYetRankings", rankingService.getNotYetRankings());
+    model.addAttribute("onProgressRanking", rankingService.getActiveRanking());
+    model.addAttribute("finishedRankings", rankingService.getFinishedRankings());
 
     return "/ranking/manageRanking";
   }
