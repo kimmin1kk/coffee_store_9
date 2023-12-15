@@ -3,6 +3,7 @@ package com.db.coffeestore9.group.controller;
 import com.db.coffeestore9.group.domain.GroupCard;
 import com.db.coffeestore9.group.service.GroupCardService;
 import com.db.coffeestore9.group.service.RechargeService;
+import com.db.coffeestore9.user.domain.GroupUser;
 import java.security.Principal;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -24,7 +25,7 @@ public class ManageGroupController {
 
     model.addAttribute("groupCard", groupCard);
 
-    model.addAttribute("groupUsers", groupCard.getGroupUsers());
+    model.addAttribute("groupUsers", groupCard.getGroupUsers().stream().filter(GroupUser::isUserAccepted));
 
     return "/manageGroup/groupInfo";
   }

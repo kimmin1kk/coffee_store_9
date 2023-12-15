@@ -64,7 +64,8 @@ public class RechargeService {
     return usernames.stream()
         .map(
         //한번 충전한 뒤로 두번째 충전할 때 결과가 2개라 오류뜸
-            s -> rechargeUserRepository.findRechargeUsersByGroupUserUserUsernameAndGroupUserGroupCardSeq(s, seq))
+            //유저네임과 그룹카드seq만으로는 rechargeUser 2개가 반환되기 때문에 오류가 뜬건데..
+            s -> rechargeUserRepository.findTopByGroupUserUserUsernameAndGroupUserGroupCardSeqOrderByCreatedDateDesc(s, seq))
         .toList();
   }
 
@@ -151,8 +152,8 @@ public class RechargeService {
   @Transactional
   public Recharge requestRecharge(RequestRechargeForm requestRechargeForm) {
     // 그룹원 전체 -> createRechargeUsers()
-    // 충전 요청에 선택된 그룹원 -> joinRecharge()
     List<RechargeUser> rechargeUsers = createRechargeUsers(requestRechargeForm.groupSeq());
+    // 충전 요청에 선택된 그룹원 -> joinRecharge()
     joinRecharge(
         convertUsernamesAndGroupSeqToRechargeUsers(requestRechargeForm.usernames(),
             requestRechargeForm.groupSeq()
