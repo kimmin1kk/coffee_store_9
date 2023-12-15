@@ -47,12 +47,15 @@
 </div>
 
 <footer class="footer"></footer>
+
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         const countInput = document.getElementById('product-count');
         const varValueSpan = document.getElementById('var-value');
         const btnMinus = document.getElementById('btn-minus');
         const btnPlus = document.getElementById('btn-plus');
+        const addToCartButton = document.getElementById('add-to-cart');
+        const cartForm = document.getElementById('cart-form');
 
         btnMinus.addEventListener('click', () => updateQuantity(-1));
         btnPlus.addEventListener('click', () => updateQuantity(1));
@@ -64,6 +67,10 @@
             countInput.value = count;
             varValueSpan.innerText = count;
         }
+
+        addToCartButton.addEventListener('click', () => {
+            cartForm.querySelector('[name="count"]').value = countInput.value;
+        });
     });
 </script>
 
