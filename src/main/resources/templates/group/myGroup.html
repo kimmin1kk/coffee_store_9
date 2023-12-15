@@ -44,7 +44,8 @@
             <tr>
                 <th>이름</th>
                 <th>직위</th>
-                <th>충전금액</th>
+                <th>충전 금액</th>
+                <th>충전 날짜</th>
             </tr>
             </thead>
             <tbody>
@@ -52,11 +53,22 @@
                 <td th:each="rechargeuser :${recharge.getRechargeUsers()}">
                     <p th:text="${rechargeuser.getGroupUser().getUser().getUsername()}"></p>
                 </td>
+                <td th:each="rechargeuser :${recharge.getRechargeUsers()}">
+                    <p th:text="${rechargeuser.getGroupUser().isAdministrator()}"></p>
+                </td>
+                <td th:each="rechargeuser :${recharge.getRechargeUsers()}">
+                    <p th:text="${rechargeuser.getRechargeAmount()}"></p>
+                </td>
+                <td>
+                    <p th:text="${recharge.getFinishedDate()}"></p>
+                </td>
             </tr>
             </tbody>
         </table>
     </div>
-</div>
+</div>-
+
+
 
 <div class="sectionWrap">
     <h2 class="groupTitle" id="그룹 포인트">그룹 포인트</h2>

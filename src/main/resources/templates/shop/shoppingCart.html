@@ -55,10 +55,23 @@
                 </tr>
             </table>
             <div class="sibal">
-            <a th:href="@{/order-page}" class="checkout-button">결제하기</a>
+                <form method="post" th:action="@{/order-page}" id="orderPageForm">
+                    <h3 class="h3">결제방식</h3>
+                    <select name="paymentMethod">
+                        <option th:each="paymentMethodOpt : ${T(com.db.coffeestore9.order.common.PaymentMethod).values()}"
+                                th:value="${paymentMethodOpt}"
+                                th:text="${paymentMethodOpt.getDisplayName()}">
+                        </option>
+                    </select>
+                    <div class="sibal">
+                        <button type="submit">결제하기</button>
+                    </div>
+                </form>
             </div>
+
         </div>
     </div>
+
 </div>
 
 <footer class="footer"></footer>
