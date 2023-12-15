@@ -3,11 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <link rel="stylesheet" type="text/css" th:href="@{/css/rank.css}" />
+    <link rel="stylesheet" type="text/css" href="/css/rank.css" />
 </head>
 <body>
 <div th:insert="/layouts/header"></div>
-
+<div class="nav">
+    <nav>
+        <a class="a" th:href="@{/ranking/form}">그룹 카드 랭킹 스케줄러</a>
+        <a class="a" th:href="@{/ranking/manageRanking}">그룹 카드 랭킹 관리</a>
+    </nav>
+</div>
 <div class="sectionWrap">
     <h4 class="contentTitle"><strong>그룹 카드 랭킹 스케줄러</strong></h4>
     <div class="sectionContent2">
@@ -20,15 +25,18 @@
             <table id="calendar"></table>
             <div id="selectedDate"></div>
             <div>
-                <form method="post" th:action = "@{/ranking/create}" id="createRankingForm">
-                    <select>
-                        <option value="MAX_PAY_RANK">BEST GROUPCARD EVENT</option>
-                        <option value="BEST_ITEM_RANK">BEST ITEM CUSTOMER</option>
-                        <option value="WORST_ITEM_RANK">WORST ITEM CUSTOMER</option>
+                <form method="post" action="/ranking/create" id="createRankingForm">
+                    <select class="option" name="eventKind">
+                        <option th:each="kindOpt : ${T(com.db.coffeestore9.rank.common.Kind).values()}"
+                                th:value="${kindOpt}"
+                                th:text="${kindOpt.getDisplayName()}"></option>
                     </select>
                     <label for="eventName">이벤트명: </label>
-                    <input type="text" id="eventName">
-                    <button type="submit">등록하기</button>
+                    <input type="text" id="eventName" name="eventName">
+                    <!-- 추가된 부분 -->
+                    <input type="hidden" id="yymm" name="yymm">
+                    <!-- /추가된 부분 -->
+                    <button type="button" onclick="submitForm()">등록하기</button>
                 </form>
             </div>
         </div>
@@ -71,7 +79,11 @@
     function updateCalendar() {
         document.getElementById('calendar').innerHTML = createCalendar(currentYear, currentMonth);
         document.getElementById('currentMonth').innerText = (currentMonth + 1) + '월';
-        document.getElementById('selectedDate').innerText = selectedYear + '년 ' + selectedMonth + '월';
+        var yymm = (selectedYear % 100).toString().padStart(2, '0') + (selectedMonth).toString().padStart(2, '0');
+        document.getElementById('selectedDate').innerText = yymm;
+        // 추가된 부분
+        document.getElementById('yymm').value = yymm;
+        // /추가된 부분
     }
 
     function prevMonth() {
@@ -88,6 +100,10 @@
         selectedYear = year;
         selectedMonth = month;
         updateCalendar();
+    }
+
+    function submitForm() {
+        document.getElementById('createRankingForm').submit();
     }
 
     updateCalendar();
