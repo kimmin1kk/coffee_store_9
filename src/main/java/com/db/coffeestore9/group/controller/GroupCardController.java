@@ -71,7 +71,8 @@ public class GroupCardController {
 
         // 끝난 충전들 (충전 내역)
         model.addAttribute("recharges", rechargeService.getRechargeHistory(groupCard).stream()
-            .filter(s -> s.getState() == State.FINISHED));
+            .filter(s -> s.getState() == State.FINISHED).toList());
+
       }
       return "/group/myGroup";
     } else {
