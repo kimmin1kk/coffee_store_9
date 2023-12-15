@@ -78,6 +78,13 @@ width: 201px;
   margin-bottom: 0;
 }
 
+.option{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 45%;
+}
+
 .sectionTitle {
   font-family: "Noto Sans KR";
   font-style: normal;
@@ -91,7 +98,6 @@ width: 201px;
   color: #000000;
   position: relative;
   top: 14.5%;
-  display: flex;
   justify-content: center;
   margin-right: 75%;
 }
@@ -142,3 +148,4 @@ width: 201px;
   position: relative;
   margin-top: 30px;
 }
+

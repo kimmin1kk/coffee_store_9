@@ -18,39 +18,42 @@
 <h2 class="sectionTitle" id="커피">커피</h2>
 <div class="search">
   <form th:action="@{/search-product}" method="get">
-    <input class="input" type="text" placeholder="검색어 입력" />
+    <input class="input" type="text" id="inputMobileSearch" name="keyword"/>
+    <select class="option" name="category">
+      <option th:each="categoryOpt : ${T(com.db.coffeestore9.product.common.Category).values()}"
+              th:value="${categoryOpt}"
+              th:text="${categoryOpt.getDisplayName()}"></option>
+    </select>
     <button type="submit" class="search-button">
       <img class="img" src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png" alt="Search Icon" />
     </button>
   </form>
 </div>
 <div class="sectionWrap" id="coffeeSection">
-  <div class="categoryBox" th:each="product : ${products}">
-      <th:block th:if="${product.getCategory().getDisplayName() eq '커피'}">
-        <a th:href="@{/single-product/{seq}(seq=${product.getSeq()})}">
-          <div class="product-summary">
-            <strong th:text="${product.getName()}"></strong>
-            <span th:text="${product.getPrice()} + '원'"></span>
-            <span th:text="${product.getCategory().getDisplayName()}"></span>
-          </div>
-        </a>
-      </th:block>
+  <th:block th:each="product : ${products}">
+    <div class="categoryBox" th:if="${product.getCategory().getDisplayName() eq '커피'}">
+      <a th:href="@{/single-product/{seq}(seq=${product.getSeq()})}">
+        <div class="product-summary">
+          <strong th:text="${product.getName()}"></strong>
+          <span th:text="${product.getPrice()} + '원'"></span>
+        </div>
+      </a>
     </div>
+  </th:block>
 </div>
 
 <h2 class="sectionTitle" id="차">차</h2>
 <div class="sectionWrap" id="teaSection">
-  <div class="categoryBox" th:each="product : ${products}">
-      <th:block th:if="${product.getCategory().getDisplayName() eq '차'}">
-        <a th:href="@{/single-product/{seq}(seq=${product.getSeq()})}">
-          <div class="product-summary">
-            <strong th:text="${product.getName()}"></strong>
-            <span th:text="${product.getPrice()} + '원'"></span>
-            <span th:text="${product.getCategory().getDisplayName()}"></span>
-          </div>
-        </a>
-      </th:block>
-  </div>
+  <th:block th:each="product : ${products}">
+    <div class="categoryBox" th:if="${product.getCategory().getDisplayName() eq '차'}">
+      <a th:href="@{/single-product/{seq}(seq=${product.getSeq()})}">
+        <div class="product-summary">
+          <strong th:text="${product.getName()}"></strong>
+          <span th:text="${product.getPrice()} + '원'"></span>
+        </div>
+      </a>
+    </div>
+  </th:block>
 </div>
 
 <div th:insert="/layouts/rightside"></div>
