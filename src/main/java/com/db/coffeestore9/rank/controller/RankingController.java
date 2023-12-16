@@ -35,10 +35,14 @@ public class RankingController {
   public String rankingInfo(Model model, Principal principal) {
 
     //현재 진행중인 랭킹
-    model.addAttribute("onProgressRanking", rankingService.getActiveRanking());
-    model.addAttribute("joinedGroupCount",
-        (long) rankingService.getActiveRanking().getRankingInfos().size());
-    model.addAttribute("top3", rankInfoService.getRankingTop3(rankingService.getActiveRanking()));
+    if (rankingService.getAllRankings() != null) {
+      model.addAttribute("onProgressRanking", rankingService.getActiveRanking());
+      model.addAttribute("joinedGroupCount",
+          (long) rankingService.getActiveRanking().getRankingInfos().size());
+      model.addAttribute("top3", rankInfoService.getRankingTop3(rankingService.getActiveRanking()));
+      model.addAttribute("myGroupInfo",
+          rankInfoService.getMyRankInfo(rankingService.getActiveRanking(), principal.getName()));
+    }
 
 
     // 종료된 랭킹들
@@ -48,8 +52,7 @@ public class RankingController {
     model.addAttribute("myGroupRanking", totalRankingService.getGroupTotalRanking(
         groupCardService.getGroupCard(principal.getName())));
 
-    model.addAttribute("myGroupInfo",
-        rankInfoService.getMyRankInfo(rankingService.getActiveRanking(), principal.getName()));
+
 
     return "ranking/info";
   }
@@ -69,7 +72,9 @@ public class RankingController {
   public String manageRankList(Model model, Principal principal) {
 
     model.addAttribute("notYetRankings", rankingService.getNotYetRankings());
-    model.addAttribute("onProgressRanking", rankingService.getActiveRanking());
+    if (rankingService.getAllRankings() != null) {
+      model.addAttribute("onProgressRanking", rankingService.getActiveRanking());
+    }
     model.addAttribute("finishedRankings", rankingService.getFinishedRankings());
 
     return "/ranking/manageRanking";
