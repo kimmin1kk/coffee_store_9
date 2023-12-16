@@ -28,8 +28,8 @@ public class ScheduledTasks {
   @Scheduled(cron = EVERY_MINUTE)
   public void scheduledTasksMethod() {
     log.info("1분 마다 실행");
-    if (rankingService.getAllRankings().stream().findAny()
-        .filter(s -> s.getState() == State.ON_PROGRESS).isPresent()) {
+    if (rankingService.getAllRankings().stream()
+        .anyMatch(s -> s.getState() == State.ON_PROGRESS)) {
       log.info("그룹 랭킹 정보가 갱신되었습니다.");
       rankingService.renewGroupsRanking();
     }else {
