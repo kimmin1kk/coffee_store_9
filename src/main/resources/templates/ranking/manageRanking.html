@@ -31,7 +31,7 @@
                 <tbody>
                 <tr th:if="${onProgressRanking != null}">
                         <td th:text="${onProgressRanking.getEventName()}">
-                        <td th:text="${onProgressRanking.getState()}">
+                        <td th:text="${onProgressRanking.getKind()}">
                         <td th:text="${onProgressRanking.getProjectedMonth()}">
                     <td>
                         <form method="post" th:action = "@{/ranking/end/{seq}(seq=${onProgressRanking.getSeq()})}">
@@ -56,7 +56,7 @@
                 </tr>
                 <tr th:each="notYetRank : ${notYetRankings}">
                     <td th:text="${notYetRank.getEventName()}"></td>
-                    <td th:text="${notYetRank.getState()}"></td>
+                    <td th:text="${notYetRank.getKind()}"></td>
                     <td th:text="${notYetRank.getProjectedMonth()}"></td>
                     <td>
                         <form method="post" th:action = "@{/ranking/start/{seq}(seq=${notYetRank.getSeq()})}">
@@ -78,7 +78,8 @@
                 </tr>
                 <tr th:each="finishedRank : ${finishedRankings}">
                     <td th:text="${finishedRank.getEventName()}"></td>
-                    <td th:text="${finishedRank.getState()}"></td>
+                    <td th:text="${finishedRank.getKind()}"></td>
+                    <td th:text="${finishedRank.getProjectedMonth()}"></td>
                     <td th:text="${finishedRank.getProjectedMonth()}"></td>
                 </tr>
             </table>
