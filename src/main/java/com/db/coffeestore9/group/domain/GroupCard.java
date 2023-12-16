@@ -105,10 +105,11 @@ public class GroupCard extends BaseTimeEntity {
     }
   }
 
+  // 포인트가 -로 들어옴
   public void payWithGroupPoint(Integer point) {
-    if (this.point - point > 0) {
-      this.point -= point;
-      this.totalSalesCharge += point;
+    if (this.point + point > 0) {
+      this.point += point;
+      this.totalSalesCharge -= point;
     }else {
       throw new IllegalArgumentException("포인트가 부족합니다!");
     }

@@ -1,21 +1,16 @@
 package com.db.coffeestore9.order.controller;
 
 import com.db.coffeestore9.order.common.OrderPageForm;
-import com.db.coffeestore9.order.common.PaymentMethod;
 import com.db.coffeestore9.order.service.OrderContentService;
 import com.db.coffeestore9.order.service.OrdersService;
 import java.security.Principal;
-import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequiredArgsConstructor
