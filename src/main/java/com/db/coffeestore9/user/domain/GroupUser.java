@@ -36,7 +36,13 @@ public class GroupUser extends BaseTimeEntity {
   private Integer totalRechargedAmount = 0;
 
   @Builder.Default
+  private Integer monthlyRechargedAmount = 0;
+
+  @Builder.Default
   private Integer totalSalesAmount = 0;
+
+  @Builder.Default
+  private Integer monthlySalesAmount = 0;
 
   @Builder.Default
   private Integer pairShareAmount = 0;
@@ -70,6 +76,7 @@ public class GroupUser extends BaseTimeEntity {
   public void changeRecentChargedDate() {
     this.recentlyChargedDate = new Timestamp(System.currentTimeMillis());
   }
+
   public void rejectGroup() {
 
     this.user = null;
@@ -83,8 +90,9 @@ public class GroupUser extends BaseTimeEntity {
     this.pairShareAmount = amount;
   }
 
-  public void addTotalRechargedAmount(Integer totalRechargedAmount) {
-    this.totalRechargedAmount += totalRechargedAmount;
+  public void addRechargedAmount(Integer rechargedAmount) {
+    this.totalRechargedAmount += rechargedAmount;
+    this.monthlyRechargedAmount += rechargedAmount;
   }
 
   public void addPairSharedAmount(Integer amount) {
@@ -99,7 +107,14 @@ public class GroupUser extends BaseTimeEntity {
     this.monthlyUsedAmount += amount;
     this.totalUsedAmount += amount;
     this.totalSalesAmount += savedAmount;
+    this.monthlySalesAmount += savedAmount;
     this.pairShareAmount -= amount;
+  }
+
+  public void resetMonthlyData() {
+    this.monthlySalesAmount =0;
+    this.monthlyRechargedAmount =0;
+    this.monthlyUsedAmount=0;
   }
 
   public void payWithGroupPoint(Integer savedAmount) {

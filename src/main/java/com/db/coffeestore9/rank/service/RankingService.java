@@ -12,6 +12,8 @@ import com.db.coffeestore9.rank.domain.TotalRanking;
 import com.db.coffeestore9.rank.repository.RankInfoRepository;
 import com.db.coffeestore9.rank.repository.RankingRepository;
 import com.db.coffeestore9.rank.repository.TotalRankingRepository;
+import com.db.coffeestore9.user.repository.UserRepository;
+import com.db.coffeestore9.user.service.UserService;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -29,7 +31,9 @@ public class RankingService {
   private final RankingRepository rankingRepository;
   private final RankInfoRepository rankInfoRepository;
   private final TotalRankingRepository totalRankingRepository;
+  private final UserRepository userRepository;
   private final PointService pointService;
+  private final UserService userService;
 
   /**
    * 랭킹 엔티티 찾는 로직
@@ -52,6 +56,7 @@ public class RankingService {
 
   /**
    * 종료된 랭킹만 보는 로직
+   *
    * @return
    */
   public List<Ranking> getFinishedRankings() {
@@ -62,6 +67,7 @@ public class RankingService {
 
   /**
    * 시작되지 않은 랭킹만 보는 로직
+   *
    * @return
    */
   public List<Ranking> getNotYetRankings() {
@@ -71,8 +77,8 @@ public class RankingService {
 
 
   /**
-   * 현재 진행중인 랭킹 이벤트를 보는 로직
-   * 한번에 하나밖에 진행 못하니까 List로 받지않음 그냥 있거나 없거나
+   * 현재 진행중인 랭킹 이벤트를 보는 로직 한번에 하나밖에 진행 못하니까 List로 받지않음 그냥 있거나 없거나
+   *
    * @return
    */
   public Ranking getActiveRanking() {
@@ -109,7 +115,8 @@ public class RankingService {
   public void startRankingSchedule(Long rankingSeq, Timestamp yymm) {
     if (getActiveRanking() == null) { //현재 진행중인 랭킹이 없어야함
       Ranking ranking = getRanking(rankingSeq);
-      if (checkRankingStart(rankingSeq, convertTimestampToInteger(yymm))) { //rankingSeq와 yymm으로 시작할 기간이 된 랭킹인지 확인함
+      if (checkRankingStart(rankingSeq,
+          convertTimestampToInteger(yymm))) { //rankingSeq와 yymm으로 시작할 기간이 된 랭킹인지 확인함
 
         totalRankingRepository.findAll().stream().filter(s -> s.getGroupCard().isActive())
             .forEach(s -> s.getRankingInfos()
@@ -267,6 +274,9 @@ public class RankingService {
       s.getTotalRanking().reNewHighestRanking();
       //
     });
+
+    //월간 데이터 저장
+    userRepository.findAll().forEach(s -> userService.saveMonthlyData(s.getUsername()));
   }
 
 

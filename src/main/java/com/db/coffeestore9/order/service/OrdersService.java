@@ -15,11 +15,13 @@ import com.db.coffeestore9.user.repository.GroupUserRepository;
 import com.db.coffeestore9.user.repository.UserRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Service
+@Slf4j
 public class OrdersService {
 
   private final OrdersRepository ordersRepository;
@@ -51,13 +53,16 @@ public class OrdersService {
 
         if (orderPageForm.paymentMethod() == PaymentMethod.GROUP_CARD) {
           orders.getSalePercentage(
-              getSalePercentageByGrade(orders.getUser().getGroupUser().getGroupCard().getGrade(),orders.getOrderContentList().stream().mapToInt(
-                  OrderContent::getCount).sum()));
+              getSalePercentageByGrade(orders.getUser().getGroupUser().getGroupCard().getGrade(),
+                  orders.getOrderContentList().stream().mapToInt(
+                      OrderContent::getCount).sum()));
           orders.calculateSavedPrice();
+
           payWithGroupCard(orders.getTotalPrice(), orders.getSavedPrice(), orders.getUser());
         }
 
       }
+      orders.getUser().addOrderData(orders.getTotalPrice());
 
     } else {
       throw new IllegalArgumentException("Error: 재고 부족으로 인한 상품 주문 불가");
@@ -66,7 +71,8 @@ public class OrdersService {
 
   /**
    * 할인율 주는 로직,
-   * @param grade Group Grade
+   *
+   * @param grade         Group Grade
    * @param productsCount / OrderContentList().stream().mapToInt(OrderContent::getCount).sum
    * @return SalePercentage
    */
@@ -121,11 +127,12 @@ public class OrdersService {
    * @param user       사용한 유저
    */
   private void payWithGroupCard(Integer totalPrice, Integer savedCharge, User user) {
+    log.info("payWithGroupCard -> totalPrice is {}", totalPrice);
     GroupUser groupUser = groupUserRepository.findByUserUsername(user.getUsername());
     GroupCard groupCard = groupCardRepository.findGroupCardByUserUsername(user.getUsername());
 
     groupCard.payWithGroupCard(totalPrice, savedCharge);
-    groupUser.payWithGroupCard(totalPrice,savedCharge);
+    groupUser.payWithGroupCard(totalPrice, savedCharge);
   }
 
   /**

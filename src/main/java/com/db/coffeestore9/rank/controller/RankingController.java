@@ -36,7 +36,10 @@ public class RankingController {
 
     //현재 진행중인 랭킹
     model.addAttribute("onProgressRanking", rankingService.getActiveRanking());
+    model.addAttribute("joinedGroupCount",
+        (long) rankingService.getActiveRanking().getRankingInfos().size());
     model.addAttribute("top3", rankInfoService.getRankingTop3(rankingService.getActiveRanking()));
+
 
     // 종료된 랭킹들
     model.addAttribute("rankings", rankingService.getFinishedRankings());
@@ -92,7 +95,7 @@ public class RankingController {
   public String startRanking(Model model, Principal principal, @PathVariable("seq") Long rankingSeq,
       Timestamp yymm) {
     rankingService.startRankingSchedule(rankingSeq, yymm);
-    return "redirect:/ranking/info";
+    return "redirect:/ranking/manageRanking";
   }
 
   /**
@@ -107,7 +110,7 @@ public class RankingController {
       Integer yymm) {
     rankingService.processRankingEnds(rankingSeq);
 
-    return "redirect:/ranking/info";
+    return "redirect:/ranking/manageRanking";
   }
 
 

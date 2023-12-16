@@ -71,15 +71,19 @@ public class User extends BaseTimeEntity {
   @ToString.Exclude
   private List<Orders> ordersList = new ArrayList<>();
 
-  @OneToMany(mappedBy = "user")
+  @OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
   @ToString.Exclude
-
   private List<MonthlyUserData> monthlyUserData;
 
   @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.DETACH}, orphanRemoval = true)
   @JoinColumn(name = "group_user_seq")
   @ToString.Exclude
   private GroupUser groupUser;
+
+  public void addOrderData(Integer amount) {
+    this.monthlyOrderCount++;
+    this.monthlyOrderCharge += amount;
+  }
 
   public void rejectGroup() {
     this.groupUser = null;
@@ -92,6 +96,11 @@ public class User extends BaseTimeEntity {
     }
     Authority authority = Authority.builder().role(role).user(this).build();
     this.authorities.add(authority);
+  }
+
+  public void resetMonthlyData() {
+    this.monthlyOrderCharge = 0;
+    this.monthlyOrderCount = 0;
   }
 
   public void getGroup(GroupUser groupUser) {

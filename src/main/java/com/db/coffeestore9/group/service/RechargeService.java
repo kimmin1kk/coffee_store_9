@@ -99,7 +99,6 @@ public class RechargeService {
   }
 
 
-
   /**
    * 이미 돈 낸 유저를 List 형태로 받아오는 로직
    *
@@ -324,7 +323,7 @@ public class RechargeService {
       recharge.getRechargeUsers().stream().filter(RechargeUser::isPayed)
           .map(RechargeUser::getGroupUser).forEach(s -> {
             s.changeRecentChargedDate();
-            s.addTotalRechargedAmount(rechargeUser.getRechargeAmount());
+            s.addRechargedAmount(rechargeUser.getRechargeAmount());
           });
 
       // 패널티 받은 유저들 양심금 초기화
@@ -396,7 +395,7 @@ public class RechargeService {
       //아직 결제한 사람이 없을 때 -> 삭제 가능할 때
       recharge.getRechargeUsers().forEach(s -> s.requestRecharge(null));
       rechargeRepository.delete(recharge);
-    }else {
+    } else {
       throw new IllegalArgumentException("이미 충전한 회원이 존재합니다!");
     }
   }

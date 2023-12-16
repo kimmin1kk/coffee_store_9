@@ -33,7 +33,7 @@ public class PointService {
     GroupUser groupUser = groupUserRepository.findByUserUsername(user.getUsername());
     GroupCard groupCard = groupCardRepository.findGroupCardByUserUsername(user.getUsername());
 
-    if (point > 0) {
+    if (point >= 0) {
       groupCard.earnPoint(point);
     } else {
       groupCard.payWithGroupPoint(point);
@@ -47,8 +47,8 @@ public class PointService {
   }
 
   /**
-   * 랭킹 별 포인트 얼마 받을지 정해서 리턴해 주는 로직
-   * 리턴된 정보 changeGroupPoint()에 넣어주면 될 듯
+   * 랭킹 별 포인트 얼마 받을지 정해서 리턴해 주는 로직 리턴된 정보 changeGroupPoint()에 넣어주면 될 듯
+   *
    * @param groupSeq   1,2,3등 보상이 월간사용금액에서 퍼센트로 지급해주는거라서 groupCard 정보 필요, 인자로 받아야 함
    * @param rewardTier 그룹의 티어
    * @return 산정된 포인트 리턴 이걸 changeGroupPoint 메서드의 point 인자에 넣으면 됨
