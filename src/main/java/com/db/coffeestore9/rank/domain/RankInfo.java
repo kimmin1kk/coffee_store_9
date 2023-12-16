@@ -3,6 +3,8 @@ package com.db.coffeestore9.rank.domain;
 import com.db.coffeestore9.global.config.BaseTimeEntity;
 import com.db.coffeestore9.rank.common.PointRewardTier;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.AccessLevel;
@@ -23,6 +25,7 @@ public class RankInfo extends BaseTimeEntity {
   @Builder.Default
   private String scheduledPoint = "0";
   @Builder.Default
+  @Enumerated(EnumType.STRING)
   private PointRewardTier pointRewardTier = PointRewardTier.NONE;
 
   @ManyToOne

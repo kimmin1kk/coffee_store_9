@@ -20,9 +20,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class TotalRanking extends BaseEntity {
 
-  private Integer highestRanking;
-  private Integer averageRanking;
-  private Integer totalEarnedPoint;
+  @Builder.Default
+  private Integer highestRanking =0;
+  @Builder.Default
+  private Integer averageRanking =0;
+  @Builder.Default
+  private Integer totalEarnedPoint = 0;
 
   @OneToOne(mappedBy = "totalRanking", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
   private GroupCard groupCard;
