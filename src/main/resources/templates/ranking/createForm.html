@@ -24,8 +24,10 @@
             </div>
             <table id="calendar"></table>
             <div id="selectedDate"></div>
+            <div id="formattedSelectedDate"></div>
             <div>
                 <form method="post" action="/ranking/create" id="createRankingForm">
+                    <label> 이벤트 항목: </label>
                     <select class="option" name="eventKind">
                         <option th:each="kindOpt : ${T(com.db.coffeestore9.rank.common.Kind).values()}"
                                 th:value="${kindOpt}"
@@ -33,9 +35,7 @@
                     </select>
                     <label for="eventName">이벤트명: </label>
                     <input type="text" id="eventName" name="eventName">
-                    <!-- 추가된 부분 -->
                     <input type="hidden" id="yymm" name="yymm">
-                    <!-- /추가된 부분 -->
                     <button type="button" onclick="submitForm()">등록하기</button>
                 </form>
             </div>
@@ -78,25 +78,46 @@
 
     function updateCalendar() {
         document.getElementById('calendar').innerHTML = createCalendar(currentYear, currentMonth);
-        document.getElementById('currentMonth').innerText = (currentMonth + 1) + '월';
+        document.getElementById('currentMonth').innerText = currentYear + '년 ' + (currentMonth + 1) + '월';
         var yymm = (selectedYear % 100).toString().padStart(2, '0') + (selectedMonth).toString().padStart(2, '0');
-        document.getElementById('selectedDate').innerText = yymm;
-        // 추가된 부분
+
+        var formattedDate = selectedYear + '년 ' + selectedMonth + '월';
+        document.getElementById('formattedSelectedDate').innerText = '선택된 날짜: ' + formattedDate;
+
         document.getElementById('yymm').value = yymm;
-        // /추가된 부분
     }
 
     function prevMonth() {
-        currentMonth = (currentMonth === 0) ? 11 : currentMonth - 1;
+        if (currentYear === selectedYear && currentMonth === selectedMonth - 1) {
+            alert("지난 달은 선택할 수 없습니다.");
+            return;
+        }
+
+        if (currentMonth === 0) {
+            currentMonth = 11;
+            currentYear--;
+        } else {
+            currentMonth--;
+        }
         updateCalendar();
     }
 
     function nextMonth() {
-        currentMonth = (currentMonth === 11) ? 0 : currentMonth + 1;
+        if (currentMonth === 11) {
+            currentMonth = 0;
+            currentYear++;
+        } else {
+            currentMonth++;
+        }
         updateCalendar();
     }
 
     function selectDate(year, month, day) {
+        if (year === currentYear && month === currentMonth) {
+            alert("지난 달은 선택할 수 없습니다.");
+            return;
+        }
+
         selectedYear = year;
         selectedMonth = month;
         updateCalendar();

@@ -16,54 +16,99 @@
     <p class="asideSub" onclick="scrollToSection('종료된 그룹 랭킹')">
         종료된 그룹 랭킹
     </p>
-    <p class="asideSub" onclick="scrollToSection('나의 그룹 랭킹')">
-        나의 그룹 랭킹
-    </p>
 </div>
 
 <div class="sectionWrap">
     <h2 class="groupTitle" id="진행 중인 그룹 랭킹">이벤트</h2>
     <h4 class="contentTitle">진행 중인 그룹 랭킹</h4>
-    <div class="rankTitle">
+    <div class="rankingTitle2" th:if="${onProgressRanking != null}">
+        <p th:text="${onProgressRanking.getKind()}" class="hihi"></p>
+        <p th:text="${'측정시작일: ' + #dates.format(onProgressRanking.getProjectedMonth(), 'yyyy-MM')}" class="hihi2"></p>
     </div>
     <div class="sectionContent2">
-        <h4 class="contentTitle2"><br>
+        <div th:if="${onProgressRanking != null}">
+        <div style="display: flex; flex-direction: row; justify-content: space-between">
+            <p th:text="${'현재 참여 그룹 수: '+joinedGroupCount}" style="text-align: start; display: flex; justify-content: flex-start"></p>
+            <p id="updateTime" style="text-align: end"></p>
+        </div>
+        <h4 class="contentTitle2">
             <canvas class="graph" id="myChart" width="500" height="400px" style="position: relative"></canvas>
         </h4>
-        <br><br>
+            <p th:text="${onProgressRanking.getKind()}" style="font-weight: bold; text-align: center"></p>
+            <div th:if="${onProgressRanking.getKind().getDisplayName() == '돈 많이 낸 그룹'}" style="text-align: center">
+                <p th:text="${'이번달 그룹 카드 랭킹인 '+onProgressRanking.getEventName()+' 은/는 베스트 그룹 카드로써'}"></p>
+                <p>베스트 그룹 카드란 월간 사용금액이 가장 높은 그룹을 선정하는 랭킹입니다!</p>
+            </div>
+            <div th:if="${onProgressRanking.getKind().getDisplayName() == '제일 안 팔리는 상품 많이 산 그룹'}" style="text-align: center">
+                <p th:text="${'이번달 그룹 카드 랭킹인 '+onProgressRanking.getEventName()+' 은/는 워스트 메뉴 그룹 카드로써'}"></p>
+                <p>워스트 메뉴 그룹 카드란 가장 안팔린 메뉴를 많이 산 그룹을 선정하는 랭킹입니다!</p>
+            </div>
+            <div th:if="${onProgressRanking.getKind().getDisplayName() == '제일 많이 팔리는 상품 많이 산 그룹'}" style="text-align: center">
+                <p th:text="${'이번달 그룹 카드 랭킹인 '+onProgressRanking.getEventName()}+' 은/는 베스트 메뉴 그룹 카드로써'"></p>
+                <p>베스트 메뉴 그룹 카드란 가장 잘팔린 메뉴를 많이 산 그룹을 선정하는 랭킹입니다!</p>
+            </div>
+        </div>
+        <p th:unless="${onProgressRanking != null}" style="text-align: center; display: flex; justify-content: center; align-items: center">현재 진행중인 랭킹이 없습니다! <br><br><br>다음달을 기다려주세요!</p>
         <hr style="height: 1px !important; display: block !important; width: 100% !important;"/>
-        <div>
-
+        <div th:if="${onProgressRanking != null}">
+            <div style="display: flex; flex-direction: row; justify-content: center; ">
+            <p th:text="${myGroupRanking.getGroupCard().getGroupName()}" style="font-weight: bold; text-align: center"></p>
+            <p> &nbsp;그룹은 현재 &nbsp;</p>
+            <p th:text="${myGroupInfo}"></p>
+            <p> &nbsp;등 입니다!</p>
+            </div>
+            <div style="display: flex; flex-direction: row; justify-content: center; ">
+                <p>나의 그룹 월간 사용 금액은 &nbsp;</p>
+                <p th:text="${myGroupRanking.getGroupCard().getTotalRanking()}" style="font-weight: bold; text-align: center"></p>
+                <p>&nbsp;원이며 현재 예상 랭킹 보상은&nbsp;</p>
+                <br>
+                <p th:text="${myGroupRanking.getGroupCard().getTotalRanking()}"></p>
+                <p> &nbsp;입니다!</p>
+<!--                뷰에 뜨는 이상한것들 뭘 띄워야할지 잘모르겟습니다 ....-->
+            </div>
+            <hr style="height: 1px !important; display: block !important; width: 100% !important;"/>
         </div>
     </div>
     <hr>
-
 </div>
 <div class="sectionWrap">
     <h4 class="contentTitle" id="종료된 그룹 랭킹">종료된 그룹 랭킹</h4>
-    <div class="sectionContent2">
-        <h4 class="contentTitle2"><br>
-        </h4>
-    </div>
-</div>
-<div class="sectionWrap">
-    <h4 class="contentTitle" id="나의 그룹 랭킹">나의 그룹 랭킹</h4>
-    <div class="sectionContent2">
-        <h4 class="contentTitle2"><br>
-        </h4>
+    <div class="gridContent">
+        <div class="grid-container">
+            <div th:each="fin:${rankings}">
+                <p th:text="${#dates.format(fin.getProjectedMonth(), 'yyyy-MM')}" ></p>
+                <p th:text="${fin.getKind()}"></p>
+                <p th:text="${fin}"></p>
+            </div>
+        </div>
+        <hr style="height: 1px !important; display: block !important; width: 100% !important; justify-content: flex-end !important; display: flex !important; "/>
     </div>
 </div>
 
 <div th:insert="/layouts/rightside"></div>
 <footer class="footer"></footer>
 
+<div th:each="top3 : ${top3}">
+    <script th:inline="javascript">
+        var groupNames = groupNames || [];
+        groupNames.push([[${top3.getTotalRanking().getGroupCard().getGroupName()}]]);
+    </script>
+</div>
+<div th:each="top3 : ${top3}">
+    <script th:inline="javascript">
+        var groupAmount = groupAmount || [];
+        groupAmount.push([[${top3.getTotalRanking().getGroupCard().getMonthlyUsedCharge()}]]);
+    </script>
+</div>
 <script>
+    console.log("groupNames", groupNames);
+    console.log("groupAmount", groupAmount);
     function scrollToSection(sectionId) {
         var sectionElement = document.getElementById(sectionId);
 
         if (sectionElement) {
             var topOffset =
-                sectionElement.getBoundingClientRect().top + window.scrollY-130;
+                sectionElement.getBoundingClientRect().top + window.scrollY - 130;
 
             window.scrollTo({
                 top: topOffset,
@@ -72,51 +117,72 @@
         }
     }
 
+    function updateUpdateTime() {
+        var currentTime = new Date();
+        var hours = currentTime.getHours();
+        var minutes = currentTime.getMinutes();
+
+
+        var ampm = hours >= 12 ? '오후' : '오전';
+
+
+        hours = hours % 12;
+        hours = hours ? hours : 12;
+
+        var updateTimeString = '다음 업데이트 시간: ' + ampm + ' ' + hours + '시 ' + minutes + '분';
+        document.getElementById('updateTime').innerText = updateTimeString;
+    }
+
+
+    updateUpdateTime();
+
+
+    setInterval(updateUpdateTime, 60000);
 
     var data = {
-        labels: ['2등', '1등', '3등'], // 2등과 3등에 빈 문자열을 넣어 세로 라벨을 없앰
+        labels: ["2등:"+groupNames[1]+" 그룹","1등:"+groupNames[0]+" 그룹","3등:"+groupNames[2]+" 그룹"],
         datasets: [{
-            data: [6, 15, 4], // 각 순위에 해당하는 데이터
+            data: [groupAmount[1],groupAmount[0],groupAmount[2]],
             backgroundColor: [
-                'rgba(255, 99, 132, 0.7)', // 1등 색상
-                'rgba(54, 162, 235, 0.7)', // 2등 색상
-                'rgba(255, 206, 86, 0.7)' // 3등 색상
+                'rgba(179, 135, 88, 0.7)',
+                'rgba(102, 89, 77, 0.7)',
+                'rgba(164, 159, 142, 0.7)'
             ],
             borderColor: [
-                'rgba(255, 99, 132, 1)',
-                'rgba(54, 162, 235, 1)',
-                'rgba(255, 206, 86, 1)'
+                'rgba(179, 135, 88, 1)',
+                'rgba(102, 89, 77, 1)',
+                'rgba(164, 159, 142, 1)'
             ],
             borderWidth: 1
         }]
     };
 
-    // 그래프 설정
+
     var options = {
         scales: {
             y: {
                 beginAtZero: true,
                 ticks: {
-                    display: false // y축의 숫자 감춤
+                    display: false
                 },
                 grid: {
-                    display: false // y축의 그리드 라인 숨김
+                    display: false
                 }
             },
             x: {
                 grid: {
-                    display: false // x축의 그리드 라인 숨김
+                    display: false
                 }
             }
         },
         plugins: {
             legend: {
-                display: false // 범례 숨김
+                display: false
             }
         },
         layout: {
             padding: {
-                left: 0, // 그래프의 왼쪽에 여백을 주어 2등 그래프가 왼쪽으로 이동하도록 함
+                left: 0,
                 right: 0,
                 top: 0,
                 bottom: 0
@@ -124,13 +190,10 @@
         }
     };
 
-
-    // 캔버스 요소 가져오기
     var ctx = document.getElementById('myChart').getContext('2d');
 
-    // 그래프 생성
     var myChart = new Chart(ctx, {
-        type: 'bar', // 바 그래프 사용
+        type: 'bar',
         data: data,
         options: options
     });
