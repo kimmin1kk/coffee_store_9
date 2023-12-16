@@ -48,6 +48,9 @@ public class RankingController {
     model.addAttribute("myGroupRanking", totalRankingService.getGroupTotalRanking(
         groupCardService.getGroupCard(principal.getName())));
 
+    model.addAttribute("myGroupInfo",
+        rankInfoService.getMyRankInfo(rankingService.getActiveRanking(), principal.getName()));
+
     return "ranking/info";
   }
 
