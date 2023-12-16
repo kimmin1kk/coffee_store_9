@@ -2,7 +2,10 @@ package com.db.coffeestore9.user.service;
 
 import com.db.coffeestore9.security.common.Role;
 import com.db.coffeestore9.user.common.RegistrationForm;
+import com.db.coffeestore9.user.domain.GroupUser;
+import com.db.coffeestore9.user.domain.MonthlyUserData;
 import com.db.coffeestore9.user.domain.User;
+import com.db.coffeestore9.user.repository.GroupUserRepository;
 import com.db.coffeestore9.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -13,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserService {
 
   private final UserRepository userRepository;
+  private final GroupUserRepository groupUserRepository;
 
   @Transactional
   public void processRegistration(RegistrationForm form) {
@@ -43,6 +47,31 @@ public class UserService {
 
   public User findByUsername(String username) {
     return userRepository.findByUsername(username);
+  }
+
+  @Transactional
+  public void saveMonthlyData(String username) {
+    User user = findByUsername(username);
+    GroupUser groupUser = groupUserRepository.findByUserUsername(username);
+
+    if (groupUser == null) {
+      user.getMonthlyUserData().add(
+          MonthlyUserData.builder().user(user).orderAmount(user.getMonthlyOrderCharge())
+              .orderCount(user.getMonthlyOrderCount()).build());
+      user.resetMonthlyData();
+
+    }
+    if (groupUser != null) {
+      user.getMonthlyUserData().add(
+          MonthlyUserData.builder().user(user).orderAmount(user.getMonthlyOrderCount())
+              .orderCount(user.getMonthlyOrderCharge()).rechargeAmount(
+                  groupUser.getMonthlyRechargedAmount()).usedAmount(groupUser.getMonthlyUsedAmount())
+              .salesAmount(groupUser.getMonthlySalesAmount()).build());
+      user.resetMonthlyData();
+      groupUser.resetMonthlyData();
+    }
+
+
   }
 
 
