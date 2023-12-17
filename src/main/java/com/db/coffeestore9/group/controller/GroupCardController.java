@@ -4,6 +4,7 @@ import com.db.coffeestore9.global.common.State;
 import com.db.coffeestore9.group.domain.GroupCard;
 import com.db.coffeestore9.group.service.GroupCardService;
 import com.db.coffeestore9.group.service.GroupUserService;
+import com.db.coffeestore9.group.service.PointService;
 import com.db.coffeestore9.group.service.RechargeService;
 import java.security.Principal;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +22,7 @@ public class GroupCardController {
   private final GroupCardService groupCardService;
   private final GroupUserService groupUserService;
   private final RechargeService rechargeService;
+  private final PointService pointService;
 
   private static final String DEFAULT_REDIRECT = "redirect:/";
   private static final String GROUP_USER_ATTRIBUTE = "groupUsers";
@@ -73,6 +75,8 @@ public class GroupCardController {
         model.addAttribute("recharges", rechargeService.getRechargeHistory(groupCard).stream()
             .filter(s -> s.getState() == State.FINISHED).toList());
 
+        // 포인트 내역
+        model.addAttribute("pointUsages", pointService.getPointUSages(groupCard));
       }
       return "/group/myGroup";
     } else {

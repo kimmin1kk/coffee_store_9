@@ -3,11 +3,13 @@ package com.db.coffeestore9.group.service;
 import com.db.coffeestore9.group.domain.GroupCard;
 import com.db.coffeestore9.group.domain.PointUsage;
 import com.db.coffeestore9.group.repository.GroupCardRepository;
+import com.db.coffeestore9.group.repository.PointUsageRepository;
 import com.db.coffeestore9.rank.common.PointRewardTier;
 import com.db.coffeestore9.user.domain.GroupUser;
 import com.db.coffeestore9.user.domain.User;
 import com.db.coffeestore9.user.repository.GroupUserRepository;
 import java.sql.Timestamp;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -19,6 +21,7 @@ public class PointService {
 
   private final GroupCardRepository groupCardRepository;
   private final GroupUserRepository groupUserRepository;
+  private final PointUsageRepository pointUsageRepository;
 
   /**
    * 포인트 지급,차감 로직 Transactional propagation 설정 해둔 이유 -> OrdersService의 confirmOrder에서도
@@ -66,6 +69,10 @@ public class PointService {
       case SEVENTY_PERCENT -> 4000;
       case NONE -> 0;
     };
+  }
+
+  public List<PointUsage> getPointUSages(GroupCard groupCard) {
+    return pointUsageRepository.findPointUsagesByGroupCard(groupCard);
   }
 
 
