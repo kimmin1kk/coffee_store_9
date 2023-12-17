@@ -10,12 +10,46 @@
 
 <div th:insert="/layouts/rightside"></div>
 <div class="sectionWrap">
-    <h2 class="groupTitle" id="My Group Reword">충전하기</h2>
+    <h2 class="groupTitle">공정분배 충전하기</h2>
     <div class="sectionContent2">
+        <table>
+            <thead>
+                <tf>
+                    <th>이름</th>
+                    <th>월간 사용 금액</th>
+                    <th>초과한 양심금</th>
+                </tf>
+            </thead>
+            <tbody>
+                <tr th:each="over: ${rechargeUsers}">
+                    <td>
+                        <input type="checkbox" th:id="'checkbox_' + ${over.getGroupUser().getUser().getUsername()}" th:value=" ${over.getGroupUser().getUser().getUsername()}" onclick="updateUsernames()">
+                        <label th:for="'checkbox_' + ${over.getGroupUser().getUser().getUsername()}" th:text="${over.getGroupUser().getUser().getUsername()}"></label>
+                    </td>
+                    <td th:text="${over.getGroupUser().getMonthlyUsedAmount()}"></td>
+                    <td th:text="${over.getGroupUser().getPairShareAmount()}"></td>
+                </tr>
+            </tbody>
+        </table>
+        <div>
+            <form method="post" th:action="@{/manageGroup/recharge/pairAmount/{seq}(seq=${rechargeUsers.get(0).getRecharge().getSeq()})}" id="requestPairAmountPenalty">
+                <input type="hidden" id="usernames" name="usernames" required />
+                <button type="submit">보내기</button>
+            </form>
+        </div>
     </div>
 </div>
 
-
+<script th:inline="javascript">
+    function updateUsernames() {
+        var checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');
+        var usernames = [];
+        checkboxes.forEach(function (checkbox) {
+            usernames.push(checkbox.value);
+        });
+        document.getElementById('usernames').value = usernames.join(',');
+    }
+</script>
 <footer class="footer"></footer>
 
 </body>

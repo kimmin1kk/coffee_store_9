@@ -26,14 +26,71 @@
 <div class="sectionWrap">
     <h2 class="groupTitle" id="My Group Reword">마이 그룹 페이지</h2>
     <div class="sectionContent2">
+        <div class="left">
+            <h3>MY GROUP REWORD!</h3>
+            <div class="imgWrap">
+                이미지 들어갈wrap
+            </div>
+            <div style="display: flex; justify-content: center; align-items: center; flex-direction: row">
+            <p>다음 등급까지 남은 금액:&nbsp;</p>
+            <p style="font-weight: bold" th:if="${groupCard.getGrade().getGroupConditionsForPromotion() - groupCard.getMonthlyUsedCharge()} >= 0"  th:text="${groupCard.getGrade().getGroupConditionsForPromotion()- groupCard.getMonthlyUsedCharge()}"></p>
+            <p style="font-weight: bold" th:unless="${groupCard.getGrade().getGroupConditionsForPromotion() - groupCard.getMonthlyUsedCharge()} >= 0">충족됨</p>
+            </div>
+        </div>
+        <div class="right">
+            <div class="basic">
+            <h3 th:text="${groupCard.getGroupName()}"></h3>
+            <p> 팀은 현재 </p>
+            <h3 th:text="${groupCard.getGrade().getDisplayName()}"></h3>
+            <p> 등급 이며 </p>
+            <p>개설 이후 지금 까지</p>
+            <h3 th:text="${groupCard.getMonthlyUsedCharge()}"></h3>
+            <p>원을 사용하였고</p>
+            <p>그 중에서</p>
+            <h3 th:text="${groupCard.getTotalSalesCharge()}"></h3>
+            <p>원의 할인 혜택을 받았습니다!</p>
+            </div>
+            <div class="pro">
+                <p>그룹 잔고: </p>
+                <h3 th:text="${groupCard.getCharge()}"></h3>
+                <p>그룹 이번달 사용 금액: </p>
+                <h3 th:text="${groupCard.getMonthlyUsedCharge()}"></h3>
+                <p>그룹 포인트:</p>
+                <h3 th:text="${groupCard.getPoint()}"></h3>
+                <p>그룹 최근 활동일:</p>
 
+<!--            해야할거2    <h3 th:text="${groupCard.ge}"-->
+            </div>
+        </div>
     </div>
 </div>
 <div class="sectionWrap">
     <h2 class="groupTitle" id="그룹원 목록">그룹원 목록</h2>
+    <div th:if="${groupCard}">
     <button><a th:href="@{/manageGroup/recharge/form}" >충전</a> </button>
+    </div>
     <div class="sectionContent2">
-
+        <table>
+            <thead>
+                <tr>
+                    <th>이름</th>
+                    <th>직위</th>
+                    <th>양심금</th>
+                    <th>사용 금액<th>
+                    <th>할인 혜택 금액</th>
+                </tr>
+            </thead>
+            <tbody>
+            <tr th:each="users: ${groupUsers}">
+                <td th:text="${users.getUser().getUsername()}"></td>
+                <td th:if="${users.isAdministrator()}">관리자</td>
+                <td th:unless="${users.isAdministrator()}">그룹원</td>
+                <td th:text="${users.getPairShareAmount()}"></td>
+                <td th:text="${users.getTotalUsedAmount()}"></td>
+                <td th:text="${users.getTotalSalesAmount()}"></td>
+            </tr>
+            </tbody>
+        </table>
     </div>
 </div>
 <div class="sectionWrap">
@@ -50,17 +107,27 @@
             </thead>
             <tbody>
             <tr th:each="recharge : ${recharges}">
-                <td th:each="rechargeuser :${recharge.getRechargeUsers()}">
-                    <p th:text="${rechargeuser.getGroupUser().getUser().getUsername()}"></p>
-                </td>
-                <td th:each="rechargeuser :${recharge.getRechargeUsers()}">
-                    <p th:text="${rechargeuser.getGroupUser().isAdministrator()}"></p>
-                </td>
-                <td th:each="rechargeuser :${recharge.getRechargeUsers()}">
-                    <p th:text="${rechargeuser.getRechargeAmount()}"></p>
+                <td>
+                     <span th:each="rechargeuser : ${recharge.getRechargeUsers()}">
+                        <span th:text="${rechargeuser.getGroupUser().getUser().getUsername()}"></span><br/>
+                     </span>
                 </td>
                 <td>
-                    <p th:text="${recharge.getFinishedDate()}"></p>
+                    <span th:each="rechargeuser : ${recharge.getRechargeUsers()}">
+                        <span th:if="${rechargeuser.getGroupUser().isAdministrator()}">관리자</span>
+                        <span th:unless="${rechargeuser.getGroupUser().isAdministrator()}">그룹원</span>
+                        <br/>
+                    </span>
+                </td>
+                <td>
+                     <span th:each="rechargeuser : ${recharge.getRechargeUsers()}">
+                        <span th:text="${rechargeuser.getRechargeAmount()}"></span><br/>
+                     </span>
+                </td>
+                <td>
+                    <span th:each="rechargeuser :${recharge.getRechargeUsers()}">
+                        <span th:text="${#dates.format(rechargeuser.getModifiedDate(),'YYYY-MM-dd')}"></span><br>
+                    </span>
                 </td>
             </tr>
             </tbody>
@@ -68,12 +135,25 @@
     </div>
 </div>-
 
-
-
 <div class="sectionWrap">
     <h2 class="groupTitle" id="그룹 포인트">그룹 포인트</h2>
     <div class="sectionContent2">
-
+        <table>
+            <thead>
+                <tr>
+                    <th>포인트 변동일</th>
+                    <th>포인트 변동량</th>
+                    <th>포인트 변동사유</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="point:${pointUsages}">
+                    <td th:text="${point.getCreatedDate()}"></td>
+                    <td th:text="${point.getAmountPoint()}"></td>
+                    <td th:text="${point.getReasonPoint()}"></td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 </div>
 <footer class="footer"></footer>

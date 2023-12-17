@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/groupcard.css}" />
+</head>
+<body>
+<div th:insert="/layouts/header"></div>
+<div class="sectionWrap">
+    <h2 class="groupTitle">주문 내역</h2>
+    <div class="sectionContent2">
+        <table>
+            <thead>
+                <tr>
+                    <th>주문번호</th>
+                    <th>주문상품</th>
+                    <th>수량</th>
+                    <th>원가</th>
+                    <th>할인율</th>
+                    <th>할인가격</th>
+                    <th>결제방식</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="orders:${orderedCarts}">
+                    <td th:text="${orders.getSeq()}"></td>
+                    <td>
+                        <span th:each="menu:${orders.getOrderContentList()}">
+                            <span th:text="${menu.getProduct().getName()}"></span><br>
+                        </span>
+                    </td>
+                    <td>
+                        <span th:each="menu:${orders.getOrderContentList()}">
+                            <span th:text="${menu.getCount()+'개'}"></span><br>
+                        </span>
+                    </td>
+                    <td th:text="${orders.getTotalPrice()}"></td>
+                    <td th:if="${orders.getSalePercentage() == null}">없음</td>
+                    <td th:unless="${orders.getSalePercentage() == null}" th:text="${orders.getSalePercentage() +'%'}"></td>
+                    <td th:text="${orders.getSavedPrice()}"></td>
+                    <td th:text="${orders.getPaymentMethod().getDisplayName()}"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<footer class="footer"></footer>
+</body>
+</html>

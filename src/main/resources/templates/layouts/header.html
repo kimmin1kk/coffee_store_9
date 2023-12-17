@@ -18,12 +18,12 @@
       <a class="title" th:href="@{/}">GROUP<br />CARD</a>
     </div>
     <div class="navTitle">
-      <a class="a" th:href="@{/ranking/form}" sec:authorize="isAuthenticated()">MANAGE</a>
+      <a class="a" th:href="@{/ranking/form}"  sec:authorize="hasRole('ROLE_ADMIN')">MANAGE</a>
       <a class="a" th:href="@{/}">MENU</a>
       <a class="a" th:href="@{/ranking/info}" sec:authorize="isAuthenticated()" >EVENT</a>
-      <a class="a" th:href="@{/group}">CROUPCARD</a>
-      <a class="a" th:href="@{/group/myGroup}" sec:authorize="isAuthenticated()">MY GROUP PAGE</a>
-      <a class="a" th:href="@{/manageGroup/groupInfo}" sec:authorize="isAuthenticated()">MY GROUP MANAGE</a>
+      <a class="a" th:href="@{/group}">CROUP CARD</a>
+        <a class="a" th:href="@{/group/myGroup}">MY GROUP PAGE</a>
+        <a class="a"  th:href="@{/manageGroup/groupInfo}">MY GROUP MANAGE</a>
     </div>
     <span class="userTitle" th:text="'안녕하세요 '+${username}+'님!'" sec:authorize="isAuthenticated()"></span>
     <div class="rightnavTitle1" sec:authorize="isAnonymous()">
@@ -46,7 +46,7 @@
       </a>
     </div>
     <div class="rightnavTitle2">
-      <a th:href="@{/}">
+      <a th:href="@{/order-history}">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           height="24"
