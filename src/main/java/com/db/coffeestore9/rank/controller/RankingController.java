@@ -1,7 +1,9 @@
 package com.db.coffeestore9.rank.controller;
 
 import com.db.coffeestore9.group.service.GroupCardService;
+import com.db.coffeestore9.group.service.PointService;
 import com.db.coffeestore9.rank.common.CreateRankingForm;
+import com.db.coffeestore9.rank.common.SendPointForm;
 import com.db.coffeestore9.rank.service.RankInfoService;
 import com.db.coffeestore9.rank.service.RankingService;
 import com.db.coffeestore9.rank.service.TotalRankingService;
@@ -25,6 +27,7 @@ public class RankingController {
   private final TotalRankingService totalRankingService;
   private final GroupCardService groupCardService;
   private final RankInfoService rankInfoService;
+  private final PointService pointService;
 
   /**
    * 현재 등록되어 있는 랭킹 이벤트들을 전부 볼 수 있는 페이지로 연결해주는 컨트롤러
@@ -35,11 +38,14 @@ public class RankingController {
   public String rankingInfo(Model model, Principal principal) {
 
     //현재 진행중인 랭킹
-    model.addAttribute("onProgressRanking", rankingService.getActiveRanking());
-    model.addAttribute("joinedGroupCount",
-        (long) rankingService.getActiveRanking().getRankingInfos().size());
-    model.addAttribute("top3", rankInfoService.getRankingTop3(rankingService.getActiveRanking()));
-
+    if (rankingService.getAllRankings() != null) {
+      model.addAttribute("onProgressRanking", rankingService.getActiveRanking());
+      model.addAttribute("joinedGroupCount",
+          (long) rankingService.getActiveRanking().getRankingInfos().size());
+      model.addAttribute("top3", rankInfoService.getRankingTop3(rankingService.getActiveRanking()));
+      model.addAttribute("myGroupInfo",
+          rankInfoService.getMyRankInfo(rankingService.getActiveRanking(), principal.getName()));
+    }
 
     // 종료된 랭킹들
     model.addAttribute("rankings", rankingService.getFinishedRankings());
@@ -47,9 +53,6 @@ public class RankingController {
     // 내 그룹 통계
     model.addAttribute("myGroupRanking", totalRankingService.getGroupTotalRanking(
         groupCardService.getGroupCard(principal.getName())));
-
-    model.addAttribute("myGroupInfo",
-        rankInfoService.getMyRankInfo(rankingService.getActiveRanking(), principal.getName()));
 
     return "ranking/info";
   }
@@ -69,7 +72,9 @@ public class RankingController {
   public String manageRankList(Model model, Principal principal) {
 
     model.addAttribute("notYetRankings", rankingService.getNotYetRankings());
-    model.addAttribute("onProgressRanking", rankingService.getActiveRanking());
+    if (rankingService.getAllRankings() != null) {
+      model.addAttribute("onProgressRanking", rankingService.getActiveRanking());
+    }
     model.addAttribute("finishedRankings", rankingService.getFinishedRankings());
 
     return "/ranking/manageRanking";
@@ -116,5 +121,27 @@ public class RankingController {
     return "redirect:/ranking/manageRanking";
   }
 
+  @GetMapping("/manageGroup")
+  public String groupManagementPage(Model model, Principal principal) {
+
+    model.addAttribute("ascGroupCards",
+        groupCardService.getActiveGroupCardsOrderedByMonthlyUsedChargeAsc());
+    model.addAttribute("descGroupCards",
+        groupCardService.getActiveGroupCardsOrderedByMonthlyUsedChargeDesc());
+
+    return "ranking/manageGroup";
+  }
+
+
+  @PostMapping("/sendPoint/{seq}")
+  public String sendPoint(Model model, Principal principal, @PathVariable("seq") Long groupSeq,
+      @ModelAttribute SendPointForm sendPointForm) {
+
+    pointService.changeGroupPoint(
+        groupCardService.getGroupCard(groupSeq).getGroupUsers().get(0).getUser(),
+        sendPointForm.point(), sendPointForm.message());
+
+    return "redirect:/ranking/manageGroup";
+  }
 
 }

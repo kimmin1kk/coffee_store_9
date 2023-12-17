@@ -22,8 +22,33 @@ public class GroupCardService {
   private final GroupCardRepository groupCardRepository;
   private final OrdersRepository ordersRepository;
 
+  /**
+   * 사용금액 낮은 순서대로 그룹카드 return 해주는 로직
+   * @return
+   */
+  public List<GroupCard> getActiveGroupCardsOrderedByMonthlyUsedChargeAsc() {
+    return groupCardRepository.findByActiveTrueOrderByMonthlyUsedChargeAsc();
+  }
+
+  /**
+   * 사용금액 높은 순서대로 그룹카드 return 해주는 로직
+   * @return
+   */
+  public List<GroupCard> getActiveGroupCardsOrderedByMonthlyUsedChargeDesc() {
+    return groupCardRepository.findByActiveTrueOrderByMonthlyUsedCharge();
+  }
+
+  /**
+   * username으로 그룹카드 찾는 로직
+   * @param username
+   * @return
+   */
   public GroupCard getGroupCard(String username) {
     return groupCardRepository.findGroupCardByUserUsername(username);
+  }
+
+  public GroupCard getGroupCard(Long seq) {
+    return groupCardRepository.findById(seq).orElse(null);
   }
 
   /**
