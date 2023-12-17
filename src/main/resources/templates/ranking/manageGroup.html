@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" type="text/css" href="/css/rank.css" />
+</head>
+<body>
+<div th:insert="/layouts/header"></div>
+<div class="nav">
+    <div class="na">
+        <a class="a" th:href="@{/ranking/form}">그룹 카드 랭킹 스케줄러</a>
+        <a class="a" th:href="@{/ranking/manageRanking}">그룹 카드 랭킹 관리</a>
+        <a class="a" th:href="@{/ranking/manageGroup}">그룹 적립금 관리</a>
+    </div>
+</div>
+<div class="sectionWrap">
+    <h4 class="contentTitle"><strong>그룹 적립금 관리</strong></h4>
+    <div class="sectionContent2">
+        <p>실적 낮은 그룹</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>그룹이름</th>
+                    <th>그룹 월간 사용 금액</th>
+                    <th>그룹 등급</th>
+                    <th>그룹 생성 날짜</th>
+                    <th>전송 버튼</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="asc:${ascGroupCards}">
+                    <td th:text="${asc.getGroupName()}"></td>
+                    <td th:text="${asc.getMonthlyUsedCharge()}"></td>
+                    <td th:text="${asc.getGrade().getDisplayName()}"></td>
+                    <td th:text="${asc.getCreatedDate()}"></td>
+                    <td>
+                        <form method="post" th:action="@{/ranking/sendPoint/{seq}(seq=${asc.getSeq()})}" id="sendPointForm">
+                            <label for="message">메시지</label>
+                            <input type="text" name="message" id="message">
+                            <label for="point">지급 포인트</label>
+                            <input type="number" name="point" id="point">
+                            <button type="submit">전송</button>
+                        </form>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <p>실적 높은 그룹</p>
+        <table>
+            <thead>
+            <tr>
+                <th>그룹이름</th>
+                <th>그룹 월간 사용 금액</th>
+                <th>그룹 등급</th>
+                <th>그룹 생성 날짜</th>
+                <th>전송 버튼</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="desc:${descGroupCards}">
+                <td th:text="${desc.getGroupName()}"></td>
+                <td th:text="${desc.getMonthlyUsedCharge()}"></td>
+                <td th:text="${desc.getGrade().getDisplayName()}"></td>
+                <td th:text="${desc.getCreatedDate()}"></td>
+                <td>
+                    <form method="post" th:action="@{/ranking/sendPoint/{seq}(seq=${desc.getSeq()})}" id="sendPointForm">
+                        <label for="message">메시지</label>
+                        <input type="text" name="message" id="message">
+                        <label for="point">지급 포인트</label>
+                        <input type="number" name="point" id="point">
+                        <button type="submit">전송</button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<div th:insert="/layouts/rightside"></div>
+<footer class="footer"></footer>
+</body>
+</html>

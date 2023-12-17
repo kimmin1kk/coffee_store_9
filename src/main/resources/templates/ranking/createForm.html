@@ -8,12 +8,13 @@
 <body>
 <div th:insert="/layouts/header"></div>
 <div class="nav">
-    <nav>
+    <div class="na">
         <a class="a" th:href="@{/ranking/form}">그룹 카드 랭킹 스케줄러</a>
         <a class="a" th:href="@{/ranking/manageRanking}">그룹 카드 랭킹 관리</a>
-    </nav>
+        <a class="a" th:href="@{/ranking/manageGroup}">그룹 적립금 관리</a>
+    </div>
 </div>
-<div class="sectionWrap">
+<div class="sectionWraps">
     <h4 class="contentTitle"><strong>그룹 카드 랭킹 스케줄러</strong></h4>
     <div class="sectionContent2">
         <div class="scheduler">
@@ -44,7 +45,7 @@
 </div>
 
 <div th:insert="/layouts/rightside"></div>
-<footer class="footer"></footer>
+<footer class="footer2"></footer>
 <script>
     var currentYear = new Date().getFullYear();
     var currentMonth = new Date().getMonth();

@@ -17,6 +17,7 @@
         종료된 그룹 랭킹
     </p>
 </div>
+<div th:insert="/layouts/rightside"></div>
 
 <div class="sectionWrap">
     <h2 class="groupTitle" id="진행 중인 그룹 랭킹">이벤트</h2>
@@ -27,13 +28,13 @@
     </div>
     <div class="sectionContent2">
         <div th:if="${onProgressRanking != null}">
-        <div style="display: flex; flex-direction: row; justify-content: space-between">
-            <p th:text="${'현재 참여 그룹 수: '+joinedGroupCount}" style="text-align: start; display: flex; justify-content: flex-start"></p>
-            <p id="updateTime" style="text-align: end"></p>
-        </div>
-        <h4 class="contentTitle2">
-            <canvas class="graph" id="myChart" width="500" height="400px" style="position: relative"></canvas>
-        </h4>
+            <div style="display: flex; flex-direction: row; justify-content: space-between">
+                <p th:text="${'현재 참여 그룹 수: '+joinedGroupCount}" style="text-align: start; display: flex; justify-content: flex-start"></p>
+                <p id="updateTime" style="text-align: end"></p>
+            </div>
+            <h4 class="contentTitle2">
+                <canvas class="graph" id="myChart" width="500" height="400px" style="position: relative"></canvas>
+            </h4>
             <p th:text="${onProgressRanking.getKind()}" style="font-weight: bold; text-align: center"></p>
             <div th:if="${onProgressRanking.getKind().getDisplayName() == '돈 많이 낸 그룹'}" style="text-align: center">
                 <p th:text="${'이번달 그룹 카드 랭킹인 '+onProgressRanking.getEventName()+' 은/는 베스트 그룹 카드로써'}"></p>
@@ -50,42 +51,64 @@
         </div>
         <p th:unless="${onProgressRanking != null}" style="text-align: center; display: flex; justify-content: center; align-items: center">현재 진행중인 랭킹이 없습니다! <br><br><br>다음달을 기다려주세요!</p>
         <hr style="height: 1px !important; display: block !important; width: 100% !important;"/>
+
         <div th:if="${onProgressRanking != null}">
+            <h2 class="h2"><strong>나의 현재 그룹 랭킹 </strong></h2>
             <div style="display: flex; flex-direction: row; justify-content: center; ">
-            <p th:text="${myGroupRanking.getGroupCard().getGroupName()}" style="font-weight: bold; text-align: center"></p>
-            <p> &nbsp;그룹은 현재 &nbsp;</p>
-            <p th:text="${myGroupInfo}"></p>
-            <p> &nbsp;등 입니다!</p>
+                <p th:text="${myGroupRanking.getGroupCard().getGroupName()}" style="font-weight: bold; text-align: center"></p>
+                <p> &nbsp;그룹은 현재 &nbsp;</p>
+                <p th:text="${myGroupInfo.getCurrentRanking()}" style="font-weight: bold; text-align: center"></p>
+                <p> &nbsp;등 입니다!</p>
             </div>
             <div style="display: flex; flex-direction: row; justify-content: center; ">
                 <p>나의 그룹 월간 사용 금액은 &nbsp;</p>
-                <p th:text="${myGroupRanking.getGroupCard().getTotalRanking()}" style="font-weight: bold; text-align: center"></p>
+                <p th:text="${myGroupRanking.getGroupCard().getMonthlyUsedCharge()}" style="font-weight: bold; text-align: center"></p>
+                <br>
                 <p>&nbsp;원이며 현재 예상 랭킹 보상은&nbsp;</p>
                 <br>
-                <p th:text="${myGroupRanking.getGroupCard().getTotalRanking()}"></p>
+                <p th:text="${myGroupInfo.getScheduledPoint()}" style="font-weight: bold; text-align: center"></p>
                 <p> &nbsp;입니다!</p>
-<!--                뷰에 뜨는 이상한것들 뭘 띄워야할지 잘모르겟습니다 ....-->
             </div>
             <hr style="height: 1px !important; display: block !important; width: 100% !important;"/>
+            <div>
+                <h2 class="h2"><strong>나의 랭킹</strong></h2>
+                <div style="display: flex; flex-direction: row; justify-content: center; ">
+                    <p th:text="${myGroupRanking.getGroupCard().getGroupName()}" style="font-weight: bold; text-align: center"></p>
+                    <p> &nbsp;그룹은 평균 &nbsp; </p>
+                    <p th:text="${myGroupRanking.getAverageRanking()}" style="font-weight: bold; text-align: center"></p>
+                    <p> 등을 기록했으며 그동안&nbsp; </p>
+                    <p th:text="${myGroupRanking.getTotalEarnedPoint()}" style="font-weight: bold; text-align: center"></p>
+                    <p>&nbsp; 의 그룹 포인트를 획득하셨습니다! </p><br>
+                    <p>또한 최고 랭킹은 &nbsp;</p>
+                    <p th:text="${myGroupRanking.getHighestRanking()}" style="font-weight: bold; text-align: center"></p>
+                    <p>&nbsp;등을 기록했습니다!</p>
+                </div>
+            </div>
         </div>
     </div>
-    <hr>
-</div>
-<div class="sectionWrap">
+
+
+<div class="gridWrap">
     <h4 class="contentTitle" id="종료된 그룹 랭킹">종료된 그룹 랭킹</h4>
     <div class="gridContent">
         <div class="grid-container">
-            <div th:each="fin:${rankings}">
+            <div style="border-color: #cccccc" th:each="fin:${rankings}">
                 <p th:text="${#dates.format(fin.getProjectedMonth(), 'yyyy-MM')}" ></p>
                 <p th:text="${fin.getKind()}"></p>
-                <p th:text="${fin}"></p>
+                <p th:text="${'이벤트명: '+ fin.getEventName()}"></p>
+                <div th:each="zz : ${fin.getRankingInfos()}">
+                    <div th:if="${zz.getCurrentRanking() <= 3}">
+                        <p th:text="${zz.getCurrentRanking()} + '등: ' + ${zz.getTotalRanking().getGroupCard().getGroupName()} "></p>
+                    </div>
+                </div>
             </div>
         </div>
-        <hr style="height: 1px !important; display: block !important; width: 100% !important; justify-content: flex-end !important; display: flex !important; "/>
     </div>
 </div>
 
-<div th:insert="/layouts/rightside"></div>
+</div>
+
+
 <footer class="footer"></footer>
 
 <div th:each="top3 : ${top3}">
