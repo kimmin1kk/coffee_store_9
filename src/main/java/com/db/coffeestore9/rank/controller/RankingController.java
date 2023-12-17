@@ -89,7 +89,7 @@ public class RankingController {
       @ModelAttribute CreateRankingForm createRankingForm) {
     rankingService.createRankingSchedule(createRankingForm);
 
-    return "redirect:/ranking/info";
+    return "redirect:/ranking/manageRanking";
   }
 
   /**

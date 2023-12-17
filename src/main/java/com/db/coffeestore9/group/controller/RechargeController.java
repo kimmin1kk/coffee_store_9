@@ -4,6 +4,7 @@ import com.db.coffeestore9.global.common.State;
 import com.db.coffeestore9.group.common.RequestPairAmountPenalty;
 import com.db.coffeestore9.group.common.RequestRechargeForm;
 import com.db.coffeestore9.group.domain.GroupCard;
+import com.db.coffeestore9.group.domain.Recharge;
 import com.db.coffeestore9.group.domain.RechargeUser;
 import com.db.coffeestore9.group.service.GroupCardService;
 import com.db.coffeestore9.group.service.GroupUserService;
@@ -40,6 +41,8 @@ public class RechargeController {
   @GetMapping("/form")
   public String rechargeBasicForm(Model model, Principal principal) {
     GroupCard groupCard = groupCardService.getGroupCard(principal.getName());
+    Recharge onProgressRecharge = rechargeService.getOnProgressRecharge(
+        rechargeService.getRechargeHistory(groupCard));
     //진행중인 충전이 있는가(하나라도 있는가랑 동일하나 한 번에 하나만 가능해야하니까..)
     if (rechargeService.getRechargeHistory(groupCard).stream()
         .anyMatch(s -> s.getState() == State.ON_PROGRESS)) {
@@ -48,19 +51,28 @@ public class RechargeController {
           rechargeService.getOnProgressRecharge(rechargeService.getRechargeHistory(groupCard))
               .getRechargeUsers().stream().filter(
                   RechargeUser::isJoined).toList());
-      model.addAttribute("onProgressRecharge", rechargeService.getOnProgressRecharge(
-          rechargeService.getRechargeHistory(groupCard)));
+      model.addAttribute("onProgressRecharge", onProgressRecharge);
 
+      //유저가 결제 했는지 여부(true false)
       model.addAttribute("checkPayed",
-          rechargeService.checkUserPayed(principal.getName(), rechargeService.getOnProgressRecharge(
-              rechargeService.getRechargeHistory(groupCard)).getSeq()));
+          rechargeService.checkUserPayed(principal.getName(), onProgressRecharge.getSeq()));
       //현재 충전된 금액
       model.addAttribute("chargingAmount",
-          rechargeService.getOnProgressRecharge(rechargeService.getRechargeHistory(groupCard))
+          onProgressRecharge
               .getRechargeUsers().stream().filter(
                   RechargeUser::isJoined).filter(RechargeUser::isPayed)
               .mapToInt(RechargeUser::getRechargeAmount).sum());
-      //유저가 결제 했는지 여부(true false)
+
+      //나의 결제금액
+      model.addAttribute("getMyAmount", onProgressRecharge.getRechargeAmount() / onProgressRecharge
+          .getRechargeUsers().stream().filter(
+              RechargeUser::isJoined).toList().size());
+      //총 결제금액
+      model.addAttribute("getTotalAmount", onProgressRecharge.getPairAmount() * onProgressRecharge
+          .getRechargeUsers().stream().filter(
+              RechargeUser::isJoined).toList().size());
+
+
     }
 
     return "recharge/basicForm";

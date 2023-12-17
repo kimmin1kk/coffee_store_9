@@ -117,8 +117,9 @@ public class GroupUser extends BaseTimeEntity {
     this.monthlyUsedAmount=0;
   }
 
+  //포인트 -로 들어오기 때문에 -=
   public void payWithGroupPoint(Integer savedAmount) {
-    this.totalSalesAmount += savedAmount;
+    this.totalSalesAmount -= savedAmount;
   }
 
 }

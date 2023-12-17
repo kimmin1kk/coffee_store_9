@@ -57,4 +57,9 @@ public class Recharge extends BaseTimeEntity {
     this.finishedDate = new Timestamp(System.currentTimeMillis());
   }
 
+  // pairAmount가 -로 들어올 예정이라서
+  public void addPairAmount(Integer pairAmount) {
+    this.rechargeAmount += pairAmount;
+  }
+
 }

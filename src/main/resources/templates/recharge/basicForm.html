@@ -45,12 +45,12 @@
                 <td th:unless="${joineduser.isPayed()}">0</td>
             </tr>
             <tr>
-                <th>나의 결제 금액</th>
+                <th>결제예정액(패널티 제외)</th>
                 <th>총 결제 금액</th>
             </tr>
             <tr th:if="${joinedUsers.size() > 0}">
-                <td th:text="${joinedUsers.get(0).getRecharge().getRechargeAmount()}"></td>
-                <td th:text="${joinedUsers.get(0).getRecharge().getRechargeAmount()}"></td>
+                <td th:text="${getMyAmount}"></td>
+                <td th:text="${getTotalAmount}"></td>
             </tr>
             </tbody>
         </table>

@@ -256,7 +256,7 @@ public class RechargeService {
     List<RechargeUser> rechargeUsers = convertUsernamesAndRechargeSeqToRechargeUsers(
         requestPairAmountPenalty.usernames(), seq);
 
-    joinPenalty(rechargeUsers);
+    joinPenalty(recharge, rechargeUsers);
 
     getRechargeAmount(recharge.getRechargeUsers(), recharge.getRechargeAmount());
 
@@ -269,9 +269,10 @@ public class RechargeService {
    * @param rechargeUsers 패널티를 부여할 회원들
    */
 
-  private void joinPenalty(List<RechargeUser> rechargeUsers) {
+  private void joinPenalty(Recharge recharge,List<RechargeUser> rechargeUsers) {
     for (RechargeUser user : rechargeUsers) {
       user.changePenaltyState(true);
+      recharge.addPairAmount(user.getGroupUser().getPairShareAmount());
     }
   }
 
@@ -290,7 +291,6 @@ public class RechargeService {
       if (rechargeUser.isPenaltyPairAmount()) {
         rechargeUser.getRechargeAmount(
             sharedAmount + Math.abs(rechargeUser.getGroupUser().getPairShareAmount()));
-        sharedAmount -= Math.abs(rechargeUser.getGroupUser().getPairShareAmount());
       } else {
         rechargeUser.getRechargeAmount(sharedAmount);
       }
