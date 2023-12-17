@@ -290,6 +290,7 @@ public class RechargeService {
       if (rechargeUser.isPenaltyPairAmount()) {
         rechargeUser.getRechargeAmount(
             sharedAmount + Math.abs(rechargeUser.getGroupUser().getPairShareAmount()));
+        sharedAmount -= Math.abs(rechargeUser.getGroupUser().getPairShareAmount());
       } else {
         rechargeUser.getRechargeAmount(sharedAmount);
       }

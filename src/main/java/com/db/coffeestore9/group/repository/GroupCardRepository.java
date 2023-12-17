@@ -16,7 +16,7 @@ public interface GroupCardRepository extends JpaRepository<GroupCard, Long> {
     List<GroupCard> findByActiveTrueOrderByMonthlyUsedChargeAsc();
 
   // 사용금액 높은 순서대로
-  List<GroupCard> findByActiveTrueOrderByMonthlyUsedCharge();
+  List<GroupCard> findByActiveTrueOrderByMonthlyUsedChargeDesc();
 
 
 }
