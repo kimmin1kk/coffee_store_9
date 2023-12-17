@@ -38,7 +38,7 @@ public class RankingController {
   public String rankingInfo(Model model, Principal principal) {
 
     //현재 진행중인 랭킹
-    if (rankingService.getAllRankings() != null) {
+    if (rankingService.getAllRankings() != null && rankingService.getActiveRanking() != null) {
       model.addAttribute("onProgressRanking", rankingService.getActiveRanking());
       model.addAttribute("joinedGroupCount",
           (long) rankingService.getActiveRanking().getRankingInfos().size());
