@@ -35,7 +35,7 @@ public class GroupCardService {
    * @return
    */
   public List<GroupCard> getActiveGroupCardsOrderedByMonthlyUsedChargeDesc() {
-    return groupCardRepository.findByActiveTrueOrderByMonthlyUsedCharge();
+    return groupCardRepository.findByActiveTrueOrderByMonthlyUsedChargeDesc();
   }
 
   /**
