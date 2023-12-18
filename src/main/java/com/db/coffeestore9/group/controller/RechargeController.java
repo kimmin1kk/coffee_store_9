@@ -69,8 +69,7 @@ public class RechargeController {
               RechargeUser::isJoined).toList().size());
       //총 결제금액
       model.addAttribute("getTotalAmount", onProgressRecharge.getPairAmount() * onProgressRecharge
-          .getRechargeUsers().stream().filter(
-              RechargeUser::isJoined).toList().size());
+          .getRechargeUsers().size());
 
 
     }

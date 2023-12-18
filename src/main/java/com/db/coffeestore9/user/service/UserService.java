@@ -1,5 +1,7 @@
 package com.db.coffeestore9.user.service;
 
+import com.db.coffeestore9.group.domain.GroupCard;
+import com.db.coffeestore9.group.repository.GroupCardRepository;
 import com.db.coffeestore9.security.common.Role;
 import com.db.coffeestore9.user.common.RegistrationForm;
 import com.db.coffeestore9.user.domain.GroupUser;
@@ -17,6 +19,7 @@ public class UserService {
 
   private final UserRepository userRepository;
   private final GroupUserRepository groupUserRepository;
+  private final GroupCardRepository groupCardRepository;
 
   @Transactional
   public void processRegistration(RegistrationForm form) {
@@ -70,6 +73,7 @@ public class UserService {
       user.resetMonthlyData();
       groupUser.resetMonthlyData();
     }
+    groupCardRepository.findAll().stream().forEach(GroupCard::resetMonthlyData);
 
 
   }

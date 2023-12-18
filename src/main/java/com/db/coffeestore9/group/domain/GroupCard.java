@@ -115,6 +115,10 @@ public class GroupCard extends BaseTimeEntity {
     }
   }
 
+  public void resetMonthlyData() {
+    this.monthlyUsedCharge = 0;
+  }
+
   public void getTotalRanking(TotalRanking totalRanking) {
     this.totalRanking = totalRanking;
   }
