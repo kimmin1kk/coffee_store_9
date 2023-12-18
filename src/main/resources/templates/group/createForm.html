@@ -8,7 +8,7 @@
 <body>
 <div th:insert="/layouts/header"></div>
 
-<div class="sectionWrap">
+<div class="sectionWrap2">
     <h3 class="contentTitle">그룹 카드 만들기</h3>
     <div>
         <form method="POST" th:action="@{/create/group}" id="groupCardForm">
@@ -21,31 +21,45 @@
             <label for="groupName">그룹 이름</label>
             <input type="text" id="groupName" name="groupName" placeholder="그룹명" required /><br />
 
-            <div id='usernames-container'>
-                <label>그룹원:</label>
-                <input type="text" name="usernames" placeholder="고객 아이디" required />
-                <button type="button" onclick="addGroupMember()">그룹원 추가</button>
-            </div>
+            <div class="btnCon">
+                <div id='usernames-container'>
+                    <label>그룹원:</label>
+                    <div id="usernames-wrapper">
+                        <input type="text" name="usernames" placeholder="고객 아이디" required />
+                    </div>
+                    <div class="btn">
+                    <button type="button" onclick="addGroupMember()">그룹원 추가</button>
+                    <button type="button" onclick="removeGroupMember()">그룹원 삭제</button>
+                    </div>
+                </div>
 
-            <div class="button-container">
-                <button type="submit">카드 만들기</button>
+                <div class="button-container">
+                    <button type="submit">카드 만들기</button>
+                </div>
             </div>
         </form>
     </div>
 </div>
 
-
 <footer class="footer"></footer>
 
 <script>
     function addGroupMember() {
-        var inputContainer = document.getElementById('usernames-container');
+        var inputContainer = document.getElementById('usernames-wrapper');
         var input = document.createElement('input');
         input.type = 'text';
         input.name = 'usernames';
         input.placeholder = '고객 아이디';
         input.required = true;
         inputContainer.appendChild(input);
+    }
+
+    function removeGroupMember() {
+        var inputContainer = document.getElementById('usernames-wrapper');
+        var inputs = inputContainer.getElementsByTagName('input');
+        if (inputs.length > 1) {
+            inputContainer.removeChild(inputs[inputs.length - 1]);
+        }
     }
 </script>
 
