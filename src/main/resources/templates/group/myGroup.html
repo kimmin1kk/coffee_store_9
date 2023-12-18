@@ -43,21 +43,23 @@
             <p> 팀은 현재 </p>
             <h3 th:text="${groupCard.getGrade().getDisplayName()}"></h3>
             <p> 등급 이며 </p>
-            <p>개설 이후 지금 까지</p>
+            </div>
+            <div class="basic">
+            <p>개설 이후 지금 까지&nbsp;</p>
             <h3 th:text="${groupCard.getMonthlyUsedCharge()}"></h3>
-            <p>원을 사용하였고</p>
-            <p>그 중에서</p>
+            <p>원을 사용하였고&nbsp;</p>
+            <p>그 중에서&nbsp;</p>
             <h3 th:text="${groupCard.getTotalSalesCharge()}"></h3>
             <p>원의 할인 혜택을 받았습니다!</p>
             </div>
             <div class="pro">
                 <p>그룹 잔고: </p>
-                <h3 th:text="${groupCard.getCharge()}"></h3>
-                <p>그룹 이번달 사용 금액: </p>
-                <h3 th:text="${groupCard.getMonthlyUsedCharge()}"></h3>
-                <p>그룹 포인트:</p>
+                <h3 th:text="${groupCard.getCharge()+'원'}"></h3>
+                <p>&nbsp;그룹 이번달 사용 금액: </p>
+                <h3 th:text="${groupCard.getMonthlyUsedCharge()+'원'}"></h3>
+                <p>&nbsp;그룹 포인트:</p>
                 <h3 th:text="${groupCard.getPoint()}"></h3>
-                <p>그룹 최근 활동일:</p>
+                <p>&nbsp;그룹 최근 활동일:</p>
 
 <!--            해야할거2    <h3 th:text="${groupCard.ge}"-->
             </div>
